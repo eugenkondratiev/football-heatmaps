@@ -1,0 +1,31 @@
+.heatmapContainerWrapper { 
+    /* width:50%;  */
+    /* height:500px;  */
+    align-self: center;
+    /* position:absolute;  */
+    width: 367px;
+    height: 250px;
+    margin: 0 auto;
+
+}
+
+.heatmapContainer { 
+    width: 367px;
+    height: 250px;
+     /* height:100%; */
+     /* margin: 0 auto; */
+}
+
+.heatmapContainer img{ 
+    /* width:100%; 
+    height:100%; */
+    width: 367px;
+    height: 250px;
+    /* margin: 0 auto; */
+
+}
+
+.heatmap-canvas {
+    width: 367px;
+    height: 250px;
+}
