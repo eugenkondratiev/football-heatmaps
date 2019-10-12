@@ -8,21 +8,37 @@
     <link rel="stylesheet" href="mainsheet.css">
 </head>
 <body>
-    
+        <h1>Heatmaptest</h1>  
+        <h2 id="gameInfo">game info</h2>  
+
     <div class="heatmapContainerWrapper">
-        <div class="heatmapContainer" id="heatmap1">
+            <h1></h1>
+        <div class="heatmapContainer" id="heatmapBall">
             <img src="./img/littleField.png" alt="">
+            <div class="overlay">Мяч</div>
         </div>
   
     </div>
-    <div class="heatmapContainerWrapper">
-        <div class="heatmapContainer" id="heatmap2">
-            <img src="./img/littleField.png" alt="">
+    
+    <div class="heatmap2ContainersWrapper">
+        <div class="heatmapContainerWrapperLeft">
+                <h1></h1>
+            <div class="heatmapContainer" id="heatmapHome">
+                <img src="./img/littleField.png" alt="">
+                <div class="overlay">Хозяева</div>
+            </div>
+    
         </div>
-  
+        <div class="heatmapContainerWrapperRight">
+                <h1></h1>
+            <div class="heatmapContainer" id="heatmapAway">
+                <img src="./img/littleField.png" alt="">
+                <div class="overlay">Гости</div>
+            </div>
+    
+        </div>  
     </div>
 
-    <h1>Heatmaptest</h1>    
     <script src="heatmap.js"></script>
 
       <script src='index.js'></script>
