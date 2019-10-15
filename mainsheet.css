@@ -158,7 +158,25 @@ html {
 		top: 2px
 	}
 
-    
+    .player_shape .tooltiptext {
+        visibility: hidden;
+         width: 67px;
+        background-color: lightyellow;
+        color: darkblue;
+        text-align: left;
+         border-radius: 3px;
+        padding: 0 0;
+		font-size: 5pt;
+       /* float: left; */
+        /* Position the tooltip */
+        /* position: absolute; */
+        position: relative;
+        z-index: 99;
+      }
+      
+      .player_shape:hover .tooltiptext {
+        visibility: visible;
+      }
 
 /*=========================================================*/
 .heatmap-canvas {
