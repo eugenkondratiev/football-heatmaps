@@ -3,7 +3,7 @@
  *  Нужно ставить сюда ссылку на тв отчет, в кавычки.
  * Сохранить. Обновить или открыть снова файл index.html
  */
-const tvurl = "http://pefl.ru/tv/#/j=1054000&z=79e6bb99a05b83f4490f455cf902e2cb";
+const tvurl = "http://pefl.ru/tv/#/j=1053998&z=768c09c5c64f2aeb37ed4221355d37c6";
 
 
 
@@ -95,8 +95,20 @@ window.onload = function() {
 
             const rep = JSON.parse(this.responseText);
             console.log(rep);
+//--------------------------------------------------------------------
 
-  
+/**
+ * 
+ */
+            let root = document.documentElement;
+            root.style.setProperty('--background-color-home', "#" + rep.home.team.back);
+            root.style.setProperty('--border-color-home', "#" + rep.home.team.color);
+            root.style.setProperty('--color-home', "#" + rep.home.team.color);
+            root.style.setProperty('--background-color-away', "#" + rep.away.team.back);
+            root.style.setProperty('--border-color-away', "#" + rep.away.team.color);
+            root.style.setProperty('--color-away', "#" + rep.away.team.color);
+
+//--------------------------------------------------------------------
               console.log(rep.home.players);
               const leftTopX = 18.98;
               const leftTopY = 19;
@@ -457,44 +469,7 @@ window.onload = function() {
   /**===================================================================================================== */
   /**===================================================================================================== */
   
-              for (let i = 1; i <=18; i++) {
-                  const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
-                  const newDiv = divWrapper.cloneNode(true);
-                  const homePlayerId = "#heatmapHome" + i;
-                  const awayPlayerId = "#heatmapAway" + i;
-  
-                  newDiv.querySelector('#heatmapHome').id = "heatmapHome" + i;
-                  newDiv.querySelector(homePlayerId + ' > div').textContent = rep.home.players[i - 1].number + '. ' + rep.home.players[i - 1].name;
-                  newDiv.querySelector('#heatmapAway').id = "heatmapAway" + i;
-                  newDiv.querySelector(awayPlayerId + ' > div').textContent = rep.away.players[i - 1].number + '. ' + rep.away.players[i - 1].name;
-  
-                  document.body.appendChild(newDiv);
-  
-                  const heatmapPlayer1 = h337.create({
-                      container: document.querySelector(homePlayerId),
-                      maxOpacity: MAX_OPACITY,
-                         minOpacity: MIN_OPACITY,
-                        radius: POINT_RADIUS
-         
-                    });
-                    heatmapPlayer1.setData({
-                      max: maximumValue * TEAM_MAX_KEFF,
-                      data: homePoints[i]
-                  });
-  
-                  const heatmapPlayer2 = h337.create({
-                      container: document.querySelector(awayPlayerId),
-                      maxOpacity: MAX_OPACITY,
-                        minOpacity: MIN_OPACITY,
-                        radius: POINT_RADIUS
-          
-                    });
-                    heatmapPlayer2.setData({
-                      max: maximumValue,
-                      data: awayPoints[i]
-                  });
-  
-              }
+
               console.log(homeTacticPoints);
               console.log(awayTacticPoints);
 
@@ -563,6 +538,7 @@ window.onload = function() {
             newTactics2.id = "awayTacticsInfo";
             newTactics2.textContent = "Смены тактик " + rep.away.team.name; 
             document.body.appendChild(newTactics2);
+
             if (awayTacticPoints.length > 1) {
                 for (let t = 1; t < awayTacticPoints.length ; t++) { 
                     if (awayTacticPoints[t].period < 2) continue;
@@ -614,6 +590,49 @@ window.onload = function() {
                 });
 
                 }             
+            }
+            const newHeatmapsHeader = document.querySelector("#gameInfo").cloneNode(true);
+            newHeatmapsHeader.id = "playersHeatmapsInfo";
+            newHeatmapsHeader.textContent = "Тепловые карты игроков "; 
+            document.body.appendChild(newHeatmapsHeader);
+
+            for (let i = 1; i <=18; i++) {
+                const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
+                const newDiv = divWrapper.cloneNode(true);
+                const homePlayerId = "#heatmapHome" + i;
+                const awayPlayerId = "#heatmapAway" + i;
+
+                newDiv.querySelector('#heatmapHome').id = "heatmapHome" + i;
+                newDiv.querySelector(homePlayerId + ' > div').textContent = rep.home.players[i - 1].number + '. ' + rep.home.players[i - 1].name;
+                newDiv.querySelector('#heatmapAway').id = "heatmapAway" + i;
+                newDiv.querySelector(awayPlayerId + ' > div').textContent = rep.away.players[i - 1].number + '. ' + rep.away.players[i - 1].name;
+
+                document.body.appendChild(newDiv);
+
+                const heatmapPlayer1 = h337.create({
+                    container: document.querySelector(homePlayerId),
+                    maxOpacity: MAX_OPACITY,
+                       minOpacity: MIN_OPACITY,
+                      radius: POINT_RADIUS
+       
+                  });
+                  heatmapPlayer1.setData({
+                    max: maximumValue * TEAM_MAX_KEFF,
+                    data: homePoints[i]
+                });
+
+                const heatmapPlayer2 = h337.create({
+                    container: document.querySelector(awayPlayerId),
+                    maxOpacity: MAX_OPACITY,
+                      minOpacity: MIN_OPACITY,
+                      radius: POINT_RADIUS
+        
+                  });
+                  heatmapPlayer2.setData({
+                    max: maximumValue,
+                    data: awayPoints[i]
+                });
+
             }
 
               document.querySelector("#heatmapHome .overlay").textContent = rep.home.team.name;
