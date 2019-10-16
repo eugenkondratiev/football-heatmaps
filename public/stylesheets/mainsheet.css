@@ -188,7 +188,7 @@ html {
     margin: 10% auto 60%;
     width: 150px;
     /* position: absolute; */
-    z-index: 99;
+    /* z-index: 99; */
 }
 .loader {
     border: 10px solid rgb(37, 97, 35);
@@ -198,9 +198,9 @@ html {
     --webkit-border-radius: 50%;;
     --moz-border-radius:50%;
     border-radius:50%;
--webkit-animation: spinner 3s  linear infinite;
--o-animation: spinner 3s  linear infinite;
-animation: spinner 3s  linear infinite;
+-webkit-animation: spinner 1.5s  linear infinite;
+-o-animation: spinner 1.5s  linear infinite;
+animation: spinner 1.5s  linear infinite;
 
 }
 
@@ -249,5 +249,7 @@ h4 span {
     font-size: smaller;
 }
 body {
-    background-color:#c9f8b7;
+    background-color:#A3DE8F;
+    /* background-color:#c9f8b7; */
+    
 }
