@@ -1,15 +1,18 @@
 {
   "name": "heatmap-test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "heatmap.js": "^2.0.5"
-  },
-  "devDependencies": {},
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "heatmap.js": "^2.0.5",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "^2.0.4",
+    "serve-static": "^1.14.1"
+  }
 }

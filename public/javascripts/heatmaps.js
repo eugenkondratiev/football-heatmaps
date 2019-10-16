@@ -3,7 +3,7 @@
  *  Нужно ставить сюда ссылку на тв отчет, в кавычки.
  * Сохранить. Обновить или открыть снова файл index.html
  */
-const tvurl = "http://pefl.ru/tv/#/j=1053999&z=a3e9650b3fdd3118c652aa25cb9c70cf";
+const tvurl = "http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
 
 
 
@@ -33,6 +33,21 @@ const HOME = 1;
 const AWAY = 2;
 
 const MIN_MINUTES_FOR_SHOW_TACTIC = 3;
+
+const leftTopX = 18.98;
+const leftTopY = 19;
+const rightBottomX = 346.56;
+const rightBottomY = 229.5;
+
+const jsonX1 = 0;
+const jsonY1 = 0;
+const jsonX2 = 720;
+const jsonY2 = 450;
+
+const FIELD_LONGTITUDE = 105;
+
+const MILEAGE_KEFF = (rightBottomX - leftTopX) / FIELD_LONGTITUDE;
+
 //==============================================================================
 function formJsonUrl(tvurl) {
     const zIndex =tvurl.indexOf('&z=');
@@ -80,16 +95,8 @@ window.onload = function() {
 
 //--------------------------------------------------------------------
               console.log(rep.home.players);
-              const leftTopX = 18.98;
-              const leftTopY = 19;
-              const rightBottomX = 346.56;
-              const rightBottomY = 229.5;
-              
-              const jsonX1 = 0;
-              const jsonY1 = 0;
-              const jsonX2 = 720;
-              const jsonY2 = 450;
-              
+
+
               function limitPoint(point, secondTime = false) {
                   const x = point.x;
                   const y = point.y;
@@ -106,7 +113,20 @@ window.onload = function() {
                   return { x: newX, y: newY, value: point.value }
               }
   
-  
+              function getMileage(point1, point2) {
+                const x = point.x;
+                const y = point.y;
+
+
+                    newX = Math.round(rightBottomX - (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
+                    newY = Math.round(rightBottomY - (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
+
+                    newX = Math.round(leftTopX + (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
+                    newY = Math.round(leftTopY + (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
+
+
+                return { x: newX, y: newY, value: point.value }
+            }  
               const game = rep.game;
               game.shift();
               game.pop();
@@ -132,10 +152,14 @@ window.onload = function() {
               const awayPoints = [];
               const homeAvgPoints = [];
               const awayAvgPoints = [];
-              
+              const homeMileage = [];
+              const awayMileage = [];     
+
               for (let i = 0; i <= MAX_PLAYERS ; i++) {
                   homePoints.push([]);
                   awayPoints.push([]);
+                  homeMileage.push(0);
+                  awayMileage.push(0);
                   homeAvgPoints.push({x:0, y:0});
                   awayAvgPoints.push({x:0, y:0});
                   homeTacticPoints[0].averages.push([{x:0, y:0}]);
@@ -724,6 +748,7 @@ window.onload = function() {
 
 
 /**===================================================================================================== */
+            document.querySelector('.loaderWrapper').remove();
 /**===================================================================================================== */
 /**===================================================================================================== */
 

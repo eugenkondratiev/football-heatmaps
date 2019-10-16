@@ -5,15 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Heatmaptest</title>
-    <link rel="stylesheet" href="mainsheet.css">
+    <link rel="stylesheet" href="stylesheets/mainsheet.css">
 </head>
 <body>
+    <div class="loaderWrapper">
+        <div class="loader">
+
+        </div>
+    </div>
+    <input type="url" name="tvurlInput" id="tvurlInput"><button id="updateButton">Открыть</button><button id="newWindow">Открыть в новом окне</button>
         <h3>Тепловые карты матча</h3>  
         <h4 id="gameInfo">game info<span></span></h4>  
 
     <div class="heatmapContainerWrapper">
         <div class="heatmapContainer" id="heatmapBall">
-            <img src="./img/littleField.png" alt="">
+            <img src="images/littleField.png" alt="">
             <div class="overlay">Мяч</div>
 
             <div id="player_default_away" title="" class="player_container medium_size" style="top: 14px; left: 341.56px; z-index: 2; opacity: 1;display:none">
@@ -37,7 +43,7 @@
         <div class="heatmapContainerWrapperLeft">
                 <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapHome">
-                <img src="./img/littleField.png" alt="">
+                <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева</div>
             </div>
     
@@ -45,7 +51,7 @@
         <div class="heatmapContainerWrapperRight">
                 <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAway">
-                <img src="./img/littleField.png" alt="">
+                <img src="images/littleField.png" alt="">
                 <div class="overlay">Гости</div>
             </div>
     
@@ -56,7 +62,7 @@
         <div class="heatmapContainerWrapperLeft">
                 <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAvgHome">
-                <img src="./img/littleField.png" alt="">
+                <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы.</div>
             </div>
     
@@ -64,7 +70,7 @@
         <div class="heatmapContainerWrapperRight">
                 <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAvgAway">
-                <img src="./img/littleField.png" alt="">
+                <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы</div>
             </div>
     
@@ -72,7 +78,7 @@
         <div class="thirdHeatmap">
             <!-- <h4></h4> -->
         <div class="heatmapContainer" id="heatmapAvgBoth">
-            <img src="./img/littleField.png" alt="">
+            <img src="images/littleField.png" alt="">
             <div class="overlay">Средние позиции</div>
         </div>
 
@@ -82,7 +88,7 @@
         <div class="heatmapContainerWrapperLeft">
                 <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAvgSubHome">
-                <img src="./img/littleField.png" alt="">
+                <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции запаса.</div>
             </div>
     
@@ -90,15 +96,15 @@
         <div class="heatmapContainerWrapperRight">
                 <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAvgSubAway">
-                <img src="./img/littleField.png" alt="">
+                <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции запаса</div>
             </div>
     
         </div>  
     </div>
 
-    <script src="heatmap.min.js"></script>
+    <script src="javascripts/heatmap.min.js"></script>
 
-      <script src='heatmaps.js'></script>
+      <script src='javascripts/heatmaps.js'></script>
 </body>
 </html>
