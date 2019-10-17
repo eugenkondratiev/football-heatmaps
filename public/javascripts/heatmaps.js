@@ -45,7 +45,7 @@ const jsonY1 = 0;
 const jsonX2 = 720;
 const jsonY2 = 450;
 
-const FIELD_LONGTITUDE = 110;//105;
+const FIELD_LONGTITUDE = 105;
 
 const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
 
