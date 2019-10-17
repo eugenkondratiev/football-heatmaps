@@ -22,6 +22,7 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, '/views')));
 // app.use(express.static(path.join(__dirname, '/public')));
 app.use(serveStatic(path.join(__dirname, 'views')));
+console.log(path.join(__dirname, 'views'));
 app.use(serveStatic(path.join(__dirname, 'public')));
 app.set('trust proxy', true);
 

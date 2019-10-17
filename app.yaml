@@ -1,1 +1,3 @@
 runtime: nodejs10
+env: standart
+service: default
