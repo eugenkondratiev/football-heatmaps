@@ -12,6 +12,7 @@ const tvurl = "http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d"
 
 
 
+
 const MAX_VALUE = 60;
 const MAX_OPACITY = .7;
 const MIN_OPACITY = .05;
@@ -50,13 +51,22 @@ const MILEAGE_KEFF = (rightBottomX - leftTopX) / FIELD_LONGTITUDE;
 
 //==============================================================================
 function formJsonUrl(tvurl) {
-    const zIndex =tvurl.indexOf('&z=');
-    const jIndex =tvurl.indexOf('#/j=');
+  const urlString = window.location.href.match(/j\=\d+\&z\=.+/i)
+            ? window.location.href
+            : tvurl;
+  // //console.log("urlString = ",  urlString);
+  // //console.log(window.location.href, "   " , window.location.href.match(/j\=\d+\&z\=.+/i));
 
-    return `http://pefl.ru/jsonreport.php?j=${ tvurl.substring(4 + jIndex, zIndex)}&z=${ tvurl.substring(3+ zIndex)}`;
+    const zIndex =urlString.indexOf('&z=');
+    const jIndex =urlString.indexOf('j=');
+    // //console.log(zIndex, jIndex, urlString.substring(2 + jIndex, zIndex), urlString.substring(3+ zIndex));
+
+    return `http://pefl.ru/jsonreport.php?j=${ urlString.substring(2 + jIndex, zIndex)}&z=${ urlString.substring(3+ zIndex)}`;
+  
+  
 }
 
-console.log("jsonurl   - ", formJsonUrl(tvurl));
+// //console.log("jsonurl   - ", formJsonUrl(tvurl));
 //==============================================================================
 function createHeatMap(rep, corners, jsoncorners) {
 
@@ -76,10 +86,10 @@ window.onload = function() {
           if (this.status == 200) {
               const scoreWithPensFound = this.responseText.match(/\d+:\d+/g);
             const scoreWithPens = scoreWithPensFound ? scoreWithPensFound.pop() : ["0:0"];
-            console.log(scoreWithPens);
+            // //console.log(scoreWithPens);
 
             const rep = JSON.parse(this.responseText);
-            console.log(rep);
+            //console.log(rep);
 //--------------------------------------------------------------------
 
 /**
@@ -94,7 +104,7 @@ window.onload = function() {
             root.style.setProperty('--color-away', "#" + rep.away.team.color);
 
 //--------------------------------------------------------------------
-              console.log(rep.home.players);
+              // //console.log(rep.home.players);
 
 
               function limitPoint(point, secondTime = false) {
@@ -113,25 +123,16 @@ window.onload = function() {
                   return { x: newX, y: newY, value: point.value }
               }
   
-              function getMileage(point1, point2) {
-                const x = point.x;
-                const y = point.y;
-
-
-                    newX = Math.round(rightBottomX - (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
-                    newY = Math.round(rightBottomY - (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
-
-                    newX = Math.round(leftTopX + (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
-                    newY = Math.round(leftTopY + (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
-
-
-                return { x: newX, y: newY, value: point.value }
+            function getMileage(point1, point2) {
+                const dX = point2.x - point1.x;
+                const dY = point2.y - point1.y;
+                return Math.sqrt(dX*dX + dY*dY)
             }  
               const game = rep.game;
               game.shift();
               game.pop();
               
-              // console.log(game);
+              // //console.log(game);
               const ballPoints = [];
    
                 const strangePoints = {home: [], away: []};
@@ -143,10 +144,8 @@ window.onload = function() {
                homeTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
                awayTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
                const init_HomeTacticPoints = [];
-              //  init_HomeTacticPoints.concat(homeTacticPoints);
               init_HomeTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
 
-              console.log("INIT homeTacticPoints - ", init_HomeTacticPoints);
 
               const homePoints = [];
               const awayPoints = [];
@@ -178,7 +177,7 @@ window.onload = function() {
                         element.messages.forEach(mes => {
                             if (mes.mes.indexOf(' СЧЕТ ') > -1){
                                 score = mes.mes.replace(' СЧЕТ ','');
-                                console.log(score);
+                                // //console.log(score);
                             };
                         });
 
@@ -215,7 +214,7 @@ window.onload = function() {
                       if (element.M) { // смена сторон. конец тайма.
                           
                           secondTime = !secondTime;
-                          console.log(secondTime, element)
+                          // //console.log(secondTime, element)
                         };
                            
                     if (element.coordinates) 
@@ -241,7 +240,7 @@ window.onload = function() {
                                     homePoints[0].push(playerPoints);
                                     homeTacticPoints[0].team.push(playerPoints);
                                     // debugger; 
-                                    // console.log("homeTacticPoints[0].averages[pl.n]   - ", pl.n, "  ", homeTacticPoints[0].averages[pl.n])
+                                    // //console.log("homeTacticPoints[0].averages[pl.n]   - ", pl.n, "  ", homeTacticPoints[0].averages[pl.n])
                                     homeTacticPoints[0].averages[pl.n].push(playerPoints);
                                   // debugger;  
                                 } else {
@@ -277,7 +276,7 @@ window.onload = function() {
                         } 
                 }); 
             } catch (error) {
-                console.log(error);
+                //console.log(error);
             }
             homeTacticPoints.push(homeTacticPoints[0]);
             awayTacticPoints.push(awayTacticPoints[0]);
@@ -397,8 +396,8 @@ window.onload = function() {
   /**===================================================================================================== */
   /**===================================================================================================== */
   
-              console.log("homeTacticPoints - ", homeTacticPoints);
-              console.log("awayTacticPoints - ", awayTacticPoints);
+              //console.log("homeTacticPoints - ", homeTacticPoints);
+              //console.log("awayTacticPoints - ", awayTacticPoints);
 
               const newTactics1 = document.querySelector("#gameInfo").cloneNode(true);
               newTactics1.id = "homeTacticsInfo";
@@ -451,8 +450,7 @@ window.onload = function() {
                               hp.style.display = "inherit";
                               hp.style.left = homeTacticPoints[t].averages[n][0].x  - 5 + "px";
                               hp.style.top = homeTacticPoints[t].averages[n][0].y  - 5  + "px";
-                              // console.log("awayTacticPoints[t].averages[n] ", awayTacticPoints[t].averages[n]);
-                              // debugger;
+
                           hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
                           hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
                           document.querySelector('#avgPositionsHome' + t).appendChild(hp);
@@ -532,7 +530,6 @@ window.onload = function() {
                   thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;
                   
                   newDiv.appendChild(thirdField);
-                          console.log(t, "awayTacticPoints[t].averages ", awayTacticPoints[t].averages);
                   
                   for (let n = 1; n < 12; n++) { 
                       const ap = document.querySelector('#player_default_away').cloneNode(true);
@@ -627,19 +624,19 @@ window.onload = function() {
   /**===================================================================================================== */
   /**=========================СРЕДНИЕ ПОЗИЦИИ================================================== */
             const avgH = homePoints[0].length;
-            console.log("Точек  - ",avgH);
+            // //console.log("Точек  - ",avgH);
             const homeTacticAvg = [];
             const awayTacticAvg = [];
             homeTacticChanges.push(homePoints[0].length -1);
             awayTacticChanges.push(awayPoints[0].length -1);
 
-            console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
-            console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
+            //console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
+            //console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
             // function calcAvgPositions(pointsArr, opposite) {
             //   const ;
             // }
-            console.log("homePoints  - ", homePoints);
-            console.log("awayPoints  - ", awayPoints);
+            //console.log("homePoints  - ", homePoints);
+            //console.log("awayPoints  - ", awayPoints);
 
             homePoints.forEach(
               (hmap, _n) => {
@@ -664,8 +661,8 @@ window.onload = function() {
               })
             })
 
-            console.log('homeAvgPoints  - ', homeAvgPoints);
-            console.log('awayAvgPoints  - ', awayAvgPoints);
+            //console.log('homeAvgPoints  - ', homeAvgPoints);
+            //console.log('awayAvgPoints  - ', awayAvgPoints);
             //-------------------------------------------------------------------------
             function showMainAvgPositions() {
               for (let n = 1; n < 12; n++) {
@@ -683,7 +680,7 @@ window.onload = function() {
                 document.getElementById('heatmapAvgBoth').appendChild(apBoth);
                 const apToINdividualHeatmap = ap.cloneNode(true);
                 apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
-                // console.log('#heatmapAway' + n, "     ", document.querySelector('#heatmapAway' + n));
+                // //console.log('#heatmapAway' + n, "     ", document.querySelector('#heatmapAway' + n));
                 document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
             
                 hp.id = "homeAvgPoints" + n;
@@ -699,7 +696,7 @@ window.onload = function() {
                     const hpToINdividualHeatmap = hp.cloneNode(true);
                     hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
                     document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
-                    //  console.log('#heatmapHome' + n, "     ", document.querySelector('#heatmapHome' + n));
+                    //  //console.log('#heatmapHome' + n, "     ", document.querySelector('#heatmapHome' + n));
                     
             
               }
@@ -720,7 +717,7 @@ window.onload = function() {
                   const apToINdividualHeatmap = ap.cloneNode(true);
                   apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
                   document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
-                  // console.log('#heatmapAvgSubAway' + n, "     ", document.querySelector('#heatmapAvgSubAway' + n));
+                  // //console.log('#heatmapAvgSubAway' + n, "     ", document.querySelector('#heatmapAvgSubAway' + n));
               }
             
                 if (homeAvgPoints[n].x != 0 || homeAvgPoints[n].y != 0 ) {
@@ -763,5 +760,37 @@ window.onload = function() {
       xmlhttp.open("GET", formJsonUrl(tvurl), true);
       xmlhttp.send();  
 
+//-----------------------------------------------------------------
+//"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
+function formHeatmapUrl(urlINput) {
+  return window.location.origin + window.location.pathname + "?" + urlINput.replace('http://pefl.ru/tv/#/', '');
+}
+//-----------------------------------------------------------------
 
+const urlPaste = document.querySelector('#pasteButton');
+const urlInput = document.querySelector("#tvurlInput");
+
+urlPaste.addEventListener('click', e => {
+  e.preventDefault();
+  navigator.clipboard.readText().then(
+    clipText => { urlInput.value = clipText; });
+});
+
+document.querySelector('#updateButton').addEventListener('click', e => {
+  e.preventDefault();
+  if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
+    alert('Вставьте корректную ссылку на ТВ матча в поле ввода!');
+    return;
+  }
+    window.location.assign(formHeatmapUrl(urlInput.value));
+});
+
+document.querySelector('#newWindow').addEventListener('click', e => {
+  e.preventDefault();
+  if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
+    alert('Вставьте корректную ссылку на ТВ матча в поле ввода!');
+    return;
+  }
+    window.open(formHeatmapUrl(urlInput.value), '_blank');
+});
 }
