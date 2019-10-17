@@ -45,9 +45,9 @@ const jsonY1 = 0;
 const jsonX2 = 720;
 const jsonY2 = 450;
 
-const FIELD_LONGTITUDE = 105;
+const FIELD_LONGTITUDE = 110;//105;
 
-const MILEAGE_KEFF = (rightBottomX - leftTopX) / FIELD_LONGTITUDE;
+const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
 
 //==============================================================================
 function formJsonUrl(tvurl) {
@@ -126,7 +126,8 @@ window.onload = function() {
             function getMileage(point1, point2) {
                 const dX = point2.x - point1.x;
                 const dY = point2.y - point1.y;
-                return Math.sqrt(dX*dX + dY*dY)
+                // console.log(MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY));
+                return MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY)
             }  
               const game = rep.game;
               game.shift();
@@ -195,6 +196,7 @@ window.onload = function() {
                             homeTacticPoints.push(homeTacticPoints[0]);
                             homeTacticPoints[0] = {start: element.minute , end: 125, period: (125 - element.minute), team: [], ball: [], averages:[]};
                             for (let i = 0; i <= MAX_PLAYERS ; i++) {
+                              
                               homeTacticPoints[0].averages.push([{x:0, y:0}]);
                             }
                             homeTacticChanges.push(homePoints[0].length);
@@ -224,8 +226,6 @@ window.onload = function() {
     
                             const hometeam = element.coordinates.home;
                             const awayteam = element.coordinates.away;
-                            // homeTacticPoints[0].averages[0].x++;
-                            // awayTacticPoints[0].averages[0].x++;
 
                             hometeam.forEach(pl => {
                                 coords = pl.n == 1 
@@ -233,15 +233,15 @@ window.onload = function() {
                                         :{x: pl.w, y: pl.h, value:1};
                                 if (pl.n <= MAX_PLAYERS ){
                                     const playerPoints = limitPoint(coords, secondTime);
-                                    // homeTacticPoints[0].averages[pl.n].x += coords.x;
-                                    // homeTacticPoints[0].averages[pl.n].y += coords.y;
-                                    // homeTacticPoints[0].averages[pl.n].push(coords);
+
                                     homePoints[pl.n].push(playerPoints);
                                     homePoints[0].push(playerPoints);
                                     homeTacticPoints[0].team.push(playerPoints);
-                                    // debugger; 
-                                    // //console.log("homeTacticPoints[0].averages[pl.n]   - ", pl.n, "  ", homeTacticPoints[0].averages[pl.n])
                                     homeTacticPoints[0].averages[pl.n].push(playerPoints);
+                                    if (homePoints[pl.n].length > 1) {
+                                      const l = homePoints[pl.n].length - 1;
+                                       homeMileage[pl.n] += getMileage(homePoints[pl.n][l], homePoints[pl.n][l - 1 ]);
+                                    }
                                   // debugger;  
                                 } else {
                                     strangePoints.home.push(pl);
@@ -253,14 +253,15 @@ window.onload = function() {
                                         :{x: pl.w, y: pl.h, value:1};
                                 if (pl.n <= MAX_PLAYERS ){
                                     const playerPoints = limitPoint(coords, !secondTime);
-                                    // awayTacticPoints[0].averages[pl.n].x += coords.x;
-                                    // awayTacticPoints[0].averages[pl.n].y += coords.y;
-                                    // awayTacticPoints[0].averages[pl.n].push(coords);
+
                                     awayPoints[pl.n].push(playerPoints);
                                     awayPoints[0].push(playerPoints);
                                     awayTacticPoints[0].team.push(playerPoints);
                                     awayTacticPoints[0].averages[pl.n].push(playerPoints);
-
+                                    if (awayPoints[pl.n].length > 1) {
+                                      const l = awayPoints[pl.n].length - 1;
+                                       awayMileage[pl.n] += getMileage(awayPoints[pl.n][l], awayPoints[pl.n][l - 1 ]);
+                                    }
                                 } else {
                                     strangePoints.away.push(pl);
                                 }
@@ -746,6 +747,13 @@ window.onload = function() {
 
 /**===================================================================================================== */
             document.querySelector('.loaderWrapper').remove();
+            console.table("Километраж хозяев ");
+            console.table(homeMileage);
+            console.table("===================================================================================================== ");
+                        console.table("Километраж гостей ");
+                        console.table(awayMileage);
+
+
 /**===================================================================================================== */
 /**===================================================================================================== */
 
