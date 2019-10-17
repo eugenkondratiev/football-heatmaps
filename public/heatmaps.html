@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Heatmaptest</title>
+    <link rel="stylesheet" href="stylesheets/mainsheet.css">
+</head>
+<body>
+    <div class="loaderWrapper">
+        <div class="loader">
+
+        </div>
+        <img src="http://pefl.ru/skins/refl/img/pefl.gif" alt="P">
+    </div>
+<div id="urlContaner">
+    <div>
+    <button id="pasteButton">Вставить из буфера обмена</button>
+    <input type="url" name="tvurlInput" id="tvurlInput">
+    <button id="updateButton">Открыть</button>
+    <button id="newWindow">Открыть в новом окне</button>
+    </div>
+</div>
+<div class="clear"></div>
+
+        <h3>Тепловые карты матча</h3>  
+        <h4 id="gameInfo">game info<span></span></h4>  
+
+    <div class="heatmapContainerWrapper">
+        <div class="heatmapContainer" id="heatmapBall">
+            <img src="images/littleField.png" alt="">
+            <div class="overlay">Мяч</div>
+
+            <div id="player_default_away" title="" class="player_container medium_size" style="top: 14px; left: 341.56px; z-index: 2; opacity: 1;display:none">
+                <div class="player_shape away">
+                    <div class="player_number">8</div>
+                    <div class="tooltiptext">Away player</div>
+                </div>
+            </div>
+            <div id="player_default_home" title="" class="player_container medium_size" style="top: 224.5px; left: 14px; z-index: 2; opacity: 1; display:none">
+                <div class="player_shape home">
+                    <div class="player_number">88</div>
+                    <div class="tooltiptext">Home player</div>
+                </div>
+            </div>
+            
+        </div>
+  
+    </div>
+             <h4></h4>   
+    <div class="heatmap2ContainersWrapper">
+        <div class="heatmapContainerWrapperLeft">
+                <!-- <h4></h4> -->
+            <div class="heatmapContainer" id="heatmapHome">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Хозяева</div>
+            </div>
+    
+        </div>
+        <div class="heatmapContainerWrapperRight">
+                <!-- <h4></h4> -->
+            <div class="heatmapContainer" id="heatmapAway">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Гости</div>
+            </div>
+    
+        </div>  
+    </div>
+
+    <div class="heatmap3ContainersWrapper">
+        <div class="heatmapContainerWrapperLeft">
+                <!-- <h4></h4> -->
+            <div class="heatmapContainer" id="heatmapAvgHome">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Хозяева. Средние позиции основы.</div>
+            </div>
+    
+        </div>
+        <div class="heatmapContainerWrapperRight">
+                <!-- <h4></h4> -->
+            <div class="heatmapContainer" id="heatmapAvgAway">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Хозяева. Средние позиции основы</div>
+            </div>
+    
+        </div>  
+        <div class="thirdHeatmap">
+            <!-- <h4></h4> -->
+        <div class="heatmapContainer" id="heatmapAvgBoth">
+            <img src="images/littleField.png" alt="">
+            <div class="overlay">Средние позиции</div>
+        </div>
+
+    </div>     </div>
+
+    <div class="heatmap2ContainersWrapper">
+        <div class="heatmapContainerWrapperLeft">
+                <!-- <h4></h4> -->
+            <div class="heatmapContainer" id="heatmapAvgSubHome">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Хозяева. Средние позиции запаса.</div>
+            </div>
+    
+        </div>
+        <div class="heatmapContainerWrapperRight">
+                <!-- <h4></h4> -->
+            <div class="heatmapContainer" id="heatmapAvgSubAway">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Хозяева. Средние позиции запаса</div>
+            </div>
+    
+        </div>  
+    </div>
+
+    <script src="javascripts/heatmap.min.js"></script>
+
+      <script src='javascripts/heatmaps.js'></script>
+</body>
+</html>

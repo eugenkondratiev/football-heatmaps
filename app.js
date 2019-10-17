@@ -22,8 +22,11 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, '/views')));
 // app.use(express.static(path.join(__dirname, '/public')));
 app.use(serveStatic(path.join(__dirname, 'views')));
-console.log(path.join(__dirname, 'views'));
+console.log("path.join(__dirname, 'views')", path.join(__dirname, 'views'));
 app.use(serveStatic(path.join(__dirname, 'public')));
+console.log("path.join(__dirname, 'public')",path.join(__dirname, 'public'));
+console.log("path.resolve(__dirname, 'public')",path.resolve(__dirname, 'public'));
+console.log("path.resolve(__dirname, 'views')",path.resolve(__dirname, 'views'));
 app.set('trust proxy', true);
 
 
