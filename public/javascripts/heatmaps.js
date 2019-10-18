@@ -394,6 +394,19 @@ window.onload = function() {
             heatmapInstance6.setData(defaultData);
             heatmapInstance7.setData(defaultData);   
             heatmapInstance8.setData(defaultData);   
+//simple test
+          //  setTimeout(function(){
+          //    const conf = {
+          //     maxOpacity: MAX_OPACITY,
+          //     minOpacity: MIN_OPACITY,
+          //     radius: POINT_RADIUS * BALL_RADIUS_KEFF,
+          //     blur : .5
+
+          //    }
+              
+          //     heatmapInstance3.configure(conf);
+          //     console.log(conf);
+          //   }, 5000)
   /**===================================================================================================== */
   /**===================================================================================================== */
   
