@@ -1,3 +1,11 @@
+body, div, span, p, h1, h2, li, td ,th, select, input,textarea 
+		{
+		font-family: Verdana, arial, Tahoma, Verdana, Arial, Helvetica;
+		font-size: 11px;
+		/* color: #000000; */
+	    background-repeat: no-repeat;
+		}
+
 /* @import url("stylesheets/players.css"); */
 :root,
 html {
@@ -10,6 +18,13 @@ html {
     --back3: #A3DE8F;
     --back1: #C9F8B7;
 
+}
+
+a 	{	 
+    color: #4A667C; text-decoration: none; 
+}
+a:hover 	{
+     background-color: #EADA28; text-decoration: none; 
 }
 
 h1, h2 , h3, h4, h5{
@@ -49,7 +64,7 @@ body {
     width: 14em;
 }
     /*---------------------------------------------------------  */
-    .heatmapContainerWrapper  { 
+.heatmapContainerWrapper  { 
     /* width:50%;  */
     /* height:500px;  */
     align-self: center;
@@ -78,7 +93,7 @@ body {
     width: 1150px; 
 
 }
- .heatmapContainerWrapperLeft, .heatmapContainerWrapperRight, .thirdHeatmap  { 
+ .heatmapContainerWrapperLeft, .heatmapContainerWrapperRight, .thirdHeatmap, .squadContainer  { 
     /* width:50%;  */
     /* height:500px;  */
     align-self: center;
@@ -89,6 +104,45 @@ body {
     /* margin: 0 auto; */
     margin: 0 9px 0 0;
 
+}
+.squadContainer > div{ 
+    width:100%; 
+    /* height:500px;  */
+    /* align-self: center; */
+    margin-bottom: 1px;
+}
+.squadContainer.playerRow:nth-child(even) { 
+    background-color: var(--back1);
+}
+/* .playerRow:nth-child(even) { 
+    background-color: var(--back1);
+} */
+
+.playerRow .playerListMileage{ 
+    width:30%; 
+    float:left
+
+    /* height:500px;  */
+    /* align-self: center; */
+}
+.playerRow .playerListEye{ 
+    width:15%; 
+    float:left
+    /* height:500px;  */
+    /* align-self: center; */
+}
+
+.playerRow .playerListName{ 
+    width:60%; 
+    /* display: inline; */
+    float: left;
+    /* font-weight: bold; */
+}
+.playerRow .playerListNum{ 
+    width:10%; 
+    /* display: inline; */
+    float: left;
+    text-align: right;
 }
 .heatmapContainerWrapperLeft  { 
     float: left;

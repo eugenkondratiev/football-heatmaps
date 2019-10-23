@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Heatmaptest</title>
+    <title>Тепловые карты</title>
     <link rel="stylesheet" href="stylesheets/mainsheet.css">
+    <link rel="icon" href="images/faviconka_hm.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/faviconka_hm.ico" type="image/x-icon"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 </head>
 <body>
     <div class="loaderWrapper">
@@ -17,7 +21,7 @@
 <div id="urlContaner">
     <div>
     <button id="pasteButton">Вставить из буфера обмена</button>
-    <input type="url" name="tvurlInput" id="tvurlInput">
+    <input type="url" name="tvurlInput" id="tvurlInput" placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
     <button id="updateButton">Открыть</button>
     <button id="newWindow">Открыть в новом окне</button>
     </div>
@@ -78,7 +82,6 @@
     
         </div>
         <div class="heatmapContainerWrapperRight">
-                <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAvgAway">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы</div>
@@ -86,7 +89,6 @@
     
         </div>  
         <div class="thirdHeatmap">
-            <!-- <h4></h4> -->
         <div class="heatmapContainer" id="heatmapAvgBoth">
             <img src="images/littleField.png" alt="">
             <div class="overlay">Средние позиции</div>
@@ -94,23 +96,23 @@
 
     </div>     </div>
 
-    <div class="heatmap2ContainersWrapper">
+    <div class="heatmap3ContainersWrapper">
         <div class="heatmapContainerWrapperLeft">
-                <!-- <h4></h4> -->
-            <div class="heatmapContainer" id="heatmapAvgSubHome">
-                <img src="images/littleField.png" alt="">
-                <div class="overlay">Хозяева. Средние позиции запаса.</div>
-            </div>
-    
+            <div class="squadContainer" id="squadHome">
+            </div>    
         </div>
         <div class="heatmapContainerWrapperRight">
-                <!-- <h4></h4> -->
             <div class="heatmapContainer" id="heatmapAvgSubAway">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции запаса</div>
             </div>
-    
+
         </div>  
+        <div class="thirdHeatmap">
+            <div class="squadContainer" id="squadAway">
+            </div>
+
+        </div>
     </div>
 
     <script src="javascripts/heatmap.min.js"></script>

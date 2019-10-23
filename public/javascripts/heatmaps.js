@@ -3,7 +3,7 @@
  *  Нужно ставить сюда ссылку на тв отчет, в кавычки.
  * Сохранить. Обновить или открыть снова файл index.html
  */
-const tvurl = "http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
+const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
 
 
 
@@ -78,6 +78,10 @@ function createHeatMap(rep, corners, jsoncorners) {
 
 window.onload = function() {
 
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.overrideMimeType("application/json");
       
@@ -129,21 +133,30 @@ window.onload = function() {
                 // console.log(MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY));
                 return MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY)
             }  
+
+            function leaveValuablePoints(pointsArr) {
+              return pointsArr.filter(point => !point); // if not null
+            }
+            function getPointsSet(pointsArr, start, end) {
+                return pointsArr.slice(start, end);
+            }
+
               const game = rep.game;
               game.shift();
               game.pop();
               
               // //console.log(game);
               const ballPoints = [];
-   
+              const minutesStarts = [0];
+
                 const strangePoints = {home: [], away: []};
                 const homeTacticChanges = [0];
                 const awayTacticChanges = [0];
 
                const homeTacticPoints = [];
                const awayTacticPoints = [];
-               homeTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
-               awayTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
+               homeTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
+               awayTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
                const init_HomeTacticPoints = [];
               init_HomeTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
 
@@ -154,6 +167,9 @@ window.onload = function() {
               const awayAvgPoints = [];
               const homeMileage = [];
               const awayMileage = [];     
+
+              const homePointsFull = [];
+              const awayPointsFull = [];
 
               for (let i = 0; i <= MAX_PLAYERS ; i++) {
                   homePoints.push([]);
@@ -166,6 +182,9 @@ window.onload = function() {
                   awayTacticPoints[0].averages.push([{x:0, y:0}]);
 
                   init_HomeTacticPoints[0].averages.push([{x:0, y:0}]);
+                  homePointsFull.push([]);
+                  awayPointsFull.push([]);
+
 
               }
 
@@ -174,6 +193,9 @@ window.onload = function() {
               let score = "0:0"; 
             try {
                 game.forEach(element => {
+                  
+                if(!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
+                    
                     if (element.messages[0]) { // изменение счета и пенальти
                         element.messages.forEach(mes => {
                             if (mes.mes.indexOf(' СЧЕТ ') > -1){
@@ -218,16 +240,43 @@ window.onload = function() {
                           secondTime = !secondTime;
                           // //console.log(secondTime, element)
                         };
-                           
+          function pushFullPoint(arr, fullPoints) {
+            for (let p = 1; p <= MAX_PLAYERS; p++) {
+              arr[p].push(fullPoints[p]);
+             }
+            }                 
                     if (element.coordinates) 
                         {
+
                             const ball = element.coordinates.ball;
                             const ballcoords = {x: ball.w, y: ball.h, value:1};
     
                             const hometeam = element.coordinates.home;
                             const awayteam = element.coordinates.away;
+                            const currentHomePositions = [];
+                            const currentAwayPositions = [];
 
-                            hometeam.forEach(pl => {
+                            for (let p = 0; p <= MAX_PLAYERS; p++) {
+                              currentHomePositions.push(null);
+                              currentAwayPositions.push(null);
+                            }
+{
+                            // for (let p = 1; p <= MAX_PLAYERS; p++) {
+                            //   const pl = hometeam[p];
+                            //   if (!pl) { 
+                            //     homePointsFull[p].push(null);
+                            //   }   else {
+                            //     coords = pl.n == 1 
+                            //             ?{x: pl.w, y: pl.h, value:GK_VALUE}
+                            //             :{x: pl.w, y: pl.h, value:1};
+                                
+                            //     const playerPoints = limitPoint(coords, secondTime);
+
+                            //     homePointsFull[p].push(playerPoints);
+                            //   }
+                            // };
+}
+                              hometeam.forEach(pl => {
                                 coords = pl.n == 1 
                                         ?{x: pl.w, y: pl.h, value:GK_VALUE}
                                         :{x: pl.w, y: pl.h, value:1};
@@ -242,11 +291,15 @@ window.onload = function() {
                                       const l = homePoints[pl.n].length - 1;
                                        homeMileage[pl.n] += getMileage(homePoints[pl.n][l], homePoints[pl.n][l - 1 ]);
                                     }
-                                  // debugger;  
+                                    currentHomePositions[pl.n] = playerPoints;
+
+                                  
                                 } else {
                                     strangePoints.home.push(pl);
                                 }
                             });
+                           // }
+
                             awayteam.forEach(pl => {
                                 coords = pl.n == 1 
                                         ?{x: pl.w, y: pl.h, value:GK_VALUE}
@@ -262,6 +315,8 @@ window.onload = function() {
                                       const l = awayPoints[pl.n].length - 1;
                                        awayMileage[pl.n] += getMileage(awayPoints[pl.n][l], awayPoints[pl.n][l - 1 ]);
                                     }
+                                    currentAwayPositions[pl.n] = playerPoints;
+
                                 } else {
                                     strangePoints.away.push(pl);
                                 }
@@ -273,11 +328,15 @@ window.onload = function() {
                             ballPoints.push(ballHeatMap)
                             homeTacticPoints[0].ball.push(ballHeatMap);
                             awayTacticPoints[0].ball.push(ballHeatMap);
+                            //debugger;  
+                            pushFullPoint(homePointsFull,currentHomePositions);
+                            pushFullPoint(awayPointsFull,currentAwayPositions);
 
                         } 
                 }); 
+
             } catch (error) {
-                //console.log(error);
+                console.log("game.forEach ", error);
             }
             homeTacticPoints.push(homeTacticPoints[0]);
             awayTacticPoints.push(awayTacticPoints[0]);
@@ -288,8 +347,12 @@ window.onload = function() {
             + ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
       
             document.querySelector("#gameInfo").textContent = gameInfoSrting;
-
-    function avgMapCreate(_id) {
+/**===================================================================================================== */
+function clearPoint(arr) {
+  return arr.filter(el => (el != null));
+}
+/**===================================================================================================== */
+          function avgMapCreate(_id) {
               return h337.create({
                 container: document.querySelector(_id),//'#heatmapAvgSubHome'),
                 maxOpacity: MAX_OPACITY,
@@ -336,7 +399,7 @@ window.onload = function() {
 
               const heatmapInstance4 = avgMapCreate('#heatmapAvgHome');
               const heatmapInstance5 = avgMapCreate('#heatmapAvgAway');
-              const heatmapInstance6 = avgMapCreate('#heatmapAvgSubHome');
+              // const heatmapInstance6 = avgMapCreate('#heatmapAvgSubHome');
               const heatmapInstance7 = avgMapCreate('#heatmapAvgSubAway');
               const heatmapInstance8 = avgMapCreate('#heatmapAvgBoth');
 
@@ -391,28 +454,18 @@ window.onload = function() {
                });
             heatmapInstance4.setData(defaultData);
             heatmapInstance5.setData(defaultData);
-            heatmapInstance6.setData(defaultData);
+            // heatmapInstance6.setData(defaultData);
             heatmapInstance7.setData(defaultData);   
             heatmapInstance8.setData(defaultData);   
-//simple test
-          //  setTimeout(function(){
-          //    const conf = {
-          //     maxOpacity: MAX_OPACITY,
-          //     minOpacity: MIN_OPACITY,
-          //     radius: POINT_RADIUS * BALL_RADIUS_KEFF,
-          //     blur : .5
-
-          //    }
-              
-          //     heatmapInstance3.configure(conf);
-          //     console.log(conf);
-          //   }, 5000)
   /**===================================================================================================== */
   /**===================================================================================================== */
   
-              //console.log("homeTacticPoints - ", homeTacticPoints);
-              //console.log("awayTacticPoints - ", awayTacticPoints);
-
+  /**===================================================================================================== */
+  /**===================================================================================================== */
+  
+             // console.log("homeTacticPoints - ", homeTacticPoints);
+             // console.log("awayTacticPoints - ", awayTacticPoints);
+            //   console.log("minutesStarts --- ", minutesStarts);
               const newTactics1 = document.querySelector("#gameInfo").cloneNode(true);
               newTactics1.id = "homeTacticsInfo";
               newTactics1.textContent = "Смены тактик " + rep.home.team.name; 
@@ -458,10 +511,11 @@ window.onload = function() {
                         
                         newDiv.appendChild(thirdField);
 
-                        for (let n = 1; n < 12; n++) { 
+                        for (let n = 1; n <= MAX_PLAYERS; n++) { 
+                          // for (let n = 1; n < 12; n++) { 
                           const hp = document.querySelector('#player_default_home').cloneNode(true);
                           hp.id = "homeAvgPoints_" + t + "_"+ n;
-                              hp.style.display = "inherit";
+                              hp.style.display = n < 12 ? "inherit" : "none";
                               hp.style.left = homeTacticPoints[t].averages[n][0].x  - 5 + "px";
                               hp.style.top = homeTacticPoints[t].averages[n][0].y  - 5  + "px";
 
@@ -545,10 +599,11 @@ window.onload = function() {
                   
                   newDiv.appendChild(thirdField);
                   
-                  for (let n = 1; n < 12; n++) { 
+                  for (let n = 1; n <= MAX_PLAYERS; n++) { 
+                    // for (let n = 1; n < 12; n++) { 
                       const ap = document.querySelector('#player_default_away').cloneNode(true);
                       ap.id = "awayAvgPoints_" + t + "_"+ n;
-                          ap.style.display = "inherit";
+                          ap.style.display = n < 12 ? "inherit" : "none";
                           ap.style.left = awayTacticPoints[t].averages[n][0].x  - 5 + "px";
                           ap.style.top = awayTacticPoints[t].averages[n][0].y  - 5  + "px";
                        ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
@@ -632,25 +687,28 @@ window.onload = function() {
               document.querySelector("#heatmapAway .overlay").textContent = rep.away.team.name;
               document.querySelector("#heatmapAvgHome .overlay").textContent = "Средние позиции " + rep.home.team.name;
               document.querySelector("#heatmapAvgAway .overlay").textContent = "Средние позиции " + rep.away.team.name;
-              document.querySelector("#heatmapAvgSubHome .overlay").textContent = "Средние позиции запаса " + rep.home.team.name;
-              document.querySelector("#heatmapAvgSubAway .overlay").textContent = "Средние позиции запаса " + rep.away.team.name;
+              // document.querySelector("#heatmapAvgSubHome .overlay").textContent = "Средние позиции запаса " + rep.home.team.name;
+              // document.querySelector("#heatmapAvgSubAway .overlay").textContent = "Средние позиции запаса " + rep.away.team.name;
+              document.querySelector("#heatmapAvgSubAway .overlay").textContent = "Средние позиции запаса ";
   /**===================================================================================================== */
   /**===================================================================================================== */
   /**=========================СРЕДНИЕ ПОЗИЦИИ================================================== */
             const avgH = homePoints[0].length;
             // //console.log("Точек  - ",avgH);
-            const homeTacticAvg = [];
-            const awayTacticAvg = [];
+
             homeTacticChanges.push(homePoints[0].length -1);
             awayTacticChanges.push(awayPoints[0].length -1);
 
-            //console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
-            //console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
+          //  console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
+          //  console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
             // function calcAvgPositions(pointsArr, opposite) {
             //   const ;
             // }
-            //console.log("homePoints  - ", homePoints);
-            //console.log("awayPoints  - ", awayPoints);
+          //  console.log("homePoints  - ", homePoints);
+          //  console.log("awayPoints  - ", awayPoints);
+
+
+          //  console.log("homePointsFull  - ", homePointsFull);
 
             homePoints.forEach(
               (hmap, _n) => {
@@ -678,19 +736,90 @@ window.onload = function() {
             //console.log('homeAvgPoints  - ', homeAvgPoints);
             //console.log('awayAvgPoints  - ', awayAvgPoints);
             //-------------------------------------------------------------------------
+            //-------------------------------------------------------------------------
+            function showHideAllColoboks(team, n, _tacticPoints){
+              const _home =  team || "home";
+              const _n = n || 1;
+              const tacticPoints = _tacticPoints || homeTacticPoints;
+
+              const _colobokId = _home +"AvgPoints"+ _n;
+              const _colobokId2 = "both" + _home + "AvgPoints"+ _n;
+            //  console.log(_colobokId, _colobokId2);
+/**hpNameDiv.style.fontWeight = n < 12 ? "bold" : "normal"; */
+              const _style = document.getElementById(_colobokId).style;
+              const _style2 = document.getElementById(_colobokId2).style;
+                  _style.display = _style.display == "none"? "inherit" : "none";
+
+                   _style2.display = _style2.display == "none"  ? "inherit"  : "none";
+
+              if (tacticPoints.length > 1) {
+                      for (let t = 1; t < tacticPoints.length ; t++) { 
+                          if (tacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+                          const _colobokId = _home +"AvgPoints_"+ t +"_" + _n;
+
+                          document.getElementById(_colobokId).style.display = document.getElementById(_colobokId).style.display == "none" 
+                          ? "inherit"
+                          : "none";
+                      }
+              }
+          
+            };
+
+            //-------------------------------------------------------------------------
             function showMainAvgPositions() {
-              for (let n = 1; n < 12; n++) {
+              for (let n = 1; n <= MAX_PLAYERS; n++) {
+                // for (let n = 1; n < 12; n++) {
                 const hp = document.querySelector('#player_default_home').cloneNode(true);
                 const ap = document.querySelector('#player_default_away').cloneNode(true);
                 ap.id = "awayAvgPoints" + n;
-                ap.style.display = "inherit";
+                ap.style.display = n < 12 ? "inherit" : "none";
                 ap.style.left = awayAvgPoints[n].x  - 5 + "px";
                 ap.style.top = awayAvgPoints[n].y  - 5  + "px";
-            
+                const apRow = "awayPlayerList_" + n;
+                // const newPlayer = document.createElement('div',{id: apRow});
+                let newPlayer = document.createElement('div');
+                newPlayer.className = "playerRow";
+                newPlayer.id =apRow;
+                const apNumDiv = document.createElement('div');
+                apNumDiv.innerText = rep.away.players[n - 1].number + ". ";
+                apNumDiv.className = "playerListNum";
+                const apNameDiv = document.createElement('div');
+                apNameDiv.className = "playerListName";
+                const apName = document.createElement('a');
+                apName.style.fontWeight = n < 12 ? "bold" : "normal";
+                apName.id = apRow + '_name';
+                apName.innerText =  rep.away.players[n - 1].name;
+                apName.href =  '#';
+                apName.addEventListener('click', function(e){
+                  e.preventDefault();
+
+                  this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
+
+                  showHideAllColoboks("away", this.id.replace("awayPlayerList_", '').replace("_name", ''), awayTacticPoints);
+                });
+                
+                apNameDiv.appendChild(apName);
+
+                newPlayer.appendChild(apNumDiv);
+                newPlayer.appendChild(apNameDiv);
+
+                const apEye = document.createElement('div');
+                apEye.className = "playerListEye";
+                apEye.innerText = " ";
+                newPlayer.appendChild(apEye);
+
+                const apMileage = document.createElement('div');
+                apMileage.className = "playerListMileage";
+                apMileage.innerText = Number(awayMileage[n]/ 1000.0).toFixed(2) + " км";
+                newPlayer.appendChild(apMileage);
+
+                document.querySelector('#squadAway').appendChild(newPlayer);
+
                 ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
                 ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;;
                 document.getElementById('heatmapAvgAway').appendChild(ap);
                 const apBoth = ap.cloneNode(true);
+                apBoth.id = "both" + apBoth.id;
                 document.getElementById('heatmapAvgBoth').appendChild(apBoth);
                 const apToINdividualHeatmap = ap.cloneNode(true);
                 apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
@@ -698,14 +827,55 @@ window.onload = function() {
                 document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
             
                 hp.id = "homeAvgPoints" + n;
-                hp.style.display = "inherit";
+                hp.style.display = n < 12 ? "inherit" : "none";
                 hp.style.left = homeAvgPoints[n].x  - 5  + "px";
                 hp.style.top = homeAvgPoints[n].y  - 5  + "px";
-            
+                const hpRow = "homePlayerList_" + n;
+                // const newPlayer = document.createElement('div',{id: hpRow});
+                const newHomePlayer = document.createElement('div');
+                newHomePlayer.id =hpRow;
+                newHomePlayer.className = "playerRow";
+
+                const hpNumDiv = document.createElement('div');
+                hpNumDiv.innerText = rep.home.players[n - 1].number + ". ";
+                hpNumDiv.className = "playerListNum";
+                newHomePlayer.appendChild(hpNumDiv);
+
+                const hpNameDiv = document.createElement('div');
+                hpNameDiv.className = "playerListName";
+                hpNameDiv.style.fontWeight = n < 12 ? "bold" : "normal";
+                const hpName = document.createElement('a');
+                hpName.id = hpRow + '_name';
+                hpName.innerText =  rep.home.players[n - 1].name;
+                hpName.href =  '#';
+                hpName.addEventListener('click', function(e){
+                  e.preventDefault();
+                  this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
+                  showHideAllColoboks("home", this.id.replace("homePlayerList_", '').replace("_name", ''), homeTacticPoints);
+                });
+                
+
+                hpNameDiv.appendChild(hpName);
+                newHomePlayer.appendChild(hpNameDiv);
+
+                const hpEye = document.createElement('div');
+                hpEye.className = "playerListEye";
+                hpEye.innerText = " ";
+                newHomePlayer.appendChild(hpEye);
+
+                const hpMileage = document.createElement('div');
+                hpMileage.className = "playerListMileage";
+                hpMileage.innerText = Number(homeMileage[n]/ 1000.0).toFixed(2) + " км";
+                newHomePlayer.appendChild(hpMileage);
+
+                document.querySelector('#squadHome').appendChild(newHomePlayer);
+
                 hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
                 hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
                 document.getElementById('heatmapAvgHome').appendChild(hp);
                 const hpBoth = hp.cloneNode(true);
+                hpBoth.id = "both" + hpBoth.id;
+
                     document.getElementById('heatmapAvgBoth').appendChild(hpBoth);
                     const hpToINdividualHeatmap = hp.cloneNode(true);
                     hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
@@ -727,6 +897,7 @@ window.onload = function() {
                   ap.style.top = awayAvgPoints[n].y  - 5  + "px";
               
                   ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
+                  ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;
                   document.getElementById('heatmapAvgSubAway').appendChild(ap);
                   const apToINdividualHeatmap = ap.cloneNode(true);
                   apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
@@ -743,8 +914,9 @@ window.onload = function() {
                     hp.style.top = homeAvgPoints[n].y  - 5  + "px";
                 
                     hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
-                    document.getElementById('heatmapAvgSubHome').appendChild(hp);
-                    // document.getElementById('heatmapAvgSubAway').appendChild(hp);
+                    hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
+                    // document.getElementById('heatmapAvgSubHome').appendChild(hp);
+                    document.getElementById('heatmapAvgSubAway').appendChild(hp);
                     const hpToINdividualHeatmap = hp.cloneNode(true);
                     hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
                     document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
@@ -760,11 +932,11 @@ window.onload = function() {
 
 /**===================================================================================================== */
             document.querySelector('.loaderWrapper').remove();
-            console.table("Километраж хозяев ");
-            console.table(homeMileage);
-            console.table("===================================================================================================== ");
-                        console.table("Километраж гостей ");
-                        console.table(awayMileage);
+           // console.table("Километраж хозяев ");
+           // console.table(homeMileage);
+           // console.table("===================================================================================================== ");
+           //             console.table("Километраж гостей ");
+            //            console.table(awayMileage);
 
 
 /**===================================================================================================== */
@@ -790,12 +962,20 @@ function formHeatmapUrl(urlINput) {
 
 const urlPaste = document.querySelector('#pasteButton');
 const urlInput = document.querySelector("#tvurlInput");
+if (navigator.clipboard) {
+  urlPaste.addEventListener('click', e => {
+    // e.preventDefault();
+    navigator.clipboard.readText()
+    .then(
+      clipText => { urlInput.value = clipText; })
+    .catch(e => {
+      console.log("Работа с буфером сейчас не разрешена или не доступна в вашем браузере!");
+    });
+  });
+} else {
+  urlPaste.remove();
+}
 
-urlPaste.addEventListener('click', e => {
-  e.preventDefault();
-  navigator.clipboard.readText().then(
-    clipText => { urlInput.value = clipText; });
-});
 
 document.querySelector('#updateButton').addEventListener('click', e => {
   e.preventDefault();
