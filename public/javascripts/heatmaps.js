@@ -6,13 +6,6 @@
 const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
 
 
-
-
-
-
-
-
-
 const MAX_VALUE = 60;
 const MAX_OPACITY = .7;
 const MIN_OPACITY = .05;
@@ -32,6 +25,8 @@ const TEAM_MAX_KEFF = 1.1;
 
 const HOME = 1;
 const AWAY = 2;
+const SUB_OUT = 1;
+const SUB_IN = 2;
 
 const MIN_MINUTES_FOR_SHOW_TACTIC = 3;
 
@@ -93,7 +88,6 @@ window.onload = function() {
             // //console.log(scoreWithPens);
 
             const rep = JSON.parse(this.responseText);
-            //console.log(rep);
 //--------------------------------------------------------------------
 
 /**
@@ -155,6 +149,8 @@ window.onload = function() {
 
                const homeTacticPoints = [];
                const awayTacticPoints = [];
+               const shots = {home: [], away: []};
+
                homeTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
                awayTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
                const init_HomeTacticPoints = [];
@@ -192,10 +188,19 @@ window.onload = function() {
               var penalties = false;
               let score = "0:0"; 
             try {
-                game.forEach(element => {
+                game.forEach((element, episode, episodes ) => {
                   
                 if(!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
-                    
+                if (element.S) { // substitutes handle
+                  console.log(element.S);
+                  if( element.S.team == 1) {
+                    rep.home.players[element.S.in - 1].sub = SUB_IN; 
+                    rep.home.players[element.S.out - 1].sub = SUB_OUT; 
+                  } else {
+                    rep.away.players[element.S.in - 1].sub = SUB_IN; 
+                    rep.away.players[element.S.out - 1].sub = SUB_OUT; 
+                  }
+                }
                     if (element.messages[0]) { // изменение счета и пенальти
                         element.messages.forEach(mes => {
                             if (mes.mes.indexOf(' СЧЕТ ') > -1){
@@ -235,7 +240,34 @@ window.onload = function() {
                     }
 
                     let coords;
-                      if (element.M) { // смена сторон. конец тайма.
+                    if (element.U && !penalties) { // shots handle
+                      const ball = element.coordinates.ball;
+                      const ballcoords = {x: ball.w, y: ball.h, value:1};
+                      const shotType = element.G ? "G" : element.V ? "V" : element.B ? "B" : element.U.team > 2 ? "Block" : "U";  
+                      // console.log(episodes[episode], episodes[episode - 1]);
+                      const shotStart = episodes[episode - 1].messages.length > 0 
+                          ? episodes[episode - 1].coordinates.ball 
+                          : episodes[episode - 2].messages.length > 0 ? episodes[episode - 2].coordinates.ball : episodes[episode - 3].coordinates.ball; 
+                      const startCoords = {x: shotStart.w, y:shotStart.h, value:1};
+
+                      if (element.U.team == 1 || element.U.team == 3) {
+                        const endpoint = limitPoint(ballcoords, secondTime);
+                        const startpoint = limitPoint(startCoords, secondTime);
+
+                        const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type: shotType, minute : element.minute};
+
+                        shots.home.push(newShot)
+                      } else {
+                        const endpoint = limitPoint(ballcoords, !secondTime);
+                        const startpoint = limitPoint(startCoords, !secondTime);
+                        const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type:shotType, minute : element.minute};
+
+                        shots.away.push(newShot)
+                        
+                      } 
+                      ;
+                    }
+                          if (element.M) { // смена сторон. конец тайма.
                           
                           secondTime = !secondTime;
                           // //console.log(secondTime, element)
@@ -699,8 +731,8 @@ function clearPoint(arr) {
             homeTacticChanges.push(homePoints[0].length -1);
             awayTacticChanges.push(awayPoints[0].length -1);
 
-          //  console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
-          //  console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
+           console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
+           console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
             // function calcAvgPositions(pointsArr, opposite) {
             //   const ;
             // }
@@ -708,7 +740,8 @@ function clearPoint(arr) {
           //  console.log("awayPoints  - ", awayPoints);
 
 
-          //  console.log("homePointsFull  - ", homePointsFull);
+          console.log("homePointsFull  - ", homePointsFull);
+          console.log("awayPointsFull  - ", awayPointsFull);
 
             homePoints.forEach(
               (hmap, _n) => {
@@ -772,6 +805,7 @@ function clearPoint(arr) {
                 const hp = document.querySelector('#player_default_home').cloneNode(true);
                 const ap = document.querySelector('#player_default_away').cloneNode(true);
                 ap.id = "awayAvgPoints" + n;
+                ap.plId = "aw" + n;
                 ap.style.display = n < 12 ? "inherit" : "none";
                 ap.style.left = awayAvgPoints[n].x  - 5 + "px";
                 ap.style.top = awayAvgPoints[n].y  - 5  + "px";
@@ -797,7 +831,10 @@ function clearPoint(arr) {
 
                   showHideAllColoboks("away", this.id.replace("awayPlayerList_", '').replace("_name", ''), awayTacticPoints);
                 });
-                
+                if (rep.away.players[n - 1].sub) {
+                  apName.appendChild(getSubArrow(rep.away.players[n -1].sub)) ;
+                }
+
                 apNameDiv.appendChild(apName);
 
                 newPlayer.appendChild(apNumDiv);
@@ -827,6 +864,7 @@ function clearPoint(arr) {
                 document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
             
                 hp.id = "homeAvgPoints" + n;
+                hp.plId = "hm" + n;
                 hp.style.display = n < 12 ? "inherit" : "none";
                 hp.style.left = homeAvgPoints[n].x  - 5  + "px";
                 hp.style.top = homeAvgPoints[n].y  - 5  + "px";
@@ -843,8 +881,8 @@ function clearPoint(arr) {
 
                 const hpNameDiv = document.createElement('div');
                 hpNameDiv.className = "playerListName";
-                hpNameDiv.style.fontWeight = n < 12 ? "bold" : "normal";
                 const hpName = document.createElement('a');
+                hpName.style.fontWeight = n < 12 ? "bold" : "normal";
                 hpName.id = hpRow + '_name';
                 hpName.innerText =  rep.home.players[n - 1].name;
                 hpName.href =  '#';
@@ -853,7 +891,9 @@ function clearPoint(arr) {
                   this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
                   showHideAllColoboks("home", this.id.replace("homePlayerList_", '').replace("_name", ''), homeTacticPoints);
                 });
-                
+                if (rep.home.players[n - 1].sub) {
+                  hpName.appendChild(getSubArrow(rep.home.players[n -1].sub)) ;
+                }
 
                 hpNameDiv.appendChild(hpName);
                 newHomePlayer.appendChild(hpNameDiv);
@@ -938,7 +978,47 @@ function clearPoint(arr) {
            //             console.table("Километраж гостей ");
             //            console.table(awayMileage);
 
+            console.log("allRep - ", rep);
+            console.log("shots - ", shots);
 
+/**===================================================================================================== */
+            const _avgHome = document.querySelector('#heatmapAvgHome .heatmap-canvas');
+            const _avgAway = document.querySelector('#heatmapAvgAway .heatmap-canvas');
+            // console.log(_avgHome);
+            if (_avgHome.getContext) 
+                  {
+                    // console.log('there is context');
+                    var context = _avgHome.getContext('2d');
+                    shots.home.forEach(shot => {
+                      context.beginPath(); ;
+                      context.moveTo(shot.startpoint.x, shot.startpoint.y);
+                      context.lineTo(shot.endpoint.x, shot.endpoint.y);
+                      context.stroke();
+                    });
+                    // Reset the current path
+                    // context.beginPath(); 
+                    // Staring point (10,45)
+                    // const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type: shotType, minute : element.minute};
+                    // context.moveTo(shots.home[0].startpoint.x, shots.home[0].startpoint.y);
+                    // End point (180,47)
+                    // context.lineTo(shots.home[0].endpoint.x, shots.home[0].endpoint.y);
+                    // Make the line visible
+                    // context.stroke();
+
+
+                    } 
+                    if (_avgAway.getContext) 
+                    {
+                        var context = _avgAway.getContext('2d');
+                        shots.away.forEach(shot => {
+                          context.beginPath(); ;
+                          context.moveTo(shot.startpoint.x, shot.startpoint.y);
+                          context.lineTo(shot.endpoint.x, shot.endpoint.y);
+                          context.stroke();
+                        });  
+                      } 
+  
+/**========================================================== =========================================== */
 /**===================================================================================================== */
 /**===================================================================================================== */
 
@@ -960,6 +1040,18 @@ function formHeatmapUrl(urlINput) {
 }
 //-----------------------------------------------------------------
 
+/**===================================================================================================== */
+/**===================================================================================================== */
+function getSubArrow(_sub) {
+  const sub = _sub || SUB_OUT;
+  const arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
+  const arrow = document.createElement("img");
+  arrow.src =  arrRef;
+  return arrow;
+}
+
+/**===================================================================================================== */
+/**===================================================================================================== */
 const urlPaste = document.querySelector('#pasteButton');
 const urlInput = document.querySelector("#tvurlInput");
 if (navigator.clipboard) {
