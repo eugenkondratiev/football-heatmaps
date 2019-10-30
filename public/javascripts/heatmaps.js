@@ -40,9 +40,14 @@ const jsonY1 = 0;
 const jsonX2 = 720;
 const jsonY2 = 450;
 
+const shotsCoords = {x1: 39, y1:38, x2:712, y2:458};
+const jsonCoords = {x1: 0, y1:0, x2:720, y2:450};
+const hmCoords = {x1: 18.98, y1:19, x2:346.56, y2:229.5};
+
 const FIELD_LONGTITUDE = 105;
 
-const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
+const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1) ;
+// const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
 
 //==============================================================================
 function formJsonUrl(tvurl) {
@@ -105,17 +110,21 @@ window.onload = function() {
               // //console.log(rep.home.players);
 
 
-              function limitPoint(point, secondTime = false) {
+              function limitPoint(point, secondTime = false, coords1 = hmCoords, coords2 = jsonCoords) {
                   const x = point.x;
                   const y = point.y;
                   let newX;
                   let newY;
                   if (secondTime) {
-                      newX = Math.round(rightBottomX - (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
-                      newY = Math.round(rightBottomY - (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
+                      // newX = Math.round(rightBottomX - (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
+                      // newY = Math.round(rightBottomY - (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
+                      newX = Math.round(coords1.x2 - (x - coords2.x1) * (coords1.x2 - coords1.x1) / (coords2.x2 - coords2.x1) );
+                      newY = Math.round(coords1.y2 - (y - coords2.y1) * (coords1.y2 - coords1.y1) / (coords2.y2 - coords2.y1) );    
                   } else {
-                      newX = Math.round(leftTopX + (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
-                      newY = Math.round(leftTopY + (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
+                      // newX = Math.round(leftTopX + (x - jsonX1) * (rightBottomX - leftTopX) / (jsonX2 - jsonX1) );
+                      // newY = Math.round(leftTopY + (y - jsonY1) * (rightBottomY - leftTopY) / (jsonY2 - jsonY1) );    
+                      newX = Math.round(coords1.x1 + (x - coords2.x1) * (coords1.x2 - coords1.x1) / (coords2.x2 - coords2.x1) );
+                      newY = Math.round(coords1.y1 + (y - coords2.y1) * (coords1.y2 - coords1.y1) / (coords2.y2 - coords2.y1) );    
                   }
   
                   return { x: newX, y: newY, value: point.value }
@@ -150,6 +159,7 @@ window.onload = function() {
                const homeTacticPoints = [];
                const awayTacticPoints = [];
                const shots = {home: [], away: []};
+              let sumInterval = 0;
 
                homeTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
                awayTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
@@ -189,7 +199,8 @@ window.onload = function() {
               let score = "0:0"; 
             try {
                 game.forEach((element, episode, episodes ) => {
-                  
+                  if (element.interval) sumInterval += parseInt(element.interval);
+
                 if(!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
                 if (element.S) { // substitutes handle
                   console.log(element.S);
@@ -251,15 +262,20 @@ window.onload = function() {
                       const startCoords = {x: shotStart.w, y:shotStart.h, value:1};
 
                       if (element.U.team == 1 || element.U.team == 3) {
-                        const endpoint = limitPoint(ballcoords, secondTime);
-                        const startpoint = limitPoint(startCoords, secondTime);
+                        // const endpoint = limitPoint(ballcoords, secondTime);
+                        // const startpoint = limitPoint(startCoords, secondTime);
+                        const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                        const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
 
                         const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type: shotType, minute : element.minute};
 
                         shots.home.push(newShot)
                       } else {
-                        const endpoint = limitPoint(ballcoords, !secondTime);
-                        const startpoint = limitPoint(startCoords, !secondTime);
+                        // const endpoint = limitPoint(ballcoords, !secondTime);
+                        // const startpoint = limitPoint(startCoords, !secondTime);
+                        const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                        const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
+
                         const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type:shotType, minute : element.minute};
 
                         shots.away.push(newShot)
@@ -375,7 +391,9 @@ window.onload = function() {
  
             const finalScore = score + (scoreWithPens == score ? '' : `(${scoreWithPens})`);
 
-            const gameInfoSrting = rep.date + ". " + rep.stadium.city + ". "+ rep.stadium.name 
+            const gameInfoSrting = rep.date + ". " 
+              + (rep.stadium.city ? rep.stadium.city + ". " : "")+ 
+              + rep.stadium.name 
             + ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
       
             document.querySelector("#gameInfo").textContent = gameInfoSrting;
@@ -432,7 +450,8 @@ function clearPoint(arr) {
               const heatmapInstance4 = avgMapCreate('#heatmapAvgHome');
               const heatmapInstance5 = avgMapCreate('#heatmapAvgAway');
               // const heatmapInstance6 = avgMapCreate('#heatmapAvgSubHome');
-              const heatmapInstance7 = avgMapCreate('#heatmapAvgSubAway');
+              const heatmapInstance7 = avgMapCreate('#chalkboard');
+              // const heatmapInstance7 = avgMapCreate('#heatmapAvgSubAway');
               const heatmapInstance8 = avgMapCreate('#heatmapAvgBoth');
 
               
@@ -721,7 +740,7 @@ function clearPoint(arr) {
               document.querySelector("#heatmapAvgAway .overlay").textContent = "Средние позиции " + rep.away.team.name;
               // document.querySelector("#heatmapAvgSubHome .overlay").textContent = "Средние позиции запаса " + rep.home.team.name;
               // document.querySelector("#heatmapAvgSubAway .overlay").textContent = "Средние позиции запаса " + rep.away.team.name;
-              document.querySelector("#heatmapAvgSubAway .overlay").textContent = "Средние позиции запаса ";
+              // document.querySelector("#heatmapAvgSubAway .overlay").textContent = "Средние позиции запаса ";
   /**===================================================================================================== */
   /**===================================================================================================== */
   /**=========================СРЕДНИЕ ПОЗИЦИИ================================================== */
@@ -925,49 +944,52 @@ function clearPoint(arr) {
             
               }
             }
-            function showSubAvgPositions() {
-              for (let n = 12; n <= MAX_PLAYERS; n++) {
-
-                if (awayAvgPoints[n].x != 0 || awayAvgPoints[n].y != 0 ) {
-                  const ap = document.querySelector('#player_default_away').cloneNode(true);
-                  
-                  ap.id = "awayAvgSubPoints" + n;
-                  ap.style.display = "inherit";
-                  ap.style.left = awayAvgPoints[n].x  - 5  + "px";
-                  ap.style.top = awayAvgPoints[n].y  - 5  + "px";
-              
-                  ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
-                  ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;
-                  document.getElementById('heatmapAvgSubAway').appendChild(ap);
-                  const apToINdividualHeatmap = ap.cloneNode(true);
-                  apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
-                  document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
-                  // //console.log('#heatmapAvgSubAway' + n, "     ", document.querySelector('#heatmapAvgSubAway' + n));
-              }
-            
-                if (homeAvgPoints[n].x != 0 || homeAvgPoints[n].y != 0 ) {
-                const hp = document.querySelector('#player_default_home').cloneNode(true);
+            {
+              // function showSubAvgPositions() {
+              //   for (let n = 12; n <= MAX_PLAYERS; n++) {
+  
+              //     if (awayAvgPoints[n].x != 0 || awayAvgPoints[n].y != 0 ) {
+              //       const ap = document.querySelector('#player_default_away').cloneNode(true);
                     
-                    hp.id = "homeAvgSubPoints" + n;
-                    hp.style.display = "inherit";
-                    hp.style.left = homeAvgPoints[n].x  - 5  + "px";
-                    hp.style.top = homeAvgPoints[n].y  - 5  + "px";
+              //       ap.id = "awayAvgSubPoints" + n;
+              //       ap.style.display = "inherit";
+              //       ap.style.left = awayAvgPoints[n].x  - 5  + "px";
+              //       ap.style.top = awayAvgPoints[n].y  - 5  + "px";
                 
-                    hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
-                    hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
-                    // document.getElementById('heatmapAvgSubHome').appendChild(hp);
-                    document.getElementById('heatmapAvgSubAway').appendChild(hp);
-                    const hpToINdividualHeatmap = hp.cloneNode(true);
-                    hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
-                    document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
-                
-                }
-            
-            
-              }
-            }  
+              //       ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
+              //       ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;
+              //       document.getElementById('heatmapAvgSubAway').appendChild(ap);
+              //       const apToINdividualHeatmap = ap.cloneNode(true);
+              //       apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
+              //       document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
+              //       // //console.log('#heatmapAvgSubAway' + n, "     ", document.querySelector('#heatmapAvgSubAway' + n));
+              //   }
+              
+              //     if (homeAvgPoints[n].x != 0 || homeAvgPoints[n].y != 0 ) {
+              //     const hp = document.querySelector('#player_default_home').cloneNode(true);
+                      
+              //         hp.id = "homeAvgSubPoints" + n;
+              //         hp.style.display = "inherit";
+              //         hp.style.left = homeAvgPoints[n].x  - 5  + "px";
+              //         hp.style.top = homeAvgPoints[n].y  - 5  + "px";
+                  
+              //         hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
+              //         hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
+              //         // document.getElementById('heatmapAvgSubHome').appendChild(hp);
+              //         document.getElementById('heatmapAvgSubAway').appendChild(hp);
+              //         const hpToINdividualHeatmap = hp.cloneNode(true);
+              //         hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
+              //         document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
+                  
+              //     }
+              
+              
+              //   }
+              // }  
+            }
+
             showMainAvgPositions();
-            showSubAvgPositions();
+            // showSubAvgPositions();
 
 
 /**===================================================================================================== */
@@ -980,19 +1002,28 @@ function clearPoint(arr) {
 
             console.log("allRep - ", rep);
             console.log("shots - ", shots);
+            console.log("sum of intervals - ", sumInterval);
 
 /**===================================================================================================== */
             const _avgHome = document.querySelector('#heatmapAvgHome .heatmap-canvas');
             const _avgAway = document.querySelector('#heatmapAvgAway .heatmap-canvas');
+            const _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
             // console.log(_avgHome);
-            if (_avgHome.getContext) 
+            if (_chalkboard.getContext) 
                   {
                     // console.log('there is context');
-                    var context = _avgHome.getContext('2d');
+                    var context = _chalkboard.getContext('2d');
                     shots.home.forEach(shot => {
+                      const _strokeStyle = shot.type == "G"
+                        ? 'red'
+                        : shot.type == "V" 
+                          ? 'darkyellow' 
+                          : shot.type == "Block" ? 'black' : 'blue';
+                      if (_strokeStyle == 'blue') return;
                       context.beginPath(); ;
                       context.moveTo(shot.startpoint.x, shot.startpoint.y);
                       context.lineTo(shot.endpoint.x, shot.endpoint.y);
+                      context.strokeStyle = _strokeStyle;
                       context.stroke();
                     });
                     // Reset the current path
@@ -1007,13 +1038,20 @@ function clearPoint(arr) {
 
 
                     } 
-                    if (_avgAway.getContext) 
+                    if (_chalkboard.getContext) 
                     {
-                        var context = _avgAway.getContext('2d');
+                        var context = _chalkboard.getContext('2d');
                         shots.away.forEach(shot => {
-                          context.beginPath(); ;
+                          const _strokeStyle = shot.type == "G"
+                          ? 'red'
+                          : shot.type == "V" 
+                            ? 'darkyellow' 
+                            : shot.type == "Block" ? 'black' : 'blue';
+                        if (_strokeStyle == 'blue') return;
+                           context.beginPath(); ;
                           context.moveTo(shot.startpoint.x, shot.startpoint.y);
                           context.lineTo(shot.endpoint.x, shot.endpoint.y);
+                          context.strokeStyle = _strokeStyle;
                           context.stroke();
                         });  
                       } 

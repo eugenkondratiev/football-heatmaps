@@ -75,7 +75,9 @@ body {
 
 }
 .heatmap2ContainersWrapper,
-.heatmap3ContainersWrapper  { 
+.heatmap3ContainersWrapper,
+.squadAndShotsContainersWrapper,
+.shotsContainerWrapper { 
     /* width:50%;  */
     /* height:500px;  */
     align-self: center;
@@ -89,11 +91,25 @@ body {
 
 }
 .heatmap3ContainersWrapper  { 
-
     width: 1150px; 
-
 }
- .heatmapContainerWrapperLeft, .heatmapContainerWrapperRight, .thirdHeatmap, .squadContainer  { 
+.squadAndShotsContainersWrapper  { 
+    /* width: 1340px;  */
+    width: 800px; 
+    /* height: 500px; */
+}
+.shotsContainerWrapper { 
+    width: 754px;
+}
+/* .squadAndShotsContainersWrapper::after  { 
+
+    clear: both;
+} */
+ .heatmapContainerWrapperLeft, 
+ .heatmapContainerWrapperRight,
+  .thirdHeatmap, 
+  .squadContainer,
+   .shotsContainerWrapperrRight { 
     /* width:50%;  */
     /* height:500px;  */
     align-self: center;
@@ -105,6 +121,11 @@ body {
     margin: 0 9px 0 0;
 
 }
+.shotsContainerWrapperRight { 
+    width: 754px;
+    height: 500px;
+}
+
 .squadContainer > div{ 
     width:100%; 
     /* height:500px;  */
@@ -144,16 +165,16 @@ body {
     float: left;
     text-align: right;
 }
-.heatmapContainerWrapperLeft  { 
+.heatmapContainerWrapperLeft , .squadWrapperLeft { 
     float: left;
 
 }
-.heatmapContainerWrapperRight  { 
+.heatmapContainerWrapperRight , .shotsContainerWrapperRight { 
     /* margin-left: 373px; */
     float: left;
 }
 
-.thirdHeatmap  { 
+.thirdHeatmap , .squadWrapperRight { 
      /* margin-left: 747px; */
     float: left;
 }
@@ -164,7 +185,18 @@ body {
      /* height:100%; */
      /* margin: 0 auto; */
 }
+.shotsContainer, .shotsContainer .heatmap-canvas {
+    width: 754px;
+    height: 500px;   
+}
 
+.squadContainer, .squadWrapperLeft , .squadWrapperRight {
+    width: 280px;
+    height: 350px;
+}
+.squadWrapperLeft , .squadWrapperRight {
+    width: 50%;
+}
 .heatmapContainer img{ 
     /* width:100%; 
     height:100%; */
@@ -332,7 +364,12 @@ background-color: var(--back1);
 
 
 /*==================================*/
-.heatmapContainer .overlay {
+.clear, .heatmap2ContainersWrapper{
+    clear:both;
+    
+}
+/*==================================*/
+.heatmapContainer .overlay, .shotsContainer .overlay {
     width:100%;
     height:100%;
     /* background:rgba(0,0,0,.5); */
