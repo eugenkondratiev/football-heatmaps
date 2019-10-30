@@ -203,7 +203,7 @@ window.onload = function() {
 
                 if(!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
                 if (element.S) { // substitutes handle
-                  console.log(element.S);
+                  // console.log(element.S);
                   if( element.S.team == 1) {
                     rep.home.players[element.S.in - 1].sub = SUB_IN; 
                     rep.home.players[element.S.out - 1].sub = SUB_OUT; 
@@ -261,22 +261,26 @@ window.onload = function() {
                           : episodes[episode - 2].messages.length > 0 ? episodes[episode - 2].coordinates.ball : episodes[episode - 3].coordinates.ball; 
                       const startCoords = {x: shotStart.w, y:shotStart.h, value:1};
 
-                      if (element.U.team == 1 || element.U.team == 3) {
+                      const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                      const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
+
+                      const newShot = {
+                        endpoint :endpoint, startpoint:startpoint,
+                        episode:episode, type: shotType, minute : element.minute, 
+                        player:element.U.player
+                      };
+                    if (element.U.team == 1 || element.U.team == 3) {
                         // const endpoint = limitPoint(ballcoords, secondTime);
                         // const startpoint = limitPoint(startCoords, secondTime);
-                        const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
-                        const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
-
-                        const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type: shotType, minute : element.minute};
 
                         shots.home.push(newShot)
                       } else {
-                        // const endpoint = limitPoint(ballcoords, !secondTime);
-                        // const startpoint = limitPoint(startCoords, !secondTime);
-                        const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
-                        const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
+                   //     // const endpoint = limitPoint(ballcoords, !secondTime);
+                   //     // const startpoint = limitPoint(startCoords, !secondTime);
+                        // const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                        // const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
 
-                        const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type:shotType, minute : element.minute};
+                        // const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type:shotType, minute : element.minute};
 
                         shots.away.push(newShot)
                         
@@ -392,7 +396,8 @@ window.onload = function() {
             const finalScore = score + (scoreWithPens == score ? '' : `(${scoreWithPens})`);
 
             const gameInfoSrting = rep.date + ". " 
-              + (rep.stadium.city ? rep.stadium.city + ". " : "")+ 
+            // + rep.stadium.city + ". "  
+            + (rep.stadium.city ? rep.stadium.city + ". " : "") 
               + rep.stadium.name 
             + ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
       
@@ -533,9 +538,7 @@ function clearPoint(arr) {
                       positions.forEach((pos, i, _arr) => {
                         positions[0].x += (pos.x / avg);
                         positions[0].y += (pos.y / avg);
-
                       })
-                      
                     })
 
                     // show tactic
@@ -556,10 +559,8 @@ function clearPoint(arr) {
                         const thirdField = theWrapper.cloneNode(true);
                         thirdField.className = "thirdHeatmap";
                         newDiv.className = "heatmap3ContainersWrapper";
-                        thirdField.querySelector(".heatmapContainer").id = "avgPositionsHome" + t; 
-                        
-                        thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;
-                        
+                        thirdField.querySelector(".heatmapContainer").id = "avgPositionsHome" + t;                        
+                        thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;                        
                         newDiv.appendChild(thirdField);
 
                         for (let n = 1; n <= MAX_PLAYERS; n++) { 
@@ -569,11 +570,9 @@ function clearPoint(arr) {
                               hp.style.display = n < 12 ? "inherit" : "none";
                               hp.style.left = homeTacticPoints[t].averages[n][0].x  - 5 + "px";
                               hp.style.top = homeTacticPoints[t].averages[n][0].y  - 5  + "px";
-
                           hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
                           hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
-                          document.querySelector('#avgPositionsHome' + t).appendChild(hp);
-    
+                          document.querySelector('#avgPositionsHome' + t).appendChild(hp);    
                       }
 
                     const heatmapInstanceAvg = avgMapCreate("#avgPositionsHome" + t);
@@ -583,14 +582,12 @@ function clearPoint(arr) {
                     container: document.querySelector(tacticId),
                     maxOpacity: MAX_OPACITY,
                        minOpacity: MIN_OPACITY,
-                      radius: POINT_RADIUS
-       
+                      radius: POINT_RADIUS       
                   });
                   heatmapPlayers.setData({
                     max: maximumValue,
                     data: homeTacticPoints[t].team
                 });
-
                 const heatmapBall = h337.create({
                     container: document.querySelector(ballId),
                     maxOpacity: MAX_OPACITY,
@@ -602,8 +599,6 @@ function clearPoint(arr) {
                     max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
                     data: homeTacticPoints[t].ball
                 });
-
-
                 }             
             }
 //-----------------------------------------------------------------------------------
@@ -615,16 +610,13 @@ function clearPoint(arr) {
             if (awayTacticPoints.length > 1) {
                 for (let t = 1; t < awayTacticPoints.length ; t++) { 
                     if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
-
                     awayTacticPoints[t].averages.forEach((positions, _n) => {
                       const avg = positions.length;
                       if (_n === 0 || avg < 2) return ;
                       positions.forEach((pos, i, _arr) => {
                         positions[0].x += (pos.x / avg);
                         positions[0].y += (pos.y / avg);
-
-                      })
-                      
+                      })                     
                     })
 
                     const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
@@ -644,10 +636,8 @@ function clearPoint(arr) {
                   const thirdField = theWrapper.cloneNode(true);
                   thirdField.className = "thirdHeatmap";
                   newDiv.className = "heatmap3ContainersWrapper";
-                  thirdField.querySelector(".heatmapContainer").id = "avgPositionsAway" + t; 
-                  
-                  thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;
-                  
+                  thirdField.querySelector(".heatmapContainer").id = "avgPositionsAway" + t;                  
+                  thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;                  
                   newDiv.appendChild(thirdField);
                   
                   for (let n = 1; n <= MAX_PLAYERS; n++) { 
@@ -695,7 +685,7 @@ function clearPoint(arr) {
             newHeatmapsHeader.textContent = "Тепловые карты игроков "; 
             document.body.appendChild(newHeatmapsHeader);
 
-            for (let i = 1; i <=18; i++) {
+            for (let i = 1; i <=MAX_PLAYERS; i++) {
                 const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
                 const newDiv = divWrapper.cloneNode(true);
                 const homePlayerId = "#heatmapHome" + i;
@@ -750,8 +740,8 @@ function clearPoint(arr) {
             homeTacticChanges.push(homePoints[0].length -1);
             awayTacticChanges.push(awayPoints[0].length -1);
 
-           console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
-           console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
+          //  console.log(" homeTacticChanges -  ", homePoints[0].length, "  -" , homeTacticChanges);
+          //  console.log(" awayTacticChanges-  ", awayPoints[0].length, "  -" , awayTacticChanges);
             // function calcAvgPositions(pointsArr, opposite) {
             //   const ;
             // }
@@ -759,8 +749,8 @@ function clearPoint(arr) {
           //  console.log("awayPoints  - ", awayPoints);
 
 
-          console.log("homePointsFull  - ", homePointsFull);
-          console.log("awayPointsFull  - ", awayPointsFull);
+          // console.log("homePointsFull  - ", homePointsFull);
+          // console.log("awayPointsFull  - ", awayPointsFull);
 
             homePoints.forEach(
               (hmap, _n) => {
@@ -928,134 +918,57 @@ function clearPoint(arr) {
                 newHomePlayer.appendChild(hpMileage);
 
                 document.querySelector('#squadHome').appendChild(newHomePlayer);
-
                 hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
                 hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
                 document.getElementById('heatmapAvgHome').appendChild(hp);
                 const hpBoth = hp.cloneNode(true);
                 hpBoth.id = "both" + hpBoth.id;
-
                     document.getElementById('heatmapAvgBoth').appendChild(hpBoth);
                     const hpToINdividualHeatmap = hp.cloneNode(true);
                     hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
                     document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
                     //  //console.log('#heatmapHome' + n, "     ", document.querySelector('#heatmapHome' + n));
-                    
-            
               }
             }
-            {
-              // function showSubAvgPositions() {
-              //   for (let n = 12; n <= MAX_PLAYERS; n++) {
-  
-              //     if (awayAvgPoints[n].x != 0 || awayAvgPoints[n].y != 0 ) {
-              //       const ap = document.querySelector('#player_default_away').cloneNode(true);
-                    
-              //       ap.id = "awayAvgSubPoints" + n;
-              //       ap.style.display = "inherit";
-              //       ap.style.left = awayAvgPoints[n].x  - 5  + "px";
-              //       ap.style.top = awayAvgPoints[n].y  - 5  + "px";
-                
-              //       ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
-              //       ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;
-              //       document.getElementById('heatmapAvgSubAway').appendChild(ap);
-              //       const apToINdividualHeatmap = ap.cloneNode(true);
-              //       apToINdividualHeatmap.id = apToINdividualHeatmap.id +"_individual";
-              //       document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
-              //       // //console.log('#heatmapAvgSubAway' + n, "     ", document.querySelector('#heatmapAvgSubAway' + n));
-              //   }
-              
-              //     if (homeAvgPoints[n].x != 0 || homeAvgPoints[n].y != 0 ) {
-              //     const hp = document.querySelector('#player_default_home').cloneNode(true);
-                      
-              //         hp.id = "homeAvgSubPoints" + n;
-              //         hp.style.display = "inherit";
-              //         hp.style.left = homeAvgPoints[n].x  - 5  + "px";
-              //         hp.style.top = homeAvgPoints[n].y  - 5  + "px";
-                  
-              //         hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
-              //         hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
-              //         // document.getElementById('heatmapAvgSubHome').appendChild(hp);
-              //         document.getElementById('heatmapAvgSubAway').appendChild(hp);
-              //         const hpToINdividualHeatmap = hp.cloneNode(true);
-              //         hpToINdividualHeatmap.id = hpToINdividualHeatmap.id +"_individual";
-              //         document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
-                  
-              //     }
-              
-              
-              //   }
-              // }  
-            }
-
             showMainAvgPositions();
             // showSubAvgPositions();
-
-
 /**===================================================================================================== */
             document.querySelector('.loaderWrapper').remove();
-           // console.table("Километраж хозяев ");
-           // console.table(homeMileage);
-           // console.table("===================================================================================================== ");
-           //             console.table("Километраж гостей ");
-            //            console.table(awayMileage);
-
             console.log("allRep - ", rep);
             console.log("shots - ", shots);
             console.log("sum of intervals - ", sumInterval);
-
 /**===================================================================================================== */
-            const _avgHome = document.querySelector('#heatmapAvgHome .heatmap-canvas');
-            const _avgAway = document.querySelector('#heatmapAvgAway .heatmap-canvas');
             const _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
+/**===================================================================================================== */
+            function drawTeamShots(teamShots, ctx) {
+              teamShots.forEach((shot, shotNum) => {
+                const _strokeStyle = shot.type == "G"
+                  ? 'red'
+                  : shot.type == "V" 
+                    ? 'yellow' 
+                    : shot.type == "Block" ? 'black' : 'blue';
+                ctx.beginPath(); 
+                ctx.fillStyle = _strokeStyle;
+                ctx.arc(shot.startpoint.x, shot.startpoint.y, 4, 0, 2 * Math.PI, false);
+                ctx.fill();              
+                ctx.moveTo(shot.startpoint.x, shot.startpoint.y);
+                ctx.lineWidth = 2;
+                ctx.lineTo(shot.endpoint.x, shot.endpoint.y);
+                ctx.arc(shot.endpoint.x, shot.endpoint.y, 2, 0, 2 * Math.PI, false);
+                ctx.strokeStyle = _strokeStyle;
+                ctx.stroke();
+              });
+            }
+/**===================================================================================================== */
             // console.log(_avgHome);
             if (_chalkboard.getContext) 
                   {
-                    // console.log('there is context');
-                    var context = _chalkboard.getContext('2d');
-                    shots.home.forEach(shot => {
-                      const _strokeStyle = shot.type == "G"
-                        ? 'red'
-                        : shot.type == "V" 
-                          ? 'darkyellow' 
-                          : shot.type == "Block" ? 'black' : 'blue';
-                      if (_strokeStyle == 'blue') return;
-                      context.beginPath(); ;
-                      context.moveTo(shot.startpoint.x, shot.startpoint.y);
-                      context.lineTo(shot.endpoint.x, shot.endpoint.y);
-                      context.strokeStyle = _strokeStyle;
-                      context.stroke();
-                    });
-                    // Reset the current path
-                    // context.beginPath(); 
-                    // Staring point (10,45)
-                    // const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type: shotType, minute : element.minute};
-                    // context.moveTo(shots.home[0].startpoint.x, shots.home[0].startpoint.y);
-                    // End point (180,47)
-                    // context.lineTo(shots.home[0].endpoint.x, shots.home[0].endpoint.y);
-                    // Make the line visible
-                    // context.stroke();
-
+                    // console.log('there is ctx');
+                    const context = _chalkboard.getContext('2d');
+                    drawTeamShots(shots.home, context );
+                    drawTeamShots(shots.away, context );
 
                     } 
-                    if (_chalkboard.getContext) 
-                    {
-                        var context = _chalkboard.getContext('2d');
-                        shots.away.forEach(shot => {
-                          const _strokeStyle = shot.type == "G"
-                          ? 'red'
-                          : shot.type == "V" 
-                            ? 'darkyellow' 
-                            : shot.type == "Block" ? 'black' : 'blue';
-                        if (_strokeStyle == 'blue') return;
-                           context.beginPath(); ;
-                          context.moveTo(shot.startpoint.x, shot.startpoint.y);
-                          context.lineTo(shot.endpoint.x, shot.endpoint.y);
-                          context.strokeStyle = _strokeStyle;
-                          context.stroke();
-                        });  
-                      } 
-  
 /**========================================================== =========================================== */
 /**===================================================================================================== */
 /**===================================================================================================== */
