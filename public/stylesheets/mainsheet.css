@@ -384,3 +384,21 @@ background-color: var(--back1);
     box-sizing:border-box;
  
  }
+
+ .overlay > .shotslegend {
+     width: 120px;
+    height: 100px; 
+
+    color: lightgrey;
+    font-size: smaller;
+    position:absolute; 
+    display:inline-block;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+    top:44px;
+    left:250px;
+ }
+ .legendRow {
+     font-weight: bold;
+ }

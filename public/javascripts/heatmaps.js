@@ -1,99 +1,24 @@
 
 // const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
-
-
-// const MAX_VALUE = 60;
-// const MAX_OPACITY = .7;
-// const MIN_OPACITY = .05;
-// const POINT_RADIUS = 35;
-// const MAX_PLAYERS = 18;
-
-// const GK_VALUE = .2;
-
-// const BALL_RADIUS_KEFF = .67;
-// const BALL_MAX_KEFF = 0.33;
-
-// const BALL_TACTICS_RADIUS_KEFF = 1.1;
-// const BALL_TACTICS_MAX_KEFF = 0.35;
-
-// const TEAM_RADIUS_KEFF = .65;
-// const TEAM_MAX_KEFF = 1.1;
-
-// const HOME = 1;
-// const AWAY = 2;
-// const SUB_OUT = 1;
-// const SUB_IN = 2;
-
-// const MIN_MINUTES_FOR_SHOW_TACTIC = 3;
-
-// const leftTopX = 18.98;
-// const leftTopY = 19;
-// const rightBottomX = 346.56;
-// const rightBottomY = 229.5;
-
-// const jsonX1 = 0;
-// const jsonY1 = 0;
-// const jsonX2 = 720;
-// const jsonY2 = 450;
-
-// const shotsCoords = {x1: 39, y1:38, x2:712, y2:458};
-// const jsonCoords = {x1: 0, y1:0, x2:720, y2:450};
-// const hmCoords = {x1: 18.98, y1:19, x2:346.56, y2:229.5};
-
-// const FIELD_LONGTITUDE = 105;
-
-// const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1) ;
-// // const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
-
-// //==============================================================================
-// function formJsonUrl(tvurl) {
-//   const urlString = window.location.href.match(/j\=\d+\&z\=.+/i)
-//             ? window.location.href
-//             : tvurl;
-//   // //console.log("urlString = ",  urlString);
-//   // //console.log(window.location.href, "   " , window.location.href.match(/j\=\d+\&z\=.+/i));
-
-//     const zIndex =urlString.indexOf('&z=');
-//     const jIndex =urlString.indexOf('j=');
-//     // //console.log(zIndex, jIndex, urlString.substring(2 + jIndex, zIndex), urlString.substring(3+ zIndex));
-
-//     return `http://pefl.ru/jsonreport.php?j=${ urlString.substring(2 + jIndex, zIndex)}&z=${ urlString.substring(3+ zIndex)}`;
-  
-  
-// }
-
 // //console.log("jsonurl   - ", formJsonUrl(tvurl));
 //==============================================================================
 function createHeatMap(rep, corners, jsoncorners) {
-
 //TODO  вынести расчет в функцию (jsonreport) => массив тепловых карты мяча,команд, игроков команд.
-
 }
-
 //==============================================================================
 
 window.onload = function() {
-
 //--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-
       var xmlhttp = new XMLHttpRequest();
-      xmlhttp.overrideMimeType("application/json");
-      
+      xmlhttp.overrideMimeType("application/json");      
       xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 /*&& this.status == 200*/) {
           if (this.status == 200) {
               const scoreWithPensFound = this.responseText.match(/\d+:\d+/g);
             const scoreWithPens = scoreWithPensFound ? scoreWithPensFound.pop() : ["0:0"];
             // //console.log(scoreWithPens);
-
             const rep = JSON.parse(this.responseText);
 //--------------------------------------------------------------------
-
-/**
- * 
- */
             let root = document.documentElement;
             root.style.setProperty('--background-color-home', "#" + rep.home.team.back);
             root.style.setProperty('--border-color-home', "#" + rep.home.team.color);
@@ -101,97 +26,14 @@ window.onload = function() {
             root.style.setProperty('--background-color-away', "#" + rep.away.team.back);
             root.style.setProperty('--border-color-away', "#" + rep.away.team.color);
             root.style.setProperty('--color-away', "#" + rep.away.team.color);
-
 //--------------------------------------------------------------------
-              // //console.log(rep.home.players);
-
-
-            //   function limitPoint(point, secondTime = false, coords1 = hmCoords, coords2 = jsonCoords) {
-            //       const x = point.x;
-            //       const y = point.y;
-            //       let newX;
-            //       let newY;
-            //       if (secondTime) {
-            //          newX = Math.round(coords1.x2 - (x - coords2.x1) * (coords1.x2 - coords1.x1) / (coords2.x2 - coords2.x1) );
-            //           newY = Math.round(coords1.y2 - (y - coords2.y1) * (coords1.y2 - coords1.y1) / (coords2.y2 - coords2.y1) );    
-            //       } else {
-            //          newX = Math.round(coords1.x1 + (x - coords2.x1) * (coords1.x2 - coords1.x1) / (coords2.x2 - coords2.x1) );
-            //           newY = Math.round(coords1.y1 + (y - coords2.y1) * (coords1.y2 - coords1.y1) / (coords2.y2 - coords2.y1) );    
-            //       }
-            //       return { x: newX, y: newY, value: point.value }
-            //   }
-  
-            // function getMileage(point1, point2) {
-            //     const dX = point2.x - point1.x;
-            //     const dY = point2.y - point1.y;
-            //     // console.log(MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY));
-            //     return MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY)
-            // }  
-
-            // function leaveValuablePoints(pointsArr) {
-            //   return pointsArr.filter(point => !point); // if not null
-            // }
-            // function getPointsSet(pointsArr, start, end) {
-            //     return pointsArr.slice(start, end);
-            // }
-
               const game = rep.game;
               game.shift();
               game.pop();
-              
-              // //console.log(game);
-              // const ballPoints = [];
-              // const minutesStarts = [0];
-
-              //   const strangePoints = {home: [], away: []};
-              //   const homeTacticChanges = [0];
-              //   const awayTacticChanges = [0];
-
-              //  const homeTacticPoints = [];
-              //  const awayTacticPoints = [];
-              //  const shots = {home: [], away: []};
-              // let sumInterval = 0;
-
-              //  homeTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
-              //  awayTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
-              //  const init_HomeTacticPoints = [];
-              // init_HomeTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
-
-
-              // const homePoints = [];
-              // const awayPoints = [];
-              // const homeAvgPoints = [];
-              // const awayAvgPoints = [];
-              // const homeMileage = [];
-              // const awayMileage = [];     
-
-              // const homePointsFull = [];
-              // const awayPointsFull = [];
-
-              // for (let i = 0; i <= MAX_PLAYERS ; i++) {
-              //     homePoints.push([]);
-              //     awayPoints.push([]);
-              //     homeMileage.push(0);
-              //     awayMileage.push(0);
-              //     homeAvgPoints.push({x:0, y:0});
-              //     awayAvgPoints.push({x:0, y:0});
-              //     homeTacticPoints[0].averages.push([{x:0, y:0}]);
-              //     awayTacticPoints[0].averages.push([{x:0, y:0}]);
-
-              //     init_HomeTacticPoints[0].averages.push([{x:0, y:0}]);
-              //     homePointsFull.push([]);
-              //     awayPointsFull.push([]);
-
-
-              // }
-
-              // let secondTime = false;
-              // var penalties = false;
               let score = "0:0"; 
             try {
                 game.forEach((element, episode, episodes ) => {
                   if (element.interval) sumInterval += parseInt(element.interval);
-
                 if(!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
                 if (element.S) { // substitutes handle
                   // console.log(element.S);
@@ -210,13 +52,11 @@ window.onload = function() {
                                 // //console.log(score);
                             };
                         });
-
                         if (element.messages[0].mes == "Серия пенальти!..." 
                             || element.messages[0].mes =="Матч переходит к послематчевым одиннадцатиметровым!...") {
                             penalties = true; //может на будущее
                           throw "Серия пенальти!...";
-                        }
-                        
+                        }                       
                     }
                     if (element.ZT) { // смена тактики
                         if (element.ZT.team == 1) {
@@ -242,69 +82,59 @@ window.onload = function() {
                     }
 
                     let coords;
-                    if (element.U && !penalties) { // shots handle
-                      const ball = element.coordinates.ball;
-                      console.log(element.minute, element.U, ball)
-                      const ballcoords = {x: ball.w, y: ball.h, value:1};
-                      const shotType = element.G ? "G" : element.V ? "V" : element.B ? "B" : element.U.team > 2 ? "Block" : "U";  
-                      // console.log(episodes[episode], episodes[episode - 1]);
-                      const shotStart = episodes[episode - 1].messages.length > 0 
-                          ? episodes[episode - 1].coordinates.ball 
-                          : episodes[episode - 2].messages.length > 0 ? episodes[episode - 2].coordinates.ball : episodes[episode - 3].coordinates.ball; 
-                      const startCoords = {x: shotStart.w, y:shotStart.h, value:1};
-
-                      const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
-                      const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
-
-                      const newShot = {
-                        endpoint :endpoint, startpoint:startpoint,
-                        episode:episode, type: shotType, minute : element.minute, 
-                        player:element.U.player
-                      };
-                    if (element.U.team == 1 || element.U.team == 3) {
-                        // const endpoint = limitPoint(ballcoords, secondTime);
-                        // const startpoint = limitPoint(startCoords, secondTime);
-
-                        shots.home.push(newShot)
-                      } else {
-                   //     // const endpoint = limitPoint(ballcoords, !secondTime);
-                   //     // const startpoint = limitPoint(startCoords, !secondTime);
-                        // const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
-                        // const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
-
-                        // const newShot = {endpoint :endpoint, startpoint:startpoint, episode:episode, type:shotType, minute : element.minute};
-
-                        shots.away.push(newShot)
-                        
-                      } 
-                      ;
-                    }
-                    if (element.G && !element.U) { // goal event in next episode
-                      const ball = element.coordinates.ball;
-                      console.log(element.minute, element.U, ball)
-                      const ballcoords = {x: ball.w, y: ball.h, value:1};
-                      const shotType = "G";
-                      const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
-                      // const newShot = {
-                      //   endpoint :endpoint, startpoint:startpoint,
-                      //   episode:episode, type: "G", minute : element.minute, 
-                      //   player:element.U.player
-                      // };
-                      let lastShot;
-                      if (element.G.team == 1 || element.G.team == 3) {
-                        lastShot = shots.home[shots.home.length - 1];
-                      } else {
-                        lastShot = shots.away[shots.home.length - 1];
-                        ;
+                    try {
+                      if (element.U && !penalties) { // shots handle
+                        const ball = element.coordinates.ball;
+                        // console.log(element.minute, element.U, ball)
+                        const ballcoords = {x: ball.w, y: ball.h, value:1};
+                        const shotType = element.G ? "G" : element.V ? "V" : element.B ? "B" : element.U.team > 2 ? "Block" : "U";  
+                        const shotStart = (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].coordinates)
+                            ? episodes[episode - 1].coordinates.ball 
+                            : (episodes[episode - 2].messages.length > 0 && episodes[episode - 2].coordinates)
+                              ? episodes[episode - 2].coordinates.ball 
+                              : (episodes[episode - 3].messages.length > 0 && episodes[episode - 3].coordinates)
+                                ? episodes[episode - 3].coordinates.ball
+                                : episodes[episode - 4].coordinates.ball; 
+                        const startCoords = {x: shotStart.w, y:shotStart.h, value:1};
+  
+                        const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                        const startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
+  
+                        const newShot = {
+                          endpoint :endpoint, startpoint:startpoint,
+                          episode:episode, type: shotType, minute : element.minute, 
+                          player:element.U.player
+                        };
+                      if (element.U.team == 1 || element.U.team == 3) {  
+                          shots.home.push(newShot)
+                        } else {
+                          shots.away.push(newShot)                          
+                        };
                       }
-                      console.log(episode);console.log(lastShot);
+                      if (element.G && !element.U) { // goal event in next episode
+                        const ball = element.coordinates.ball;
+                        console.log(element.minute, element.U, ball)
+                        const ballcoords = {x: ball.w, y: ball.h, value:1};
+                        const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                        let lastShot;
+                        if (element.G.team == 1 || element.G.team == 3) {
+                          lastShot = shots.home[shots.home.length - 1];
+                        } else {
+                          lastShot = shots.away[shots.home.length - 1];
+                          ;
+                        }
+                        // console.log(episode);console.log(lastShot);
+                        lastShot.type = "G";
+                        lastShot.endpoint = endpoint;
+                        lastShot.player = element.G.player;
+                      }                      
+                    } catch (error) {
+                      console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
+                      console.log(element, episodes[episode - 1], episodes[episode - 2]);
 
-                      lastShot.type = "G";
-                      lastShot.endpoint = endpoint;
-                      lastShot.player = element.G.player;
                     }
-                          if (element.M) { // смена сторон. конец тайма.
-                          
+
+                          if (element.M) { // смена сторон. конец тайма.                         
                           secondTime = !secondTime;
                           // //console.log(secondTime, element)
                         };
@@ -315,35 +145,17 @@ window.onload = function() {
             }                 
                     if (element.coordinates) 
                         {
-
                             const ball = element.coordinates.ball;
-                            const ballcoords = {x: ball.w, y: ball.h, value:1};
-    
+                            const ballcoords = {x: ball.w, y: ball.h, value:1};   
                             const hometeam = element.coordinates.home;
                             const awayteam = element.coordinates.away;
                             const currentHomePositions = [];
                             const currentAwayPositions = [];
-
                             for (let p = 0; p <= MAX_PLAYERS; p++) {
                               currentHomePositions.push(null);
                               currentAwayPositions.push(null);
                             }
-{
-                            // for (let p = 1; p <= MAX_PLAYERS; p++) {
-                            //   const pl = hometeam[p];
-                            //   if (!pl) { 
-                            //     homePointsFull[p].push(null);
-                            //   }   else {
-                            //     coords = pl.n == 1 
-                            //             ?{x: pl.w, y: pl.h, value:GK_VALUE}
-                            //             :{x: pl.w, y: pl.h, value:1};
-                                
-                            //     const playerPoints = limitPoint(coords, secondTime);
 
-                            //     homePointsFull[p].push(playerPoints);
-                            //   }
-                            // };
-}
                               hometeam.forEach(pl => {
                                 coords = pl.n == 1 
                                         ?{x: pl.w, y: pl.h, value:GK_VALUE}
@@ -359,15 +171,11 @@ window.onload = function() {
                                       const l = homePoints[pl.n].length - 1;
                                        homeMileage[pl.n] += getMileage(homePoints[pl.n][l], homePoints[pl.n][l - 1 ]);
                                     }
-                                    currentHomePositions[pl.n] = playerPoints;
-
-                                  
+                                    currentHomePositions[pl.n] = playerPoints;                                  
                                 } else {
                                     strangePoints.home.push(pl);
                                 }
                             });
-                           // }
-
                             awayteam.forEach(pl => {
                                 coords = pl.n == 1 
                                         ?{x: pl.w, y: pl.h, value:GK_VALUE}
@@ -387,11 +195,8 @@ window.onload = function() {
 
                                 } else {
                                     strangePoints.away.push(pl);
-                                }
-    
-             
-                             });       
-    
+                                }            
+                             });          
                              const ballHeatMap = limitPoint(ballcoords, secondTime);
                             ballPoints.push(ballHeatMap)
                             homeTacticPoints[0].ball.push(ballHeatMap);
@@ -399,10 +204,8 @@ window.onload = function() {
                             //debugger;  
                             pushFullPoint(homePointsFull,currentHomePositions);
                             pushFullPoint(awayPointsFull,currentAwayPositions);
-
                         } 
                 }); 
-
             } catch (error) {
                 console.log("game.forEach ", error);
             }
@@ -410,7 +213,6 @@ window.onload = function() {
             awayTacticPoints.push(awayTacticPoints[0]);
  
             const finalScore = score + (scoreWithPens == score ? '' : `(${scoreWithPens})`);
-
             const gameInfoSrting = rep.date + ". " 
             // + rep.stadium.city + ". "  
             + (rep.stadium.city ? rep.stadium.city + ". " : "") 
@@ -418,10 +220,7 @@ window.onload = function() {
             + ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
       
             document.querySelector("#gameInfo").textContent = gameInfoSrting;
-/**===================================================================================================== */
-function clearPoint(arr) {
-  return arr.filter(el => (el != null));
-}
+
 /**===================================================================================================== */
           function avgMapCreate(_id) {
               return h337.create({
@@ -433,79 +232,37 @@ function clearPoint(arr) {
               });
             }
             const heatmapInstance = h337.create({
-              // only container is required, the rest will be defaults
               container: document.querySelector('#heatmapHome'),
-              // gradient: {
-              //     // enter n keys between 0 and 1 here
-              //     // for gradient color customization
-              //     '.5': 'blue',
-              //     '.8': 'green',
-              //     '.95': 'red'
-              //   },
-                // the maximum opacity (the value with the highest intensity will have it)
-              //   blur: 0.4, //Default value: 0.85
                    maxOpacity: MAX_OPACITY,
-                // minimum opacity. any value > 0 will produce
-                // no transparent gradient transition
                   minOpacity: MIN_OPACITY,
-              //    opacity: 0.8
               radius: POINT_RADIUS * TEAM_RADIUS_KEFF
-              // radius: POINT_RADIUS
             });
             const heatmapInstance2 = h337.create({
               container: document.querySelector('#heatmapAway'),
               maxOpacity: MAX_OPACITY,
                 minOpacity: MIN_OPACITY,
-                radius: POINT_RADIUS * TEAM_RADIUS_KEFF 
-  
-            });
-  
+                radius: POINT_RADIUS * TEAM_RADIUS_KEFF   
+            }); 
             const heatmapInstance3 = h337.create({
               container: document.querySelector('#heatmapBall'),
               maxOpacity: MAX_OPACITY,
                 minOpacity: MIN_OPACITY,
-                radius: POINT_RADIUS * BALL_RADIUS_KEFF
-  
+                radius: POINT_RADIUS * BALL_RADIUS_KEFF  
             });
-
               const heatmapInstance4 = avgMapCreate('#heatmapAvgHome');
               const heatmapInstance5 = avgMapCreate('#heatmapAvgAway');
               // const heatmapInstance6 = avgMapCreate('#heatmapAvgSubHome');
               const heatmapInstance7 = avgMapCreate('#chalkboard');
-              // const heatmapInstance7 = avgMapCreate('#heatmapAvgSubAway');
               const heatmapInstance8 = avgMapCreate('#heatmapAvgBoth');
-
               
             const heatPoints = [
-              {
-                  x: 19,
-                  y: 19,
-                  value: 1,
-                  radius: 1
-              },
-              {
-                  x: 346.56,
-                  y: 229.5,
-                  value: 200,
-                  radius: 1
-              },
-              {
-                x: 19,
-                y: 229.5,
-                value: 1,
-                radius: 1
-               },
-               {
-                x: 346.56,
-                y: 19,
-                value: 1,
-                radius: 1
-               }
-   
+              { x: 19,  y: 19,  value: 1,  radius: 1},
+              {  x: 346.56,  y: 229.5, value: 200, radius: 1},
+              {  x: 19,  y: 229.5,  value: 1,  radius: 1 },
+               {  x: 346.56, y: 19, value: 1,  radius: 1 }  
             ];
   
-            const maximumValue = MAX_VALUE;
-      
+            const maximumValue = MAX_VALUE;     
           const data = {
               max: maximumValue * TEAM_MAX_KEFF,
               data: homePoints[0]
@@ -514,7 +271,6 @@ function clearPoint(arr) {
             max: maximumValue * TEAM_MAX_KEFF,
             data: heatPoints
          };
-
           heatmapInstance.setData(data);
           heatmapInstance2.setData({
                   max: maximumValue * TEAM_MAX_KEFF,
@@ -530,11 +286,6 @@ function clearPoint(arr) {
             heatmapInstance7.setData(defaultData);   
             heatmapInstance8.setData(defaultData);   
   /**===================================================================================================== */
-  /**===================================================================================================== */
-  
-  /**===================================================================================================== */
-  /**===================================================================================================== */
-  
              // console.log("homeTacticPoints - ", homeTacticPoints);
              // console.log("awayTacticPoints - ", awayTacticPoints);
             //   console.log("minutesStarts --- ", minutesStarts);
@@ -543,7 +294,6 @@ function clearPoint(arr) {
               newTactics1.textContent = "Смены тактик " + rep.home.team.name; 
               document.body.appendChild(newTactics1);
 //-----------------------------------------------------------------------------------
-
             if (homeTacticPoints.length > 1) {
                 for (let t = 1; t < homeTacticPoints.length ; t++) { 
                     if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
@@ -556,7 +306,6 @@ function clearPoint(arr) {
                         positions[0].y += (pos.y / avg);
                       })
                     })
-
                     // show tactic
                     const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
                     const newDiv = divWrapper.cloneNode(true);
@@ -571,7 +320,6 @@ function clearPoint(arr) {
                         ;
                   document.body.appendChild(newDiv);
                         const theWrapper  = document.getElementsByClassName('heatmapContainerWrapperRight')[0];
-
                         const thirdField = theWrapper.cloneNode(true);
                         thirdField.className = "thirdHeatmap";
                         newDiv.className = "heatmap3ContainersWrapper";
@@ -608,8 +356,7 @@ function clearPoint(arr) {
                     container: document.querySelector(ballId),
                     maxOpacity: MAX_OPACITY,
                       minOpacity: MIN_OPACITY,
-                      radius: POINT_RADIUS * BALL_RADIUS_KEFF *BALL_TACTICS_RADIUS_KEFF
-        
+                      radius: POINT_RADIUS * BALL_RADIUS_KEFF *BALL_TACTICS_RADIUS_KEFF       
                   });
                   heatmapBall.setData({
                     max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
@@ -622,7 +369,6 @@ function clearPoint(arr) {
             newTactics2.id = "awayTacticsInfo";
             newTactics2.textContent = "Смены тактик " + rep.away.team.name; 
             document.body.appendChild(newTactics2);
-
             if (awayTacticPoints.length > 1) {
                 for (let t = 1; t < awayTacticPoints.length ; t++) { 
                     if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
@@ -745,7 +491,6 @@ function clearPoint(arr) {
               document.querySelector("#heatmapAvgHome .overlay").textContent = "Средние позиции " + rep.home.team.name;
               document.querySelector("#heatmapAvgAway .overlay").textContent = "Средние позиции " + rep.away.team.name;
   /**===================================================================================================== */
-  /**===================================================================================================== */
   /**=========================СРЕДНИЕ ПОЗИЦИИ================================================== */
             const avgH = homePoints[0].length;
             // //console.log("Точек  - ",avgH);
@@ -760,8 +505,6 @@ function clearPoint(arr) {
             // }
           //  console.log("homePoints  - ", homePoints);
           //  console.log("awayPoints  - ", awayPoints);
-
-
           // console.log("homePointsFull  - ", homePointsFull);
           // console.log("awayPointsFull  - ", awayPointsFull);
 
@@ -774,10 +517,7 @@ function clearPoint(arr) {
                   homeAvgPoints[_n].x += point.x / avg;
                   homeAvgPoints[_n].y += point.y / avg;
               })
-            }
-
-            )
-
+            })
             awayPoints.forEach((hmap, _n) => {
               const avg = hmap.length;
               if (_n === 0 || avg < 1) return ;
@@ -787,10 +527,8 @@ function clearPoint(arr) {
                   awayAvgPoints[_n].y += point.y / avg;
               })
             })
-
             //console.log('homeAvgPoints  - ', homeAvgPoints);
             //console.log('awayAvgPoints  - ', awayAvgPoints);
-            //-------------------------------------------------------------------------
             //-------------------------------------------------------------------------
             function showHideAllColoboks(team, n, _tacticPoints){
               const _home =  team || "home";
@@ -800,13 +538,10 @@ function clearPoint(arr) {
               const _colobokId = _home +"AvgPoints"+ _n;
               const _colobokId2 = "both" + _home + "AvgPoints"+ _n;
             //  console.log(_colobokId, _colobokId2);
-/**hpNameDiv.style.fontWeight = n < 12 ? "bold" : "normal"; */
               const _style = document.getElementById(_colobokId).style;
               const _style2 = document.getElementById(_colobokId2).style;
                   _style.display = _style.display == "none"? "inherit" : "none";
-
                    _style2.display = _style2.display == "none"  ? "inherit"  : "none";
-
               if (tacticPoints.length > 1) {
                       for (let t = 1; t < tacticPoints.length ; t++) { 
                           if (tacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
@@ -816,10 +551,8 @@ function clearPoint(arr) {
                           ? "inherit"
                           : "none";
                       }
-              }
-          
+              }         
             };
-
             //-------------------------------------------------------------------------
             function showMainAvgPositions() {
               for (let n = 1; n <= MAX_PLAYERS; n++) {
@@ -846,11 +579,10 @@ function clearPoint(arr) {
                 apName.id = apRow + '_name';
                 apName.innerText =  rep.away.players[n - 1].name;
                 apName.href =  '#';
+
                 apName.addEventListener('click', function(e){
                   e.preventDefault();
-
                   this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
-
                   showHideAllColoboks("away", this.id.replace("awayPlayerList_", '').replace("_name", ''), awayTacticPoints);
                 });
                 if (rep.away.players[n - 1].sub) {
@@ -858,15 +590,12 @@ function clearPoint(arr) {
                 }
 
                 apNameDiv.appendChild(apName);
-
                 newPlayer.appendChild(apNumDiv);
                 newPlayer.appendChild(apNameDiv);
-
                 const apEye = document.createElement('div');
                 apEye.className = "playerListEye";
                 apEye.innerText = " ";
                 newPlayer.appendChild(apEye);
-
                 const apMileage = document.createElement('div');
                 apMileage.className = "playerListMileage";
                 apMileage.innerText = Number(awayMileage[n]/ 1000.0).toFixed(2) + " км";
@@ -952,6 +681,7 @@ function clearPoint(arr) {
             console.log("sum of intervals - ", sumInterval);
 /**===================================================================================================== */
             const _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
+            document.querySelector(".shotslegend").style.display = "inline-block";
 /**===================================================================================================== */
             function drawTeamShots(teamShots, ctx) {
               teamShots.forEach((shot, shotNum) => {
@@ -976,45 +706,25 @@ function clearPoint(arr) {
             // console.log(_avgHome);
             if (_chalkboard.getContext) 
                   {
-                    // console.log('there is ctx');
                     const context = _chalkboard.getContext('2d');
                     drawTeamShots(shots.home, context );
                     drawTeamShots(shots.away, context );
-
                     } 
-/**========================================================== =========================================== */
 /**===================================================================================================== */
-/**===================================================================================================== */
-
           } else {
               alert('Вставьте верно ссылку на матч!');
           }
-
-          }
-      
-           };
+          }      
+        };
       
       xmlhttp.open("GET", formJsonUrl(tvurl), true);
       xmlhttp.send();  
-
 //-----------------------------------------------------------------
 //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
 function formHeatmapUrl(urlINput) {
   return window.location.origin + window.location.pathname + "?" + urlINput.replace('http://pefl.ru/tv/#/', '');
 }
-//-----------------------------------------------------------------
 
-/**===================================================================================================== */
-/**===================================================================================================== */
-function getSubArrow(_sub) {
-  const sub = _sub || SUB_OUT;
-  const arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
-  const arrow = document.createElement("img");
-  arrow.src =  arrRef;
-  return arrow;
-}
-
-/**===================================================================================================== */
 /**===================================================================================================== */
 const urlPaste = document.querySelector('#pasteButton');
 const urlInput = document.querySelector("#tvurlInput");
@@ -1032,7 +742,6 @@ if (navigator.clipboard) {
   urlPaste.remove();
 }
 
-
 document.querySelector('#updateButton').addEventListener('click', e => {
   e.preventDefault();
   if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
@@ -1041,7 +750,6 @@ document.querySelector('#updateButton').addEventListener('click', e => {
   }
     window.location.assign(formHeatmapUrl(urlInput.value));
 });
-
 document.querySelector('#newWindow').addEventListener('click', e => {
   e.preventDefault();
   if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
