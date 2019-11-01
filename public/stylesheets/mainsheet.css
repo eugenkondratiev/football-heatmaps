@@ -191,8 +191,8 @@ body {
 }
 
 .squadContainer, .squadWrapperLeft , .squadWrapperRight {
-    width: 280px;
-    height: 350px;
+    width: 300px;
+    height: 280px;
 }
 .squadWrapperLeft , .squadWrapperRight {
     width: 50%;
@@ -385,7 +385,7 @@ background-color: var(--back1);
  
  }
 
- .overlay > .shotslegend {
+ .overlay > .shotslegend , .overlay > #oneShotLegend{
      width: 120px;
     height: 100px; 
 
@@ -402,3 +402,47 @@ background-color: var(--back1);
  .legendRow {
      font-weight: bold;
  }
+
+ .overlay > #oneShotLegend {
+    left: 380px;
+    width: 320px;
+    border: 1px solid lightgrey;
+    font-size: small;
+    height: 2em;
+    background-color: var(--back3);
+    border-radius: 5px;
+    border: 2px solid rgb(37, 97, 35);
+    color:  rgb(37, 97, 35);;
+
+}
+ .shotline{content:"";
+    position:absolute;
+    border-top:2px solid blue;
+      width:147px;
+      top:50px;
+      left:50px;
+      transform: rotate(45deg);
+      transform-origin: 1px 1px;
+      /* transform-origin: top left; */
+    }
+    
+    .shotstart, .shotend{
+    /*content:" ";*/
+    position:absolute;
+    border:1px solid blue;
+      width:9px;
+      height:9px;
+     top:46px;
+      left:46px;
+       border-radius: 50%;
+      background-color: blue;
+     /* transform: rotate(45deg);*/
+     /* transform-origin: 0% 0%;*/
+    }
+    
+     .shotend{
+      width:3px;
+      height:3px;
+     top:150px;
+      left:149px;
+    }

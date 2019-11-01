@@ -32,15 +32,24 @@ function formJsonUrl(tvurl) {
     return { x: newX, y: newY, value: point.value }
 }
 //==============================================================================
-
-function getMileage(point1, point2) {
+function getSegmentLength(point1, point2) {
   const dX = point2.x - point1.x;
   const dY = point2.y - point1.y;
-  // console.log(MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY));
-  return MILEAGE_KEFF * Math.sqrt(dX*dX + dY*dY)
+  return Math.sqrt(dX*dX + dY*dY)
 }  
 //==============================================================================
+function getSegmentAngle(startPoint, endPoint) {
+  const dX = endPoint.x - startPoint.x;
+  const dY = endPoint.y - startPoint.y;
+  const keff = dX < 0 ? (dY < 0 ? -180 : 180) : 0;
 
+  return keff + Math.atan(dY/dX) * 180 / Math.PI;;
+}  
+//==============================================================================
+function getMileage(point1, point2) {
+  return MILEAGE_KEFF * getSegmentLength(point1, point2);
+}  
+//==============================================================================
 function leaveValuablePoints(pointsArr) {
 return pointsArr.filter(point => !point); // if not null
 }
@@ -61,3 +70,4 @@ function getSubArrow(_sub) {
   arrow.src =  arrRef;
   return arrow;
 }
+/**===================================================================================================== */

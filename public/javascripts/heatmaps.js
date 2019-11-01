@@ -682,33 +682,15 @@ window.onload = function() {
 /**===================================================================================================== */
             const _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
             document.querySelector(".shotslegend").style.display = "inline-block";
-/**===================================================================================================== */
-            function drawTeamShots(teamShots, ctx) {
-              teamShots.forEach((shot, shotNum) => {
-                const _strokeStyle = shot.type == "G"
-                  ? 'red'
-                  : shot.type == "V" 
-                    ? 'yellow' 
-                    : shot.type == "Block" ? 'black' : 'blue';
-                ctx.beginPath(); 
-                ctx.fillStyle = _strokeStyle;
-                ctx.arc(shot.startpoint.x, shot.startpoint.y, 4, 0, 2 * Math.PI, false);
-                ctx.fill();              
-                ctx.moveTo(shot.startpoint.x, shot.startpoint.y);
-                ctx.lineWidth = 2;
-                ctx.lineTo(shot.endpoint.x, shot.endpoint.y);
-                ctx.arc(shot.endpoint.x, shot.endpoint.y, 2, 0, 2 * Math.PI, false);
-                ctx.strokeStyle = _strokeStyle;
-                ctx.stroke();
-              });
-            }
+
 /**===================================================================================================== */
             // console.log(_avgHome);
             if (_chalkboard.getContext) 
                   {
                     const context = _chalkboard.getContext('2d');
-                    drawTeamShots(shots.home, context );
-                    drawTeamShots(shots.away, context );
+                    // drawTeamShots(shots.home, context );
+                    drawTeamShots(shots.away, rep.away.players, context );
+                    drawTeamShots(shots.home, rep.home.players, context );
                     } 
 /**===================================================================================================== */
           } else {
