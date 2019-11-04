@@ -78,46 +78,29 @@ body {
 .heatmap3ContainersWrapper,
 .squadAndShotsContainersWrapper,
 .shotsContainerWrapper { 
-    /* width:50%;  */
-    /* height:500px;  */
     align-self: center;
-    /* position:absolute;  */
-    /* width: 367px;
-    height: 250px; */
     margin: 0 auto;
     width: 760px; 
     overflow: hidden;
-     /* margin: 0 4px 0 0;  */
 
 }
 .heatmap3ContainersWrapper  { 
     width: 1150px; 
 }
 .squadAndShotsContainersWrapper  { 
-    /* width: 1340px;  */
-    width: 800px; 
-    /* height: 500px; */
+    width: 850px; 
 }
 .shotsContainerWrapper { 
     width: 754px;
 }
-/* .squadAndShotsContainersWrapper::after  { 
-
-    clear: both;
-} */
  .heatmapContainerWrapperLeft, 
  .heatmapContainerWrapperRight,
   .thirdHeatmap, 
   .squadContainer,
    .shotsContainerWrapperrRight { 
-    /* width:50%;  */
-    /* height:500px;  */
     align-self: center;
-    /* position:absolute;  */
     width: 367px;
     height: 267px;
-    /* height: 250px; */
-    /* margin: 0 auto; */
     margin: 0 9px 0 0;
 
 }
@@ -128,54 +111,50 @@ body {
 
 .squadContainer > div{ 
     width:100%; 
-    /* height:500px;  */
-    /* align-self: center; */
-    margin-bottom: 1px;
+    margin: 1px 0 5px 0;
 }
-.squadContainer.playerRow:nth-child(even) { 
+.playerRow:nth-child(odd) { 
     background-color: var(--back1);
 }
-/* .playerRow:nth-child(even) { 
-    background-color: var(--back1);
-} */
-
+.playerListMileage, .playerListNum,
+.playerListName,.playerListEye
+,.playerListShots,.playerShotCheckbox{
+    float:left;
+    background-color: inherit;
+    padding:0 1px 1px 0;
+    white-space: pre-wrap;
+    height: 1.2em;
+}
 .playerRow .playerListMileage{ 
-    width:30%; 
-    float:left
-
-    /* height:500px;  */
-    /* align-self: center; */
-}
-.playerRow .playerListEye{ 
-    width:15%; 
-    float:left
-    /* height:500px;  */
-    /* align-self: center; */
-}
-
-.playerRow .playerListName{ 
-    width:60%; 
-    /* display: inline; */
-    float: left;
-    /* font-weight: bold; */
-}
-.playerRow .playerListNum{ 
-    width:10%; 
-    /* display: inline; */
-    float: left;
+    width:12%; 
     text-align: right;
 }
-.heatmapContainerWrapperLeft , .squadWrapperLeft { 
-    float: left;
-
+.playerRow .playerListEye{ 
+    width:8%; 
 }
-.heatmapContainerWrapperRight , .shotsContainerWrapperRight { 
-    /* margin-left: 373px; */
-    float: left;
+.playerRow .playerShotCheckbox{ 
+    width:7%;
+    align-content: center;
+    text-align: center;
+    /* cursor:pointer  */
 }
-
-.thirdHeatmap , .squadWrapperRight { 
-     /* margin-left: 747px; */
+.playerRow .playerListShots{ 
+    width:18%; 
+}
+.playerRow .playerListName{ 
+    width:40%; 
+}
+.playerRow .playerListNum{ 
+    width:7%; 
+    /* display: inline; */
+    text-align: right;
+}
+.playerShotCheckbox input {
+    margin: 0;
+}
+.heatmapContainerWrapperLeft , .squadWrapperLeft,
+.heatmapContainerWrapperRight , .shotsContainerWrapperRight,
+.thirdHeatmap , .squadWrapperRight  { 
     float: left;
 }
 
@@ -191,7 +170,7 @@ body {
 }
 
 .squadContainer, .squadWrapperLeft , .squadWrapperRight {
-    width: 300px;
+    width: 400px;
     height: 280px;
 }
 .squadWrapperLeft , .squadWrapperRight {
@@ -285,7 +264,7 @@ body {
     top: 2px
 }
 
-.player_shape .tooltiptext {
+.player_shape .tooltiptext, .playerListShots .tooltiptext {
     visibility: hidden;
      width: 67px;
     background-color: lightyellow;
@@ -301,10 +280,13 @@ body {
     z-index: 99;
   }
   
-  .player_shape:hover .tooltiptext {
+  .player_shape:hover .tooltiptext, .playerListShots:hover .tooltiptext {
     visibility: visible;
   }
-
+  .playerListShots:hover .tooltiptext {
+    width: 222px;
+    font-size: 6pt;
+  }
 /*=========================================================*/
 .heatmap-canvas {
     width: 367px;
@@ -399,11 +381,16 @@ background-color: var(--back1);
     top:44px;
     left:250px;
  }
- .legendRow {
+ .shotslegendHome {
+     left:400px;
+ }
+
+ .legendRow , .shotFilters > a{
      font-weight: bold;
  }
 
  .overlay > #oneShotLegend {
+    top:462px;
     left: 380px;
     width: 320px;
     border: 1px solid lightgrey;
@@ -423,7 +410,6 @@ background-color: var(--back1);
       left:50px;
       transform: rotate(45deg);
       transform-origin: 1px 1px;
-      /* transform-origin: top left; */
     }
     
     .shotstart, .shotend{
@@ -436,9 +422,7 @@ background-color: var(--back1);
       left:46px;
        border-radius: 50%;
       background-color: blue;
-     /* transform: rotate(45deg);*/
-     /* transform-origin: 0% 0%;*/
-    }
+     }
     
      .shotend{
       width:3px;

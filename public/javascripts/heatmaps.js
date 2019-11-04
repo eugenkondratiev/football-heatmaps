@@ -88,6 +88,7 @@ window.onload = function() {
                         // console.log(element.minute, element.U, ball)
                         const ballcoords = {x: ball.w, y: ball.h, value:1};
                         const shotType = element.G ? "G" : element.V ? "V" : element.B ? "B" : element.U.team > 2 ? "Block" : "U";  
+
                         const shotStart = (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].coordinates)
                             ? episodes[episode - 1].coordinates.ball 
                             : (episodes[episode - 2].messages.length > 0 && episodes[episode - 2].coordinates)
@@ -106,9 +107,11 @@ window.onload = function() {
                           player:element.U.player
                         };
                       if (element.U.team == 1 || element.U.team == 3) {  
-                          shots.home.push(newShot)
+                          shots.home.push(newShot);
+                          // countShot(shotType, rep.home[newShot.player])
                         } else {
-                          shots.away.push(newShot)                          
+                          shots.away.push(newShot);
+                          // countShot(shotType, rep.away[newShot.player])
                         };
                       }
                       if (element.G && !element.U) { // goal event in next episode
@@ -119,6 +122,7 @@ window.onload = function() {
                         let lastShot;
                         if (element.G.team == 1 || element.G.team == 3) {
                           lastShot = shots.home[shots.home.length - 1];
+                          // countShot("G", rep.home[newShot.player]);
                         } else {
                           lastShot = shots.away[shots.home.length - 1];
                           ;
@@ -127,6 +131,7 @@ window.onload = function() {
                         lastShot.type = "G";
                         lastShot.endpoint = endpoint;
                         lastShot.player = element.G.player;
+                        
                       }                      
                     } catch (error) {
                       console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
@@ -137,12 +142,12 @@ window.onload = function() {
                           if (element.M) { // смена сторон. конец тайма.                         
                           secondTime = !secondTime;
                           // //console.log(secondTime, element)
-                        };
-          function pushFullPoint(arr, fullPoints) {
-            for (let p = 1; p <= MAX_PLAYERS; p++) {
-              arr[p].push(fullPoints[p]);
-             }
-            }                 
+                              };
+                function pushFullPoint(arr, fullPoints) {
+                  for (let p = 1; p <= MAX_PLAYERS; p++) {
+                    arr[p].push(fullPoints[p]);
+                  }
+                  }                 
                     if (element.coordinates) 
                         {
                             const ball = element.coordinates.ball;
@@ -220,7 +225,9 @@ window.onload = function() {
             + ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
       
             document.querySelector("#gameInfo").textContent = gameInfoSrting;
-
+/**=========================================================================== */
+            shots.home.forEach(shot => { countShot(shot.type, rep.home.players[shot.player -1]); });
+            shots.away.forEach(shot => { countShot(shot.type, rep.away.players[shot.player -1]); });
 /**===================================================================================================== */
           function avgMapCreate(_id) {
               return h337.create({
@@ -588,7 +595,6 @@ window.onload = function() {
                 if (rep.away.players[n - 1].sub) {
                   apName.appendChild(getSubArrow(rep.away.players[n -1].sub)) ;
                 }
-
                 apNameDiv.appendChild(apName);
                 newPlayer.appendChild(apNumDiv);
                 newPlayer.appendChild(apNameDiv);
@@ -596,6 +602,28 @@ window.onload = function() {
                 apEye.className = "playerListEye";
                 apEye.innerText = " ";
                 newPlayer.appendChild(apEye);
+                const apShots = document.createElement('div');
+                apShots.className = "playerListShots";
+                const apShotsString = formShotsString(rep.away.players[n-1]);
+                apShots.innerText = apShotsString;
+                const apShotsCheckbox = document.createElement('div');
+                apShotsCheckbox.className = "playerShotCheckbox";
+                if (apShotsString == " ") {
+                  apShotsCheckbox.innerText = " ";
+                } else {
+                  // apShotsCheckbox.innerText = "v";
+                  apShotsCheckbox.appendChild(createShotCheckbox( {
+                    player:n,
+                    team: "away"
+                  }))
+                  const apShotsTooltip = document.createElement('div');
+                  apShotsTooltip.className = "tooltiptext";
+                  apShotsTooltip.innerText = "Удары|В створ|Голы   |Блокированные|Каркас";
+                  apShots.appendChild(apShotsTooltip);
+                  }
+                newPlayer.appendChild(apShotsCheckbox);
+                newPlayer.appendChild(apShots);
+                // newPlayer.classList.add("awayShot");
                 const apMileage = document.createElement('div');
                 apMileage.className = "playerListMileage";
                 apMileage.innerText = Number(awayMileage[n]/ 1000.0).toFixed(2) + " км";
@@ -648,11 +676,36 @@ window.onload = function() {
 
                 hpNameDiv.appendChild(hpName);
                 newHomePlayer.appendChild(hpNameDiv);
+                // newHomePlayer.classList.add("homeShot");
 
                 const hpEye = document.createElement('div');
                 hpEye.className = "playerListEye";
                 hpEye.innerText = " ";
                 newHomePlayer.appendChild(hpEye);
+                const hpShots = document.createElement('div');
+                hpShots.className = "playerListShots";
+                const hpShotsString = formShotsString(rep.home.players[n-1]);
+                hpShots.innerText = hpShotsString;
+
+                const hpShotsCheckbox = document.createElement('div');
+                hpShotsCheckbox.className = "playerShotCheckbox";
+
+                if (hpShotsString == " ") {
+                  hpShotsCheckbox.innerText = " ";
+                } else {
+                  // hpShotsCheckbox.innerText = "v";
+                  hpShotsCheckbox.appendChild(createShotCheckbox( {
+                    player:n,
+                    team: "home"
+                  }))
+                  const hpShotsTooltip = document.createElement('div');
+                  hpShotsTooltip.className = "tooltiptext";
+                  hpShotsTooltip.innerText = "Удары|В створ|Голы   |Блокированные|Каркас";
+                  hpShots.appendChild(hpShotsTooltip);
+                  }
+
+                newHomePlayer.appendChild(hpShotsCheckbox);
+                newHomePlayer.appendChild(hpShots);
 
                 const hpMileage = document.createElement('div');
                 hpMileage.className = "playerListMileage";
@@ -681,7 +734,7 @@ window.onload = function() {
             console.log("sum of intervals - ", sumInterval);
 /**===================================================================================================== */
             const _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
-            document.querySelector(".shotslegend").style.display = "inline-block";
+            // document.querySelector(".shotslegend").style.display = "inline-block";
 
 /**===================================================================================================== */
             // console.log(_avgHome);
@@ -689,8 +742,8 @@ window.onload = function() {
                   {
                     const context = _chalkboard.getContext('2d');
                     // drawTeamShots(shots.home, context );
-                    drawTeamShots(shots.away, rep.away.players, context );
-                    drawTeamShots(shots.home, rep.home.players, context );
+                    drawTeamShots(shots.away, rep.away.players, "away",context );
+                    drawTeamShots(shots.home, rep.home.players, "home", context );
                     } 
 /**===================================================================================================== */
           } else {

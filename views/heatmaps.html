@@ -114,20 +114,25 @@
 
         </div>
     </div>
-
-    <div class="shotsContainerWrapper">
+    <p class="shotFilters"><a href="#" id="filterGoals" data-type="G" style="font-weight: bold;"> Голы |</a>
+        <a href="#" id="filterStvor" data-type="V" style="font-weight: bold;"> В створ |</a>
+        <a href="#" id="filterMiss" data-type="U" style="font-weight: bold;"> Мимо |</a>
+        <a href="#" id="filterBlocks" data-type="Block" style="font-weight: bold;"> Блокированные </a>
+        <a href="#" id="filterBars"  data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
+    </p>
+    <div class="shotsContainerWrapper" data-homes="0" data-aways="0" data-players="all">
         <div class="shotsContainer" id="chalkboard">
             <img src="images/bigField.png" alt="">
             <div class="overlay">Меловая доска ударов
-                <div class="shotslegend" style="display: none;"> 
-                    <!-- <div class="overlay shotslegend" style="text-decoration: underline;"></div>>Временая легенда -->
+                <!-- <div class="shotslegend" style="display: none;"> 
+                    <div class="overlay shotslegend" style="text-decoration: underline;"></div>>Временая легенда
                         <div class="legendRow"  style="text-decoration: underline;">Временая легенда</div>
                         <div class="legendRow" style="color: rgb(197, 45, 45);">Гол</div>
                         <div class="legendRow" style="color: yellow;">Удар в створ</div>
                         <div class="legendRow" style="color: blue;">Удар мимо</div>
                         <div class="legendRow" style="color: black;">Блокированный</div>
 
-                </div>
+                </div> -->
                 <div id="oneShotLegend" style="display: none;">                     
                 </div>
             </div>

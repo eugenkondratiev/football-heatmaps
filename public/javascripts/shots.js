@@ -29,7 +29,7 @@ function createShotStart(shot, shotinfo, color) {
   shotStart.addEventListener('mouseenter', function(e) {
     console.log(shot.minute, shot.episode, shot.player, shotinfo.playerName, typeString);
     const shotLegend = document.querySelector('#oneShotLegend');
-    const shotString = "Минута " + shot.minute + ", " + typeString + ",\n\r " + shot.player + "." + shotinfo.playerName;
+    const shotString = " Минута " + shot.minute + ", " + typeString + ",\n\r " + shot.player + "." + shotinfo.playerName;
     shotLegend.textContent = shotString;
     shotLegend.style.display  = "inline-block";
   })
@@ -58,6 +58,9 @@ function createShot (shot, shotinfo) {
 
     const shotPict = document.createElement('div');
     shotPict.classList.add('shot');
+    const teamClass = shotinfo.team + "Shot";
+    shotPict.classList.add(teamClass);
+
     shotPict.setAttribute("player", shot.player);
     shotPict.setAttribute("shotType", shot.type);
 
@@ -68,15 +71,10 @@ function createShot (shot, shotinfo) {
     return shotPict;
 }
 /**===================================================================================================== */
-function drawTeamShots(teamShots, players, ctx) {
+function drawTeamShots(teamShots, players, team, ctx) {
     teamShots.forEach((shot, shotNum) => {
-      // const _strokeStyle = shot.type == "G"
-      //   ? 'red'
-      //   : shot.type == "V" 
-      //     ? 'yellow' 
-      //     : shot.type == "Block" ? 'black' : 'blue';
 
-    const shotInfo = {playerName: players[shot.player - 1].name};
+    const shotInfo = {playerName: players[shot.player - 1].name, team:team};
 
     document.querySelector('#chalkboard').appendChild(createShot(shot, shotInfo));
 
@@ -94,3 +92,119 @@ function drawTeamShots(teamShots, players, ctx) {
 
     });
   }
+/**===================================================================================================== */
+function countShot(newShotType, player) {
+  if (newShotType == "U") {
+    if (!player.miss) {
+      player.miss = 1;return;
+    } 
+      player.miss++
+  }
+
+  if (newShotType == "G") {
+    if (!player.goals) {
+      player.goals = 1;return;
+    } 
+      player.goals++
+  }
+  if (newShotType == "B") {
+    if (!player.bar) {
+      player.bar = 1;return;
+    } 
+      player.bar++
+  }
+  if (newShotType == "Block") {
+    if (!player.block) {
+      player.block = 1;return;
+    } 
+      player.block++
+  }
+  if (newShotType == "V") {
+    if (!player.stvor) {
+      player.stvor = 1;return;
+    } 
+      player.stvor++
+  }
+}
+/**===================================================================================================== */
+function formShotsString(player) {
+  const goals = player.goals ? parseInt(player.goals) : 0;
+  const stvor = goals + (player.stvor ? parseInt(player.stvor) : 0);
+  const sum = stvor + (player.miss ? parseInt(player.miss) : 0);
+  const goalsString = "|" + goals;
+  const bars = player.bar ? "|"+(parseInt(player.bar) ): " ";
+  const blocks = player.block ? "|"+(parseInt(player.block) ): " ";
+
+  return sum + bars + blocks == 0 
+            ? " "
+            : sum == 0 
+              ? "        "   + blocks + bars
+              :(sum > 9 ? sum : " "+sum )+ "|" + stvor + goalsString + " " + blocks + bars;   
+}
+/**===================================================================================================== */
+function displayAllShots(display, team, hard=true) {
+  const shotsSelector = "." + team + "Shot";
+  document.querySelectorAll(shotsSelector).forEach(shot => {
+    const checkbox = document.querySelector("#"+ team +"PlayerList_"+ shot.getAttribute("player") + " input");
+    let checked = checkbox ? checkbox.checked : false;
+    shot.style.display = (display)
+        ? "block" 
+        : (checked && !hard )? "block" :"none";
+  })
+}
+
+function changeCheckboxCount(action=-1, team="home") {
+  const shotsContainer = document.querySelectorAll('.shotsContainerWrapper')[0];
+  let chboxCount = parseInt(team == "home" ? shotsContainer.getAttribute("data-homes") : shotsContainer.getAttribute("data-aways"));
+  if (action == -1) {chboxCount--} else {chboxCount++};
+  if (chboxCount < 0 ) chboxCount = 0;
+  if (team == "home") {
+    shotsContainer.setAttribute("data-homes",chboxCount);
+  } else {
+    shotsContainer.setAttribute("data-aways",chboxCount);
+  }
+  return chboxCount;
+}
+/**===================================================================================================== */
+function createShotCheckbox(params) {
+  const chbox = document.createElement('input');
+  chbox.type = "checkbox";
+  chbox.checked = false;
+  chbox.style.cursor = "pointer"
+  chbox.addEventListener('click', function(e) {
+    if (this.checked) {
+      changeCheckboxCount(1,params.team);
+      displayAllShots(false, params.team, false)
+    } else {
+     if (changeCheckboxCount(-1,params.team) == 0 ) {
+       displayAllShots(true, params.team);
+     } else {
+      displayAllShots(false, params.team, false);
+     }      
+    }
+  })
+  return chbox;
+}
+//=================================================
+function changeVisibilityByType(e) {
+  e.preventDefault();
+  const type = this.getAttribute("data-type");
+  const shotsSelector = ".shot[shottype="+ type +"]";
+  const checked = this.style.fontWeight == "bold";
+document.querySelectorAll(shotsSelector).forEach(shot => {
+  shot.style.display = !checked ? "block" : "none";
+});
+this.style.fontWeight = checked ? "normal" : "bold";
+}
+//=================================================
+const fGoals = document.getElementById("filterGoals");
+fGoals.addEventListener('click',changeVisibilityByType.bind(fGoals));
+
+const fStvor = document.getElementById("filterStvor")
+fStvor.addEventListener('click',changeVisibilityByType.bind(fStvor));
+const fMiss = document.getElementById("filterMiss");
+fMiss.addEventListener('click',changeVisibilityByType.bind(fMiss));
+const fBars = document.getElementById("filterBars");
+fBars.addEventListener('click',changeVisibilityByType.bind(fBars));
+const fBlocks = document.getElementById("filterBlocks");
+fBlocks.addEventListener('click',changeVisibilityByType.bind(fBlocks));
