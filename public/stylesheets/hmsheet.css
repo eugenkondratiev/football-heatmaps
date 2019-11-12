@@ -1,15 +1,27 @@
-body, div, span, p, h1, h2, li, td ,th, select, input,textarea 
-		{
-		font-family: Verdana, arial, Tahoma, Verdana, Arial, Helvetica;
-		font-size: 11px;
-		/* color: #000000; */
-	    background-repeat: no-repeat;
-		}
+body,
+div,
+span,
+p,
+h1,
+h2,
+li,
+td,
+th,
+select,
+input,
+textarea {
+    font-family: Verdana, arial, Tahoma, Verdana, Arial, Helvetica;
+    font-size: 11px;
+    /* color: #000000; */
+    background-repeat: no-repeat;
+}
+
 .copyright {
     text-align: right;
     font-weight: normal;
-    font-size:smaller;
+    font-size: smaller;
 }
+
 /* @import url("stylesheets/players.css"); */
 :root,
 html {
@@ -18,57 +30,71 @@ html {
     --border-color-home: #fdfcfc;
     --background-color-away: white;
     --color-away: rgb(0, 0, 139);
-    --border-color-away:  rgb(0, 0, 139);
+    --border-color-away: rgb(0, 0, 139);
     --back3: #A3DE8F;
     --back1: #C9F8B7;
 
 }
 
-a 	{	 
-    color: #4A667C; text-decoration: none; 
-}
-a:hover 	{
-     background-color: #EADA28; text-decoration: none; 
+a {
+    color: #4A667C;
+    text-decoration: none;
 }
 
-h1, h2 , h3, h4, h5{
+a:hover {
+    background-color: #EADA28;
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
     text-align: center;
 }
+
 h4 span {
     font-style: italic;
     font-size: smaller;
 }
+
 body {
-    background-color:var(--back3);
+    background-color: var(--back3);
     /* background-color:#A3DE8F; */
     /* background-color:#c9f8b7; */
-    
+
 }
 
 #urlContaner {
     align-content: center;
 }
-#urlContaner > div {
+
+#urlContaner>div {
     width: 90%;
     margin: 0 auto;
 }
-#urlContaner input{
+
+#urlContaner input {
     width: 33em;
     margin: 3px;
     padding: 0;
     float: left;
 }
-#urlContaner button{
+
+#urlContaner button {
     margin: 3px;
     padding: 0;
     width: 12em;
     float: left
 }
-#urlContaner #pasteButton{
+
+#urlContaner #pasteButton {
     width: 14em;
 }
-    /*---------------------------------------------------------  */
-.heatmapContainerWrapper  { 
+
+/*---------------------------------------------------------  */
+.heatmapContainerWrapper {
     /* width:50%;  */
     /* height:500px;  */
     align-self: center;
@@ -78,109 +104,138 @@ body {
     margin: 0 auto;
 
 }
+
 .heatmap2ContainersWrapper,
 .heatmap3ContainersWrapper,
 .squadAndShotsContainersWrapper,
-.shotsContainerWrapper { 
+.shotsContainerWrapper {
     align-self: center;
     margin: 0 auto;
-    width: 760px; 
+    width: 760px;
     overflow: hidden;
 
 }
-.heatmap3ContainersWrapper  { 
-    width: 1150px; 
+
+.heatmap3ContainersWrapper {
+    width: 1150px;
 }
-.squadAndShotsContainersWrapper  { 
-    width: 850px; 
+
+.squadAndShotsContainersWrapper {
+    width: 850px;
 }
-.shotsContainerWrapper { 
+
+.shotsContainerWrapper {
     width: 754px;
 }
- .heatmapContainerWrapperLeft, 
- .heatmapContainerWrapperRight,
-  .thirdHeatmap, 
-  .squadContainer,
-   .shotsContainerWrapperrRight { 
+
+.heatmapContainerWrapperLeft,
+.heatmapContainerWrapperRight,
+.thirdHeatmap,
+.squadContainer,
+.shotsContainerWrapperrRight {
     align-self: center;
     width: 367px;
     height: 267px;
     margin: 0 9px 0 0;
 
 }
-.shotsContainerWrapperRight { 
+
+.shotsContainerWrapperRight {
     width: 754px;
     height: 500px;
 }
 
-.squadContainer > div{ 
-    width:100%; 
+.squadContainer>div {
+    width: 100%;
     margin: 1px 0 5px 0;
 }
-.playerRow:nth-child(odd) { 
+
+.playerRow:nth-child(odd) {
     background-color: var(--back1);
 }
-.playerListMileage, .playerListNum,
-.playerListName,.playerListEye
-,.playerListShots,.playerShotCheckbox{
-    float:left;
+
+.playerListMileage,
+.playerListNum,
+.playerListName,
+.playerListEye,
+.playerListShots,
+.playerShotCheckbox {
+    float: left;
     background-color: inherit;
-    padding:0 1px 1px 0;
+    padding: 0 1px 1px 0;
     white-space: pre-wrap;
     height: 1.2em;
 }
-.playerRow .playerListMileage{ 
-    width:12%; 
+
+.playerRow .playerListMileage {
+    width: 12%;
     text-align: right;
 }
-.playerRow .playerListEye{ 
-    width:8%; 
+
+.playerRow .playerListEye {
+    width: 8%;
 }
-.playerRow .playerShotCheckbox{ 
-    width:7%;
+
+.playerRow .playerShotCheckbox {
+    width: 7%;
     align-content: center;
     text-align: center;
     /* cursor:pointer  */
 }
-.playerRow .playerListShots{ 
-    width:18%; 
+
+.playerRow .playerListShots {
+    width: 18%;
 }
-.playerRow .playerListName{ 
-    width:40%; 
+
+.playerRow .playerListName {
+    width: 40%;
 }
-.playerRow .playerListNum{ 
-    width:7%; 
+
+.playerRow .playerListNum {
+    width: 7%;
     /* display: inline; */
     text-align: right;
 }
+
 .playerShotCheckbox input {
     margin: 0;
 }
-.heatmapContainerWrapperLeft , .squadWrapperLeft,
-.heatmapContainerWrapperRight , .shotsContainerWrapperRight,
-.thirdHeatmap , .squadWrapperRight  { 
+
+.heatmapContainerWrapperLeft,
+.squadWrapperLeft,
+.heatmapContainerWrapperRight,
+.shotsContainerWrapperRight,
+.thirdHeatmap,
+.squadWrapperRight {
     float: left;
 }
 
-.heatmapContainer { 
+.heatmapContainer {
     width: 367px;
     height: 250px;
-     /* height:100%; */
-     /* margin: 0 auto; */
-}
-.shotsContainer, .shotsContainer .heatmap-canvas {
-    width: 754px;
-    height: 500px;   
+    /* height:100%; */
+    /* margin: 0 auto; */
 }
 
-.squadContainer, .squadWrapperLeft , .squadWrapperRight {
+.shotsContainer,
+.shotsContainer .heatmap-canvas {
+    width: 754px;
+    height: 500px;
+}
+
+.squadContainer,
+.squadWrapperLeft,
+.squadWrapperRight {
     width: 400px;
     height: 280px;
 }
-.squadWrapperLeft , .squadWrapperRight {
+
+.squadWrapperLeft,
+.squadWrapperRight {
     width: 50%;
 }
-.heatmapContainer img{ 
+
+.heatmapContainer img {
     /* width:100%; 
     height:100%; */
     width: 367px;
@@ -190,16 +245,18 @@ body {
     margin-left: auto;
     /* background-size: 120px */
 }
+
 /*====================================*/
-    /* :root, */
+/* :root, */
 /*=========================================================*/
-    
+
 
 
 
 .pitch_container {
     width: 100%
 }
+
 .pitch_canvas_container,
 .pitch_canvas_container0,
 .pitch_canvas_container1,
@@ -212,10 +269,12 @@ body {
 .clear {
     clear: left
 }
+
 .player_container {
     position: absolute;
     z-index: 1
 }
+
 .manager_shape,
 .player_shape {
     border-radius: 50%;
@@ -223,18 +282,21 @@ body {
     cursor: pointer;
     margin: auto
 }
+
 .manager_shape.home,
 .player_shape.home {
     color: var(--color-home);
     background-color: var(--background-color-home);
     border-color: var(--border-color-home)
 }
+
 .manager_shape.away,
 .player_shape.away {
     color: var(--color-away);
     background-color: var(--background-color-away);
     border-color: var(--border-color-away)
 }
+
 .manager_shape {
     border-radius: 0
 }
@@ -253,14 +315,17 @@ body {
     transform: scale(1.6);
     padding: 0;
     margin: 0;
-   line-height: 11px; /*  =height  for vartical center align*/
+    line-height: 11px;
+    /*  =height  for vartical center align*/
 }
+
 .medium_size .player_number {
     width: 11px;
     font-size: 5.1pt;
     padding: 0;
-     margin: auto ;
+    margin: auto;
 }
+
 .medium_size .player_name {
     font-size: 8pt;
     color: #fff;
@@ -268,41 +333,46 @@ body {
     top: 2px
 }
 
-.player_shape .tooltiptext, .playerListShots .tooltiptext,
-.playerListEye > img .tooltiptext {
+.player_shape .tooltiptext,
+.playerListShots .tooltiptext,
+.playerListEye>img .tooltiptext {
     visibility: hidden;
-     width: 67px;
+    width: 67px;
     background-color: lightyellow;
     color: darkblue;
     text-align: left;
-     border-radius: 3px;
+    border-radius: 3px;
     padding: 0 0;
     font-size: 5pt;
-   /* float: left; */
+    /* float: left; */
     /* Position the tooltip */
     /* position: absolute; */
     position: relative;
     z-index: 99;
-  }
-  
-  .player_shape:hover .tooltiptext, .playerListShots:hover .tooltiptext,
-  .playerListEye>img:hover .tooltiptext{
+}
+
+.player_shape:hover .tooltiptext,
+.playerListShots:hover .tooltiptext,
+.playerListEye>img:hover .tooltiptext {
     visibility: visible;
-  }
-  .playerListShots:hover .tooltiptext {
+}
+
+.playerListShots:hover .tooltiptext {
     width: 222px;
     font-size: 5pt;
-  }
-  .playerListEye>img:hover .tooltiptext{
+}
+
+.playerListEye>img:hover .tooltiptext {
     width: 150px;
     height: 150px;
-  }
+}
 
 /*=========================================================*/
 .heatmap-canvas {
     width: 367px;
     height: 250px;
 }
+
 /*=========================================================*/
 .loaderWrapper {
     margin: 10% auto 146%;
@@ -312,10 +382,10 @@ body {
     /* z-index: 99; */
 }
 
-.loaderWrapper img{
+.loaderWrapper img {
     /* margin: 0 auto; */
-     width: 50px;
-     height: 50px;
+    width: 50px;
+    height: 50px;
     position: relative;
     left: 45px;
     top: -95px;
@@ -326,25 +396,26 @@ body {
     height: 120px;
     width: 120px;
     border-top: 10px solid rgb(135, 206, 121);
-    --webkit-border-radius: 50%;;
-    --moz-border-radius:50%;
-    border-radius:50%;
--webkit-animation: spinner 1.5s  linear infinite;
--o-animation: spinner 1.5s  linear infinite;
-animation: spinner 1.5s  linear infinite;
-background-color: var(--back1);
+    --webkit-border-radius: 50%;
+    --moz-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-animation: spinner 1.5s linear infinite;
+    -o-animation: spinner 1.5s linear infinite;
+    animation: spinner 1.5s linear infinite;
+    background-color: var(--back1);
 
 }
 
 @keyframes spinner {
-    0%{
+    0% {
         -webkit-transform: rotate(0deg);
         -moz-transform: rotate(0deg);
         -ms-transform: rotate(0deg);
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
-    100%{
+
+    100% {
         -webkit-transform: rotate(360deg);
         -moz-transform: rotate(360deg);
         -ms-transform: rotate(360deg);
@@ -357,51 +428,57 @@ background-color: var(--back1);
 
 
 /*==================================*/
-.clear, .heatmap2ContainersWrapper{
-    clear:both;
-    
+.clear,
+.heatmap2ContainersWrapper {
+    clear: both;
+
 }
+
 /*==================================*/
-.heatmapContainer .overlay, .shotsContainer .overlay {
-    width:100%;
-    height:100%;
+.heatmapContainer .overlay,
+.shotsContainer .overlay {
+    width: 100%;
+    height: 100%;
     /* background:rgba(0,0,0,.5); */
     color: lightgrey;
     font-size: small;
-    position:absolute;
-    top:0;
-    left:0;
-    display:inline-block;
-    -webkit-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
- 
- }
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
- .overlay > .shotslegend , .overlay > #oneShotLegend{
-     width: 120px;
-    height: 100px; 
+}
+
+.overlay>.shotslegend,
+.overlay>#oneShotLegend {
+    width: 120px;
+    height: 100px;
 
     color: lightgrey;
     font-size: smaller;
-    position:absolute; 
-    display:inline-block;
-    -webkit-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
-    top:44px;
-    left:250px;
- }
- .shotslegendHome {
-     left:400px;
- }
+    position: absolute;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    top: 44px;
+    left: 250px;
+}
 
- .legendRow , .shotFilters > a{
-     font-weight: bold;
- }
+.shotslegendHome {
+    left: 400px;
+}
 
- .overlay > #oneShotLegend {
-    top:44px;
+.legendRow,
+.shotFilters>a {
+    font-weight: bold;
+}
+
+.overlay>#oneShotLegend {
+    top: 44px;
     left: 380px;
     width: 320px;
     border: 1px solid lightgrey;
@@ -410,34 +487,38 @@ background-color: var(--back1);
     background-color: var(--back3);
     border-radius: 5px;
     border: 2px solid rgb(37, 97, 35);
-    color:  rgb(37, 97, 35);;
+    color: rgb(37, 97, 35);
+    ;
 
 }
- .shotline{content:"";
-    position:absolute;
-    border-top:2px solid blue;
-      width:147px;
-      top:50px;
-      left:50px;
-      transform: rotate(45deg);
-      transform-origin: 1px 1px;
-    }
-    
-    .shotstart, .shotend{
+
+.shotline {
+    content: "";
+    position: absolute;
+    border-top: 2px solid blue;
+    width: 147px;
+    top: 50px;
+    left: 50px;
+    transform: rotate(45deg);
+    transform-origin: 1px 1px;
+}
+
+.shotstart,
+.shotend {
     /*content:" ";*/
-    position:absolute;
-    border:1px solid blue;
-      width:9px;
-      height:9px;
-     top:46px;
-      left:46px;
-       border-radius: 50%;
-      background-color: blue;
-     }
-    
-     .shotend{
-      width:3px;
-      height:3px;
-     top:150px;
-      left:149px;
-    }
+    position: absolute;
+    border: 1px solid blue;
+    width: 9px;
+    height: 9px;
+    top: 46px;
+    left: 46px;
+    border-radius: 50%;
+    background-color: blue;
+}
+
+.shotend {
+    width: 3px;
+    height: 3px;
+    top: 150px;
+    left: 149px;
+}

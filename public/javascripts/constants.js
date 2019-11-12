@@ -25,11 +25,11 @@ const SUB_IN = 2;
 
 const MIN_MINUTES_FOR_SHOW_TACTIC = 3;
 
-const shotsCoords = {x1: 39, y1:38, x2:712, y2:458};
-const jsonCoords = {x1: 0, y1:0, x2:720, y2:450};
-const hmCoords = {x1: 18.98, y1:19, x2:346.56, y2:229.5};
+const shotsCoords = { x1: 39, y1: 38, x2: 712, y2: 458 };
+const jsonCoords = { x1: 0, y1: 0, x2: 720, y2: 450 };
+const hmCoords = { x1: 18.98, y1: 19, x2: 346.56, y2: 229.5 };
 
 const FIELD_LONGTITUDE = 105;
 
-const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1) ;
+const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1);
 // const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;

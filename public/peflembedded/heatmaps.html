@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,11 @@
     <title>Тепловые карты</title>
     <link rel="stylesheet" href="stylesheets/hmsheet.css">
     <link rel="icon" href="images/faviconka_hm.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="images/faviconka_hm.ico" type="image/x-icon"> 
+    <link rel="shortcut icon" href="images/faviconka_hm.ico" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
+
 <body>
     <div class="loaderWrapper">
         <div class="loader">
@@ -18,57 +20,60 @@
         </div>
         <img src="http://pefl.ru/skins/refl/img/pefl.gif" alt="P">
     </div>
-<div class="copyright"><a href="http://pefl.ru/users.php?m=details&id=13035" target="_blank" rel="noopener noreferrer"> ©Sullen</a></div>
-<div id="urlContaner">
-    <div>
-    <button id="pasteButton">Вставить из буфера обмена</button>
-    <input type="url" name="tvurlInput" id="tvurlInput" placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
-    <button id="updateButton">Открыть</button>
-    <button id="newWindow">Открыть в новом окне</button>
+    <div class="copyright"><a href="http://pefl.ru/users.php?m=details&id=13035" target="_blank"
+            rel="noopener noreferrer"> ©Sullen</a></div>
+    <div id="urlContaner">
+        <div>
+            <button id="pasteButton">Вставить из буфера обмена</button>
+            <input type="url" name="tvurlInput" id="tvurlInput" placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
+            <button id="updateButton">Открыть</button>
+            <button id="newWindow">Открыть в новом окне</button>
+        </div>
     </div>
-</div>
-<div class="clear"></div>
+    <div class="clear"></div>
 
-        <h3>Тепловые карты матча</h3>  
-        <h4 id="gameInfo">game info<span></span></h4>  
+    <h3>Тепловые карты матча</h3>
+    <h4 id="gameInfo">game info<span></span></h4>
 
     <div class="heatmapContainerWrapper">
         <div class="heatmapContainer" id="heatmapBall">
             <img src="images/littleField.png" alt="">
             <div class="overlay">Мяч</div>
 
-            <div id="player_default_away" title="" class="player_container medium_size" style="top: 14px; left: 341.56px; z-index: 2; opacity: 1;display:none">
+            <div id="player_default_away" title="" class="player_container medium_size"
+                style="top: 14px; left: 341.56px; z-index: 2; opacity: 1;display:none">
                 <div class="player_shape away">
                     <div class="player_number">8</div>
                     <div class="tooltiptext">Away player</div>
                 </div>
             </div>
-            <div id="player_default_home" title="" class="player_container medium_size" style="top: 224.5px; left: 14px; z-index: 2; opacity: 1; display:none">
+            <div id="player_default_home" title="" class="player_container medium_size"
+                style="top: 224.5px; left: 14px; z-index: 2; opacity: 1; display:none">
                 <div class="player_shape home">
                     <div class="player_number">88</div>
                     <div class="tooltiptext">Home player</div>
                 </div>
             </div>
-            
+
         </div>
-  
+
     </div>
-             <h4></h4>   
+    <h4></h4>
     <div class="heatmap2ContainersWrapper">
         <div class="heatmapContainerWrapperLeft">
             <div class="heatmapContainer" id="heatmapHome">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева</div>
             </div>
-    
+
         </div>
         <div class="heatmapContainerWrapperRight">
             <div class="heatmapContainer" id="heatmapAway">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Гости</div>
             </div>
-    
-        </div>  
+
+        </div>
     </div>
 
     <div class="heatmap3ContainersWrapper">
@@ -77,28 +82,28 @@
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы.</div>
             </div>
-    
+
         </div>
         <div class="heatmapContainerWrapperRight">
             <div class="heatmapContainer" id="heatmapAvgAway">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы</div>
             </div>
-    
-        </div>  
-        <div class="thirdHeatmap">
-        <div class="heatmapContainer" id="heatmapAvgBoth">
-            <img src="images/littleField.png" alt="">
-            <div class="overlay">Средние позиции</div>
-        </div>
 
-        </div>     
+        </div>
+        <div class="thirdHeatmap">
+            <div class="heatmapContainer" id="heatmapAvgBoth">
+                <img src="images/littleField.png" alt="">
+                <div class="overlay">Средние позиции</div>
+            </div>
+
+        </div>
     </div>
 
     <div class="squadAndShotsContainersWrapper">
         <div class="squadWrapperLeft">
             <div class="squadContainer" id="squadHome">
-            </div>    
+            </div>
         </div>
 
         <div class="squadWrapperRight">
@@ -112,29 +117,30 @@
             <a href="#" id="filterStvor" data-type="V" style="font-weight: bold;"> В створ |</a>
             <a href="#" id="filterMiss" data-type="U" style="font-weight: bold;"> Мимо |</a>
             <a href="#" id="filterBlocks" data-type="Block" style="font-weight: bold;"> Блокированные |</a>
-            <a href="#" id="filterBars"  data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
-            <a href="#" id="filterShowAll" style="font-weight: bold;">    Показать все</a>
+            <a href="#" id="filterBars" data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
+            <a href="#" id="filterShowAll" style="font-weight: bold;"> Показать все</a>
         </p>
-   </div>
+    </div>
 
     <div class="shotsContainerWrapper" data-homes="0" data-aways="0" data-players="all">
         <div class="shotsContainer" id="chalkboard">
             <img src="images/bigField.png" alt="">
             <div class="overlay">Меловая доска ударов
-                <div id="oneShotLegend" style="display: none;">                     
+                <div id="oneShotLegend" style="display: none;">
                 </div>
             </div>
         </div>
--               
+        -
     </div>
-<div class="clear"></div>
-<script src="javascripts/heatmap.min.js"></script>
+    <div class="clear"></div>
+    <script src="javascripts/heatmap.min.js"></script>
 
-<script src="javascripts/constants.js"></script>
-<script src="javascripts/init.js"></script>
-<script src="javascripts/utils.js"></script>
-<script src="javascripts/shots.js"></script>
+    <script src="javascripts/constants.js"></script>
+    <script src="javascripts/init.js"></script>
+    <script src="javascripts/utils.js"></script>
+    <script src="javascripts/shots.js"></script>
 
-<script src='javascripts/heatmaps.js'></script>
+    <script src='javascripts/heatmaps.js'></script>
 </body>
+
 </html>
