@@ -3,26 +3,41 @@ function createHeatMap(rep, corners, jsoncorners) {
   //TODO  вынести расчет в функцию (jsonreport) => массив тепловых карты мяча,команд, игроков команд.
 }
 //==============================================================================
-
+let startTime = Date.now();
+// console.log(new Date(startTime).toLocaleTimeString());
 window.onload = function () {
   //--------------------------------------------------------------------
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.overrideMimeType("application/json");
   xmlhttp.onreadystatechange = function () {
-    if (this.readyState == 4 /*&& this.status == 200*/ ) {
+    if (this.readyState == 4 /*&& this.status == 200*/) {
       if (this.status == 200) {
+        // console.log(new Date(Date.now() - startTime).toLocaleTimeString());
         const scoreWithPensFound = this.responseText.match(/\d+:\d+/g);
         const scoreWithPens = scoreWithPensFound ? scoreWithPensFound.pop() : ["0:0"];
-        // //console.log(scoreWithPens);
+        // console.log('scoreWithPens', scoreWithPens);
         const rep = JSON.parse(this.responseText);
         //--------------------------------------------------------------------
-        let root = document.documentElement;
-        root.style.setProperty('--background-color-home', "#" + rep.home.team.back);
-        root.style.setProperty('--border-color-home', "#" + rep.home.team.color);
-        root.style.setProperty('--color-home', "#" + rep.home.team.color);
-        root.style.setProperty('--background-color-away', "#" + rep.away.team.back);
-        root.style.setProperty('--border-color-away', "#" + rep.away.team.color);
-        root.style.setProperty('--color-away', "#" + rep.away.team.color);
+        // let root = document.documentElement;
+        // root.style.setProperty('--background-color-home', "#" + rep.home.team.back);
+        // root.style.setProperty('--border-color-home', "#" + rep.home.team.color);
+        // root.style.setProperty('--color-home', "#" + rep.home.team.color);
+        // root.style.setProperty('--background-color-away', "#" + rep.away.team.back);
+        // root.style.setProperty('--border-color-away', "#" + rep.away.team.color);
+        // root.style.setProperty('--color-away', "#" + rep.away.team.color);
+        function setTeamsColors() {
+          const away = document.getElementById("player_default_away").style;
+          const home = document.getElementById("player_default_away").style;
+          away.backgroundColor = rep.away.team.back;
+          away.borderColor = rep.away.team.color;
+          away.color = rep.away.team.color;
+          home.color = rep.home.team.color;
+          home.borderColor = rep.home.team.color;
+          home.backgroundColor = rep.home.team.back;
+
+        }
+        setTeamsColors();
+
         //--------------------------------------------------------------------
         const game = rep.game;
         game.shift();
@@ -46,11 +61,12 @@ window.onload = function () {
               element.messages.forEach(mes => {
                 if (mes.mes.indexOf(' СЧЕТ ') > -1) {
                   score = mes.mes.replace(' СЧЕТ ', '');
-                  // //console.log(score);
+                  // console.log(score);
                 };
               });
               if (element.messages[0].mes == "Серия пенальти!..." ||
-                element.messages[0].mes == "Матч переходит к послематчевым одиннадцатиметровым!...") {
+                element.messages[0].mes == "Матч переходит к послематчевым одиннадцатиметровым!..." ||
+                element.messages[0].mes == "Назначаются послематчевые пенальти!...") {
                 penalties = true; //может на будущее
                 throw "Серия пенальти!...";
               }
@@ -69,7 +85,6 @@ window.onload = function () {
                   averages: []
                 };
                 for (let i = 0; i <= MAX_PLAYERS; i++) {
-
                   homeTacticPoints[0].averages.push([{
                     x: 0,
                     y: 0
@@ -113,10 +128,10 @@ window.onload = function () {
                 const shotStart = (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].coordinates) ?
                   episodes[episode - 1].coordinates.ball :
                   (episodes[episode - 2].messages.length > 0 && episodes[episode - 2].coordinates) ?
-                  episodes[episode - 2].coordinates.ball :
-                  (episodes[episode - 3].messages.length > 0 && episodes[episode - 3].coordinates) ?
-                  episodes[episode - 3].coordinates.ball :
-                  episodes[episode - 4].coordinates.ball;
+                    episodes[episode - 2].coordinates.ball :
+                    (episodes[episode - 3].messages.length > 0 && episodes[episode - 3].coordinates) ?
+                      episodes[episode - 3].coordinates.ball :
+                      episodes[episode - 4].coordinates.ball;
                 const startCoords = {
                   x: shotStart.w,
                   y: shotStart.h,
@@ -162,7 +177,6 @@ window.onload = function () {
                 lastShot.type = "G";
                 lastShot.endpoint = endpoint;
                 lastShot.player = element.G.player;
-
               }
             } catch (error) {
               console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
@@ -257,7 +271,6 @@ window.onload = function () {
               ballPoints.push(ballHeatMap)
               homeTacticPoints[0].ball.push(ballHeatMap);
               awayTacticPoints[0].ball.push(ballHeatMap);
-              //debugger;  
               pushFullPoint(homePointsFull, currentHomePositions);
               pushFullPoint(awayPointsFull, currentAwayPositions);
             }
@@ -267,10 +280,13 @@ window.onload = function () {
         }
         homeTacticPoints.push(homeTacticPoints[0]);
         awayTacticPoints.push(awayTacticPoints[0]);
-
-        const finalScore = score + (scoreWithPens == score ? '' : `(${scoreWithPens})`);
+        function getPenalties(s, p) {
+          const score = s.split(':');
+          const withpens = p.split(':');
+          return `${withpens[0] - score[0]}:${withpens[1] - score[1]}`
+        }
+        const finalScore = score + (scoreWithPens == score ? '' : `(${getPenalties(score, scoreWithPens)})`);
         const gameInfoSrting = rep.date + ". "
-          // + rep.stadium.city + ". "  
           +
           (rep.stadium.city ? rep.stadium.city + ". " : "") +
           rep.stadium.name +
@@ -287,7 +303,7 @@ window.onload = function () {
         /**===================================================================================================== */
         function avgMapCreate(_id) {
           return h337.create({
-            container: document.querySelector(_id), //'#heatmapAvgSubHome'),
+            container: document.querySelector(_id), //'#heatmap-avgSubHome'),
             maxOpacity: MAX_OPACITY,
             minOpacity: MIN_OPACITY,
             radius: POINT_RADIUS * TEAM_RADIUS_KEFF
@@ -295,53 +311,53 @@ window.onload = function () {
           });
         }
         const heatmapInstance = h337.create({
-          container: document.querySelector('#heatmapHome'),
+          container: document.querySelector('#heatmap-home'),
           maxOpacity: MAX_OPACITY,
           minOpacity: MIN_OPACITY,
           radius: POINT_RADIUS * TEAM_RADIUS_KEFF
         });
         const heatmapInstance2 = h337.create({
-          container: document.querySelector('#heatmapAway'),
+          container: document.querySelector('#heatmap-away'),
           maxOpacity: MAX_OPACITY,
           minOpacity: MIN_OPACITY,
           radius: POINT_RADIUS * TEAM_RADIUS_KEFF
         });
         const heatmapInstance3 = h337.create({
-          container: document.querySelector('#heatmapBall'),
+          container: document.querySelector('#heatmap-ball'),
           maxOpacity: MAX_OPACITY,
           minOpacity: MIN_OPACITY,
           radius: POINT_RADIUS * BALL_RADIUS_KEFF
         });
-        const heatmapInstance4 = avgMapCreate('#heatmapAvgHome');
-        const heatmapInstance5 = avgMapCreate('#heatmapAvgAway');
-        // const heatmapInstance6 = avgMapCreate('#heatmapAvgSubHome');
+        const heatmapInstance4 = avgMapCreate('#heatmap-avgHome');
+        const heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
+        // const heatmapInstance6 = avgMapCreate('#heatmap-avgSubHome');
         const heatmapInstance7 = avgMapCreate('#chalkboard');
-        const heatmapInstance8 = avgMapCreate('#heatmapAvgBoth');
+        const heatmapInstance8 = avgMapCreate('#heatmap-avgBoth');
 
         const heatPoints = [{
-            x: 19,
-            y: 19,
-            value: 1,
-            radius: 1
-          },
-          {
-            x: 346.56,
-            y: 229.5,
-            value: 200,
-            radius: 1
-          },
-          {
-            x: 19,
-            y: 229.5,
-            value: 1,
-            radius: 1
-          },
-          {
-            x: 346.56,
-            y: 19,
-            value: 1,
-            radius: 1
-          }
+          x: 19,
+          y: 19,
+          value: 1,
+          radius: 1
+        },
+        {
+          x: 346.56,
+          y: 229.5,
+          value: 200,
+          radius: 1
+        },
+        {
+          x: 19,
+          y: 229.5,
+          value: 1,
+          radius: 1
+        },
+        {
+          x: 346.56,
+          y: 19,
+          value: 1,
+          radius: 1
+        }
         ];
 
         const maximumValue = MAX_VALUE;
@@ -386,27 +402,26 @@ window.onload = function () {
               })
             })
             // show tactic
-            const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
+            const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
             const newDiv = divWrapper.cloneNode(true);
-            const tacticId = "#heatmapTactichome" + t;
-            const ballId = "#heatmapBallhome" + t;
+            const tacticId = "#heatmap-tactichome" + t;
+            const ballId = "#heatmap-ballhome" + t;
             const tacticLabel = (homeTacticPoints[t].start > 0 ? ("от " + homeTacticPoints[t].start) : "") + " " +
               (homeTacticPoints[t].end < 125 ? ("до " + homeTacticPoints[t].end) : "") + ".  " + rep.home.team.name;
-            newDiv.querySelector('#heatmapHome').id = "heatmapTactichome" + t;
+            newDiv.querySelector('#heatmap-home').id = "heatmap-tactichome" + t;
             newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
-            newDiv.querySelector('#heatmapAway').id = "heatmapBallhome" + t;
+            newDiv.querySelector('#heatmap-away').id = "heatmap-ballhome" + t;
             newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;;
             document.body.appendChild(newDiv);
-            const theWrapper = document.getElementsByClassName('heatmapContainerWrapperRight')[0];
+            const theWrapper = document.getElementsByClassName('heatmap-container-wrapper-right')[0];
             const thirdField = theWrapper.cloneNode(true);
             thirdField.className = "thirdHeatmap";
-            newDiv.className = "heatmap3ContainersWrapper";
-            thirdField.querySelector(".heatmapContainer").id = "avgPositionsHome" + t;
-            thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;
+            newDiv.className = "heatmap3-containers-wrapper";
+            thirdField.querySelector(".heatmap-container").id = "avgPositionsHome" + t;
+            thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
             newDiv.appendChild(thirdField);
 
             for (let n = 1; n <= MAX_PLAYERS; n++) {
-              // for (let n = 1; n < 12; n++) { 
               const hp = document.querySelector('#player_default_home').cloneNode(true);
               hp.id = "homeAvgPoints_" + t + "_" + n;
               hp.style.display = n < 12 ? "inherit" : "none";
@@ -429,13 +444,13 @@ window.onload = function () {
               max: maximumValue,
               data: homeTacticPoints[t].team
             });
-            const heatmapBall = h337.create({
+            const heatmapball = h337.create({
               container: document.querySelector(ballId),
               maxOpacity: MAX_OPACITY,
               minOpacity: MIN_OPACITY,
               radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
             });
-            heatmapBall.setData({
+            heatmapball.setData({
               max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
               data: homeTacticPoints[t].ball
             });
@@ -457,24 +472,24 @@ window.onload = function () {
                 positions[0].y += (pos.y / avg);
               })
             })
-            const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
+            const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
             const newDiv = divWrapper.cloneNode(true);
-            const tacticId = "#heatmapTacticaway" + t;
-            const ballId = "#heatmapBallaway" + t;
+            const tacticId = "#heatmap-tacticaway" + t;
+            const ballId = "#heatmap-ballaway" + t;
             const tacticLabel = (awayTacticPoints[t].start > 0 ? ("от " + awayTacticPoints[t].start) : "") + " " +
               (awayTacticPoints[t].end < 125 ? ("до " + awayTacticPoints[t].end) : "") + ".  " + rep.away.team.name;
-            newDiv.querySelector('#heatmapHome').id = "heatmapTacticaway" + t;
+            newDiv.querySelector('#heatmap-home').id = "heatmap-tacticaway" + t;
             newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
-            newDiv.querySelector('#heatmapAway').id = "heatmapBallaway" + t;
+            newDiv.querySelector('#heatmap-away').id = "heatmap-ballaway" + t;
             newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;;
             document.body.appendChild(newDiv);
-            const theWrapper = document.getElementsByClassName('heatmapContainerWrapperRight')[0];
+            const theWrapper = document.getElementsByClassName('heatmap-container-wrapper-right')[0];
 
             const thirdField = theWrapper.cloneNode(true);
             thirdField.className = "thirdHeatmap";
-            newDiv.className = "heatmap3ContainersWrapper";
-            thirdField.querySelector(".heatmapContainer").id = "avgPositionsAway" + t;
-            thirdField.querySelector(".heatmapContainer > div").textContent = "Ср.поз." + tacticLabel;
+            newDiv.className = "heatmap3-containers-wrapper";
+            thirdField.querySelector(".heatmap-container").id = "avgPositionsAway" + t;
+            thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
             newDiv.appendChild(thirdField);
 
             for (let n = 1; n <= MAX_PLAYERS; n++) {
@@ -502,14 +517,14 @@ window.onload = function () {
               data: awayTacticPoints[t].team
             });
 
-            const heatmapBall = h337.create({
+            const heatmapball = h337.create({
               container: document.querySelector(ballId),
               maxOpacity: MAX_OPACITY,
               minOpacity: MIN_OPACITY,
               radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
 
             });
-            heatmapBall.setData({
+            heatmapball.setData({
               max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
               data: awayTacticPoints[t].ball
             });
@@ -522,14 +537,14 @@ window.onload = function () {
         document.body.appendChild(newHeatmapsHeader);
 
         for (let i = 1; i <= MAX_PLAYERS; i++) {
-          const divWrapper = document.getElementsByClassName('heatmap2ContainersWrapper')[0];
+          const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
           const newDiv = divWrapper.cloneNode(true);
-          const homePlayerId = "#heatmapHome" + i;
-          const awayPlayerId = "#heatmapAway" + i;
+          const homePlayerId = "#heatmap-home" + i;
+          const awayPlayerId = "#heatmap-away" + i;
 
-          newDiv.querySelector('#heatmapHome').id = "heatmapHome" + i;
+          newDiv.querySelector('#heatmap-home').id = "heatmap-home" + i;
           newDiv.querySelector(homePlayerId + ' > div').textContent = rep.home.players[i - 1].number + '. ' + rep.home.players[i - 1].name;
-          newDiv.querySelector('#heatmapAway').id = "heatmapAway" + i;
+          newDiv.querySelector('#heatmap-away').id = "heatmap-away" + i;
           newDiv.querySelector(awayPlayerId + ' > div').textContent = rep.away.players[i - 1].number + '. ' + rep.away.players[i - 1].name;
 
           document.body.appendChild(newDiv);
@@ -560,10 +575,10 @@ window.onload = function () {
 
         }
 
-        document.querySelector("#heatmapHome .overlay").textContent = rep.home.team.name;
-        document.querySelector("#heatmapAway .overlay").textContent = rep.away.team.name;
-        document.querySelector("#heatmapAvgHome .overlay").textContent = "Средние позиции " + rep.home.team.name;
-        document.querySelector("#heatmapAvgAway .overlay").textContent = "Средние позиции " + rep.away.team.name;
+        document.querySelector("#heatmap-home .overlay").textContent = rep.home.team.name;
+        document.querySelector("#heatmap-away .overlay").textContent = rep.away.team.name;
+        document.querySelector("#heatmap-avgHome .overlay").textContent = "Средние позиции " + rep.home.team.name;
+        document.querySelector("#heatmap-avgAway .overlay").textContent = "Средние позиции " + rep.away.team.name;
         /**===================================================================================================== */
         /**=========================СРЕДНИЕ ПОЗИЦИИ================================================== */
         const avgH = homePoints[0].length;
@@ -674,7 +689,6 @@ window.onload = function () {
             if (apShotsString == " ") {
               apShotsCheckbox.innerText = " ";
             } else {
-              // apShotsCheckbox.innerText = "v";
               apShotsCheckbox.appendChild(createShotCheckbox({
                 player: n,
                 team: "away"
@@ -686,7 +700,6 @@ window.onload = function () {
             }
             newPlayer.appendChild(apShotsCheckbox);
             newPlayer.appendChild(apShots);
-            // newPlayer.classList.add("awayShot");
             const apMileage = document.createElement('div');
             apMileage.className = "playerListMileage";
             apMileage.innerText = Number(awayMileage[n] / 1000.0).toFixed(2) + " км";
@@ -696,13 +709,13 @@ window.onload = function () {
 
             ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
             ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;;
-            document.getElementById('heatmapAvgAway').appendChild(ap);
+            document.getElementById('heatmap-avgAway').appendChild(ap);
             const apBoth = ap.cloneNode(true);
             apBoth.id = "both" + apBoth.id;
-            document.getElementById('heatmapAvgBoth').appendChild(apBoth);
+            document.getElementById('heatmap-avgBoth').appendChild(apBoth);
             const apToINdividualHeatmap = ap.cloneNode(true);
             apToINdividualHeatmap.id = apToINdividualHeatmap.id + "_individual";
-            document.querySelector('#heatmapAway' + n).appendChild(apToINdividualHeatmap);
+            document.querySelector('#heatmap-away' + n).appendChild(apToINdividualHeatmap);
 
             hp.id = "homeAvgPoints" + n;
             hp.plId = "hm" + n;
@@ -737,8 +750,6 @@ window.onload = function () {
 
             hpNameDiv.appendChild(hpName);
             newHomePlayer.appendChild(hpNameDiv);
-            // newHomePlayer.classList.add("homeShot");
-
             const hpEye = document.createElement('div');
             hpEye.className = "playerListEye";
             hpEye.innerText = " ";
@@ -767,10 +778,8 @@ window.onload = function () {
               hpShotsTooltip.innerText = "Удары|В створ|Голы   |Блокированные|Каркас";
               hpShots.appendChild(hpShotsTooltip);
             }
-
             newHomePlayer.appendChild(hpShotsCheckbox);
             newHomePlayer.appendChild(hpShots);
-
             const hpMileage = document.createElement('div');
             hpMileage.className = "playerListMileage";
             hpMileage.innerText = Number(homeMileage[n] / 1000.0).toFixed(2) + " км";
@@ -779,19 +788,19 @@ window.onload = function () {
             document.querySelector('#squadHome').appendChild(newHomePlayer);
             hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
             hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
-            document.getElementById('heatmapAvgHome').appendChild(hp);
+            document.getElementById('heatmap-avgHome').appendChild(hp);
             const hpBoth = hp.cloneNode(true);
             hpBoth.id = "both" + hpBoth.id;
-            document.getElementById('heatmapAvgBoth').appendChild(hpBoth);
+            document.getElementById('heatmap-avgBoth').appendChild(hpBoth);
             const hpToINdividualHeatmap = hp.cloneNode(true);
             hpToINdividualHeatmap.id = hpToINdividualHeatmap.id + "_individual";
-            document.querySelector('#heatmapHome' + n).appendChild(hpToINdividualHeatmap);
+            document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
           }
         }
         showMainAvgPositions();
         // showSubAvgPositions();
         /**===================================================================================================== */
-        document.querySelector('.loaderWrapper').remove();
+        document.querySelector('.loader-wrapper').remove();
         console.log("allRep - ", rep);
         console.log("shots - ", shots);
         console.log("sum of intervals - ", sumInterval);

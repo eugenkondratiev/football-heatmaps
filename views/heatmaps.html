@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Тепловые карты</title>
-    <link rel="stylesheet" href="stylesheets/hmsheet.css">
+    <link rel="stylesheet" href="peflembedded/min/hmsheet.css">
+    <!-- <link rel="stylesheet" href="stylesheets/hmsheet.css"> -->
     <link rel="icon" href="images/faviconka_hm.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/faviconka_hm.ico" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -14,7 +15,7 @@
 </head>
 
 <body>
-    <div class="loaderWrapper">
+    <div class="loader-wrapper">
         <div class="loader">
 
         </div>
@@ -35,8 +36,8 @@
     <h3>Тепловые карты матча</h3>
     <h4 id="gameInfo">game info<span></span></h4>
 
-    <div class="heatmapContainerWrapper">
-        <div class="heatmapContainer" id="heatmapBall">
+    <div class="heatmap-container-wrapper">
+        <div class="heatmap-container" id="heatmap-ball">
             <img src="images/littleField.png" alt="">
             <div class="overlay">Мяч</div>
 
@@ -59,16 +60,16 @@
 
     </div>
     <h4></h4>
-    <div class="heatmap2ContainersWrapper">
-        <div class="heatmapContainerWrapperLeft">
-            <div class="heatmapContainer" id="heatmapHome">
+    <div class="heatmap2-containers-wrapper">
+        <div class="heatmap-container-wrapper-left">
+            <div class="heatmap-container" id="heatmap-home">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева</div>
             </div>
 
         </div>
-        <div class="heatmapContainerWrapperRight">
-            <div class="heatmapContainer" id="heatmapAway">
+        <div class="heatmap-container-wrapper-right">
+            <div class="heatmap-container" id="heatmap-away">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Гости</div>
             </div>
@@ -76,23 +77,23 @@
         </div>
     </div>
 
-    <div class="heatmap3ContainersWrapper">
-        <div class="heatmapContainerWrapperLeft">
-            <div class="heatmapContainer" id="heatmapAvgHome">
+    <div class="heatmap3-containers-wrapper">
+        <div class="heatmap-container-wrapper-left">
+            <div class="heatmap-container" id="heatmap-avgHome">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы.</div>
             </div>
 
         </div>
-        <div class="heatmapContainerWrapperRight">
-            <div class="heatmapContainer" id="heatmapAvgAway">
+        <div class="heatmap-container-wrapper-right">
+            <div class="heatmap-container" id="heatmap-avgAway">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Хозяева. Средние позиции основы</div>
             </div>
 
         </div>
         <div class="thirdHeatmap">
-            <div class="heatmapContainer" id="heatmapAvgBoth">
+            <div class="heatmap-container" id="heatmap-avgBoth">
                 <img src="images/littleField.png" alt="">
                 <div class="overlay">Средние позиции</div>
             </div>
@@ -100,13 +101,13 @@
         </div>
     </div>
 
-    <div class="squadAndShotsContainersWrapper">
-        <div class="squadWrapperLeft">
+    <div class="squadAndShots-containers-wrapper">
+        <div class="squad-wrapper-left">
             <div class="squadContainer" id="squadHome">
             </div>
         </div>
 
-        <div class="squadWrapperRight">
+        <div class="squad-wrapper-right">
             <div class="squadContainer" id="squadAway">
             </div>
 
@@ -122,7 +123,7 @@
         </p>
     </div>
 
-    <div class="shotsContainerWrapper" data-homes="0" data-aways="0" data-players="all">
+    <div class="shots-container-wrapper" data-homes="0" data-aways="0" data-players="all">
         <div class="shotsContainer" id="chalkboard">
             <img src="images/bigField.png" alt="">
             <div class="overlay">Меловая доска ударов

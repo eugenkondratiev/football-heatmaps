@@ -6,10 +6,9 @@ var logger = require('morgan');
 var serveStatic = require('serve-static')
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+// const compression = require('compression');
 var app = express();
-
+// app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -21,16 +20,10 @@ app.use(express.urlencoded({
 }));
 
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, '/views')));
-// app.use(express.static(path.join(__dirname, '/public')));
+app.use(serveStatic(path.join(__dirname, 'public/peflembedded/min'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
 app.use(serveStatic(path.join(__dirname, 'views')));
-// console.log("path.join(__dirname, 'views')", path.join(__dirname, 'views'));
 app.use(serveStatic(path.join(__dirname, 'public')));
-// console.log("path.join(__dirname, 'public')",path.join(__dirname, 'public'));
-// console.log("path.resolve(__dirname, 'public')",path.resolve(__dirname, 'public'));
-// console.log("path.resolve(__dirname, 'views')",path.resolve(__dirname, 'views'));
 app.set('trust proxy', true);
-
 
 app.use('/', indexRouter);
 // app.use('/users', usersRouter);

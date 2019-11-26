@@ -23,7 +23,7 @@ textarea {
 }
 
 /* @import url("stylesheets/players.css"); */
-:root,
+/* :root,
 html {
     --background-color-home: darkred;
     --color-home: #fff;
@@ -34,7 +34,7 @@ html {
     --back3: #A3DE8F;
     --back1: #C9F8B7;
 
-}
+} */
 
 a {
     color: #4A667C;
@@ -60,7 +60,7 @@ h4 span {
 }
 
 body {
-    background-color: var(--back3);
+    background-color: #A3DE8F;
     /* background-color:#A3DE8F; */
     /* background-color:#c9f8b7; */
 
@@ -151,7 +151,7 @@ body {
 }
 
 .playerRow:nth-child(odd) {
-    background-color: var(--back1);
+    background-color: #C9F8B7;
 }
 
 .playerListMileage,
@@ -403,7 +403,7 @@ body {
     -webkit-animation: spinner 1.5s linear infinite;
     -o-animation: spinner 1.5s linear infinite;
     animation: spinner 1.5s linear infinite;
-    background-color: var(--back1);
+    background-color: #C9F8B7;
 
 }
 
@@ -485,12 +485,10 @@ body {
     border: 1px solid lightgrey;
     font-size: small;
     height: 2em;
-    background-color: var(--back3);
+    background-color: #A3DE8F;
     border-radius: 5px;
     border: 2px solid rgb(37, 97, 35);
     color: rgb(37, 97, 35);
-    ;
-
 }
 
 .shotline {
@@ -506,7 +504,6 @@ body {
 
 .shotstart,
 .shotend {
-    /*content:" ";*/
     position: absolute;
     border: 1px solid blue;
     width: 9px;
