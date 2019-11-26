@@ -217,10 +217,10 @@ function showAllShots() {
     chbox.checked = false;
   })
 }
-document.getElementsByClassName("shotsContainer")[0].addEventListener('click', function (e) {
+document.getElementsByClassName("shots-container")[0].addEventListener('click', function (e) {
   showAllShots();
 });
-document.getElementById("filterShowAll").addEventListener('click', function (e) {
+document.getElementById("filter-show-all").addEventListener('click', function (e) {
   e.preventDefault();
   showAllShots();
 });

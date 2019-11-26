@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Тепловые карты</title>
-    <link rel="stylesheet" href="peflembedded/min/hmsheet.css">
-    <!-- <link rel="stylesheet" href="stylesheets/hmsheet.css"> -->
+    <!-- <link rel="stylesheet" href="peflembedded/min/hmsheet.css"> -->
+    <link rel="stylesheet" href="stylesheets/hmsheet.css">
     <link rel="icon" href="images/faviconka_hm.ico" type="image/x-icon">
     <link rel="shortcut icon" href="images/faviconka_hm.ico" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -23,10 +23,10 @@
     </div>
     <div class="copyright"><a href="http://pefl.ru/users.php?m=details&id=13035" target="_blank"
             rel="noopener noreferrer"> ©Sullen</a></div>
-    <div id="urlContaner">
+    <div id="url-сontainer">
         <div>
             <button id="pasteButton">Вставить из буфера обмена</button>
-            <input type="url" name="tvurlInput" id="tvurlInput" placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
+            <input type="url" name="tv-url-input" id="tv-url-input" placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
             <button id="updateButton">Открыть</button>
             <button id="newWindow">Открыть в новом окне</button>
         </div>
@@ -34,7 +34,7 @@
     <div class="clear"></div>
 
     <h3>Тепловые карты матча</h3>
-    <h4 id="gameInfo">game info<span></span></h4>
+    <h4 id="game-info">game info<span></span></h4>
 
     <div class="heatmap-container-wrapper">
         <div class="heatmap-container" id="heatmap-ball">
@@ -119,15 +119,15 @@
             <a href="#" id="filterMiss" data-type="U" style="font-weight: bold;"> Мимо |</a>
             <a href="#" id="filterBlocks" data-type="Block" style="font-weight: bold;"> Блокированные |</a>
             <a href="#" id="filterBars" data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
-            <a href="#" id="filterShowAll" style="font-weight: bold;"> Показать все</a>
+            <a href="#" id="filter-show-all" style="font-weight: bold;"> Показать все</a>
         </p>
     </div>
 
     <div class="shots-container-wrapper" data-homes="0" data-aways="0" data-players="all">
-        <div class="shotsContainer" id="chalkboard">
+        <div class="shots-container" id="chalkboard">
             <img src="images/bigField.png" alt="">
             <div class="overlay">Меловая доска ударов
-                <div id="oneShotLegend" style="display: none;">
+                <div id="one-shot-legend" style="display: none;">
                 </div>
             </div>
         </div>

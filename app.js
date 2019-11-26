@@ -20,9 +20,10 @@ app.use(express.urlencoded({
 }));
 
 app.use(cookieParser());
-app.use(serveStatic(path.join(__dirname, 'public/peflembedded/min'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
+// app.use(serveStatic(path.join(__dirname, 'public/peflembedded/min'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
 app.use(serveStatic(path.join(__dirname, 'views')));
-app.use(serveStatic(path.join(__dirname, 'public')));
+app.use(serveStatic(path.join(__dirname, 'public'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
+// app.use(serveStatic(path.join(__dirname, 'public')));
 app.set('trust proxy', true);
 
 app.use('/', indexRouter);
