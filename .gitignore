@@ -3,7 +3,10 @@ data
 data/*.*
 *test*.*
 read-json
-public
+# public
+peflembedded
+*.map
+
 
 
 
