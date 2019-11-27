@@ -6,9 +6,9 @@ var logger = require('morgan');
 var serveStatic = require('serve-static')
 
 var indexRouter = require('./routes/index');
-// const compression = require('compression');
+const compression = require('compression');
 var app = express();
-// app.use(compression());
+app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -19,10 +19,24 @@ app.use(express.urlencoded({
   extended: false
 }));
 
+function setCustomCacheControl(res, path) {
+  if (serveStatic.mime.lookup(path) === 'text/html') {
+    // Custom Cache-Control for HTML files
+    res.setHeader('Cache-Control', 'public, max-age=0')
+  }
+}
+
 app.use(cookieParser());
 // app.use(serveStatic(path.join(__dirname, 'public/peflembedded/min'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
-app.use(serveStatic(path.join(__dirname, 'views')));
-app.use(serveStatic(path.join(__dirname, 'public'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
+app.use(serveStatic(path.join(__dirname, 'views'), {
+  maxAge: '1d',
+  setHeaders: setCustomCacheControl
+}));
+app.use(serveStatic(path.join(__dirname, 'public'), {
+  'index': ['heatmaps.html', 'heatmaps.htm'],
+  maxAge: '1d',
+  setHeaders: setCustomCacheControl
+}))
 // app.use(serveStatic(path.join(__dirname, 'public')));
 app.set('trust proxy', true);
 
