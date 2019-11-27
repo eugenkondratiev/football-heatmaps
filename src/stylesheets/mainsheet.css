@@ -1,0 +1,66 @@
+
+body,
+div,
+span,
+p,
+h1,
+h2,
+li,
+td,
+th,
+select,
+input,
+textarea {
+    font-family: Verdana, arial, Tahoma, Verdana, Arial, Helvetica;
+    font-size: 11px;
+    background-repeat: no-repeat;
+}
+
+.copyright {
+    text-align: right;
+    font-weight: normal;
+    font-size: smaller;
+}
+
+/* :root,
+html {
+    --background-color-home: darkred;
+    --color-home: #fff;
+    --border-color-home: #fdfcfc;
+    --background-color-away: white;
+    --color-away: rgb(0, 0, 139);
+    --border-color-away: rgb(0, 0, 139);
+    --back3: #A3DE8F;
+    --back1: #C9F8B7;
+
+} */
+
+a {
+    color: #4A667C;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #EADA28;
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    text-align: center;
+}
+
+h4 span {
+    font-style: italic;
+    font-size: smaller;
+}
+
+body {
+    background-color: #A3DE8F;
+    /* background-color:#A3DE8F; */
+    /* background-color:#c9f8b7; */
+
+}

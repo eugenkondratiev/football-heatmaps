@@ -1,0 +1,52 @@
+
+/*=========================================================*/
+.loader-wrapper {
+    margin: 10% auto 146%;
+    width: 150px;
+    height: 150px;
+    /* position: absolute; */
+    /* z-index: 99; */
+}
+
+.loader-wrapper img {
+    /* margin: 0 auto; */
+    width: 50px;
+    height: 50px;
+    position: relative;
+    left: 45px;
+    top: -95px;
+}
+
+.loader {
+    border: 10px solid rgb(37, 97, 35);
+    height: 120px;
+    width: 120px;
+    border-top: 10px solid rgb(135, 206, 121);
+    --webkit-border-radius: 50%;
+    --moz-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-animation: spinner 1.5s linear infinite;
+    -o-animation: spinner 1.5s linear infinite;
+    animation: spinner 1.5s linear infinite;
+    background-color:  #C9F8B7;
+}
+
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/*==================================*/

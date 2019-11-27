@@ -1,0 +1,110 @@
+
+.pitch_container {
+    width: 100%
+}
+
+.pitch_canvas_container,
+.pitch_canvas_container0,
+.pitch_canvas_container1,
+.pitch_canvas_container2 {
+    margin-right: auto;
+    margin-left: auto;
+    background-size: 120px
+}
+
+.clear {
+    clear: left
+}
+
+.player_container {
+    position: absolute;
+    z-index: 1
+}
+
+.manager_shape,
+.player_shape {
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+    margin: auto
+}
+
+.manager_shape.home,
+.player_shape.home {
+    color: #fff;
+    background-color: darkred;
+    border-color:  #fdfcfc;
+}
+
+.manager_shape.away,
+.player_shape.away {
+    color: rgb(0, 0, 139);
+    background-color: white;
+    border-color: rgb(0, 0, 139);
+}
+
+.manager_shape {
+    border-radius: 0
+}
+
+.player_name {
+    position: relative
+}
+
+.medium_size .player_shape {
+    width: 11px;
+    height: 11px;
+    border-width: 0.5px;
+    border-style: solid;
+    -webkit-transform: scale(1.6);
+    -ms-transform: scale(1.6);
+    transform: scale(1.6);
+    padding: 0;
+    margin: 0;
+    line-height: 11px;
+}
+
+.medium_size .player_number {
+    width: 11px;
+    font-size: 5.1pt;
+    padding: 0;
+    margin: auto;
+}
+
+.medium_size .player_name {
+    font-size: 8pt;
+    color: #fff;
+    left: -12px;
+    top: 2px
+}
+
+.player_shape .tooltiptext,
+.player-list-shots .tooltiptext,
+.player-list-eye>img .tooltiptext {
+    visibility: hidden;
+    width: 67px;
+    background-color: lightyellow;
+    color: darkblue;
+    text-align: left;
+    border-radius: 3px;
+    padding: 0 0;
+    font-size: 5pt;
+    position: relative;
+    z-index: 99;
+}
+
+.player_shape:hover .tooltiptext,
+.player-list-shots:hover .tooltiptext,
+.player-list-eye>img:hover .tooltiptext {
+    visibility: visible;
+}
+
+.player-list-shots:hover .tooltiptext {
+    width: 222px;
+    font-size: 5pt;
+}
+
+.player-list-eye>img:hover .tooltiptext {
+    width: 150px;
+    height: 150px;
+}
