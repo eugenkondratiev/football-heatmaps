@@ -5,6 +5,8 @@ span,
 p,
 h1,
 h2,
+h3,
+h4,
 li,
 td,
 th,
@@ -14,12 +16,18 @@ textarea {
     font-family: Verdana, arial, Tahoma, Verdana, Arial, Helvetica;
     font-size: 11px;
     background-repeat: no-repeat;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .copyright {
     text-align: right;
     font-weight: normal;
     font-size: smaller;
+    margin-right: 0.2em;
+    box-sizing: border-box;
+    width: 98%;
 }
 
 /* :root,
@@ -60,6 +68,8 @@ h4 span {
 
 body {
     background-color: #A3DE8F;
+    width: 99vw;
+    margin: 0 auto;
     /* background-color:#A3DE8F; */
     /* background-color:#c9f8b7; */
 

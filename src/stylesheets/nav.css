@@ -1,0 +1,56 @@
+.main-section {
+    width: 99%;
+    margin: .3em auto;
+}
+
+
+.bojan__control {
+    display: none;
+}
+
+.bojan__content {
+    display: none;
+    width: 100%;
+    margin: 0.5em 0;
+}
+
+.bojan__label {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1em 0;
+    background-color:#C9F8B7;
+    box-shadow: inset -3px 0px 5px 1px #82ad74;
+}
+.bojan__label__header::after {
+    content: "+";
+    position: absolute;
+    right: 0.5em;
+    top: 0;
+    height: 1em;
+    width: 1em;
+    display: block;
+    font-size: 1.2em;
+}
+
+.bojan__control:checked ~ .bojan__label .bojan__label__header::after {
+    content: "-";
+}
+
+.bojan__label__header {
+    width: 99%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    position: relative;
+}
+
+.bojan__control ~ .bojan__content {
+    display: none;
+    width: 100vw;
+
+}
+
+.bojan__control:checked ~ .bojan__content {
+    display: block;
+    width: 98%;
+}

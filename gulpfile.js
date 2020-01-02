@@ -19,6 +19,7 @@ const sass = require('gulp-sass'),
     // const csso = require('csso');
     concat = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
+    babel = require('gulp-babel'),
     // cssimport = require("gulp-cssimport"),
     autoprefixer = require('gulp-autoprefixer');
 
@@ -43,8 +44,13 @@ task('css', () =>
 task('scripts', () => src(c.scripts)
     // task('scripts', () => src(c.SRC_PATH + 'javascripts/*')
     .pipe(sourcemaps.init())
+    .pipe(gulpif("!*.min.js",babel({
+        presets: ["@babel/preset-env"
+    //     presets: ['@babel/env'
+         ]
+    })))
+    .pipe(gulpif("!*.min.js",uglify()))
     .pipe(concat("hm.js"))
-    .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(dest(c.DEST_PATH + 'javascripts/'))
 

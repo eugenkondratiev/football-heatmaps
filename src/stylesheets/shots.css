@@ -23,7 +23,10 @@
 .shotFilters>a {
     font-weight: bold;
 }
-
+.shotFilters {
+    max-width: 80%;
+    margin: .4em auto;
+}
 .overlay>#one-shot-legend {
     top: 44px;
     left: 380px;
