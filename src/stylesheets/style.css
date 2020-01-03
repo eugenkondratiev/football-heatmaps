@@ -13,9 +13,15 @@
     font-weight: 300;
     font-size: 1.2em;
     line-height: 1.5;
-    margin: .7em 1em;
+    margin: .7em 3em;
 
 }
 .help-rule__paragraph::first-letter {
 margin-left: 1.8em;
+}
+
+@media screen and (max-width:769px) {
+    .help-rule__paragraph {
+        margin: .7em 1em;
+    }
 }
