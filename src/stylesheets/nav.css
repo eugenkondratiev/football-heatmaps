@@ -16,32 +16,42 @@
 
 .bojan__label {
     display: block;
+    position: relative;
     width: 100%;
     box-sizing: border-box;
     padding: 1em 0;
     background-color:#C9F8B7;
     box-shadow: inset -3px 0px 5px 1px #82ad74;
 }
-.bojan__label__header::after {
-    content: "+";
+
+.bojan__label::after {
+    /* .bojan__label__header::after { */
+    /* content: "\22C1";  */
+    content: "+"; 
     position: absolute;
-    right: 0.5em;
-    top: 0;
-    height: 1em;
+    right: .8em;
+    top: .2em;
+    height: 100%;
     width: 1em;
     display: block;
-    font-size: 1.2em;
+    font-size: 1.8em;
+    font-weight: 500;
+    margin-left: 1em;
+    padding-left: 2em;
 }
 
-.bojan__control:checked ~ .bojan__label .bojan__label__header::after {
+.bojan__control:checked ~ .bojan__label::after {
+    /* .bojan__control:checked ~ .bojan__label .bojan__label__header::after { */
+    /* content: "\22C0"; */
     content: "-";
 }
 
 .bojan__label__header {
     width: 99%;
-    margin: 0 auto;
+    margin: 0 4em 0 auto;
     font-size: 1.1em;
     position: relative;
+    max-width: 90%;
 }
 
 .bojan__control ~ .bojan__content {
@@ -51,6 +61,8 @@
 }
 
 .bojan__control:checked ~ .bojan__content {
-    display: block;
-    width: 98%;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
 }

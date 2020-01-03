@@ -37,8 +37,20 @@
     /* position:absolute;  */
     width: 367px;
     height: 250px;
-    margin: .4em auto;
+    margin: .2em;
+    /* margin: .3em auto; */
 
+}
+
+.heatmap-containers-wrapper {
+    /* width: 1150px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: .4em auto;
+    overflow: hidden;
+    align-self: center;
+    flex-wrap: wrap;
 }
 
 .heatmap2-containers-wrapper,
@@ -47,21 +59,37 @@
 .shots-container-wrapper {
     align-self: center;
     margin: .4em auto;
-    width: 760px;
+    /* width: 760px; */
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 
 }
 
-.heatmap3-containers-wrapper {
-    width: 1150px;
+.heatmap3-containers-wrapper,
+.heatmap2-containers-wrapper {
+    margin-bottom: 1.5em;
 }
+
 
 .squadAndShots-containers-wrapper {
-    width: 850px;
+    /* width: 850px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
 }
 
 .shots-container-wrapper {
-    width: 754px;
+    /* width: 754px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
 }
 
 .heatmap-container-wrapper-left,
@@ -73,15 +101,16 @@
     width: 367px;
     /* height: 267px; */
     height: 250px;
-    margin: 0 .3em;
+    margin: .3em 0;
 
 }
 
 .heatmap-container-wrapper-left,
 .heatmap-container-wrapper-right {
     display: flex;
-    
+
 }
+
 .shots-container-wrapper-right {
     width: 754px;
     height: 500px;
@@ -93,7 +122,7 @@
 }
 
 .playerRow:nth-child(odd) {
-    background-color:  #C9F8B7;
+    background-color: #C9F8B7;
 }
 
 .player-list-mileage,
@@ -130,7 +159,7 @@
 }
 
 .playerRow .player-list-name {
-    width: 40%;
+    width: 45%;
 }
 
 .playerRow .player-list-num {
@@ -168,13 +197,15 @@
 .squadContainer,
 .squad-wrapper-left,
 .squad-wrapper-right {
-    width: 400px;
+    width: 360px;
     height: 280px;
 }
 
 .squad-wrapper-left,
 .squad-wrapper-right {
-    width: 50%;
+    min-width: 360px;
+    display: flex;
+
 }
 
 .heatmap-container img {
