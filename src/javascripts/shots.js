@@ -3,7 +3,7 @@
   const line = document.createElement('div');
   line.classList.add('shotline');
   line.style.top = shot.startpoint.y - 1 + "px";
-  line.style.left = shot.startpoint.x + "px";
+  line.style.left = shot.startpoint.x - 1 + "px";
   line.style.width = getSegmentLength(shot.startpoint, shot.endpoint) + "px";
   line.style.transform = "rotate(" + getSegmentAngle(shot.startpoint, shot.endpoint) + "deg)";
   line.style.borderTopColor = color;
@@ -18,6 +18,8 @@ function createShotStart(shot, shotinfo, color) {
   shotStart.style.backgroundColor = color;
   shotStart.style.top = shot.startpoint.y - 5 + "px";
   shotStart.style.left = shot.startpoint.x - 5 + "px";
+  // shotStart.style.top = shot.startpoint.y - .7 + "%";
+  // shotStart.style.left = shot.startpoint.x - .7 + "%";
   const typeString = shot.type == "G"
     ? 'Гол'
     : shot.type == "V"
@@ -28,14 +30,14 @@ function createShotStart(shot, shotinfo, color) {
 
   shotStart.addEventListener('mouseenter', function (e) {
     // console.log(shot.minute, shot.episode, shot.player, shotinfo.playerName, typeString);
-    const shotLegend = document.querySelector('#oneShotLegend');
+    const shotLegend = document.querySelector('#one-shot-legend');
     const shotString = " Минута " + shot.minute + ", " + typeString + ",\n\r " + shot.player + "." + shotinfo.playerName;
     shotLegend.textContent = shotString;
     shotLegend.style.display = "inline-block";
   })
 
   shotStart.addEventListener('mouseleave', function (e) {
-    document.querySelector('#oneShotLegend').style.display = "none";
+    document.querySelector('#one-shot-legend').style.display = "none";
   })
   return shotStart;
 }
@@ -46,7 +48,7 @@ function createShotEnd(shot, shotinfo, color) {
   shotEnd.style.borderColor = color;
   shotEnd.style.backgroundColor = color;
   shotEnd.style.top = shot.endpoint.y - 2 + "px";
-  shotEnd.style.left = shot.endpoint.x - 2 + "px";
+  shotEnd.style.left = shot.endpoint.x - 1 + "px";
   return shotEnd;
 }/**===================================================================================================== */
 function createShot(shot, shotinfo) {

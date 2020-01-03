@@ -31,11 +31,15 @@
             </label>
 
             <div class="bojan__content">
-                <button id="pasteButton">Вставить из буфера обмена</button>
-                <input type="url" name="tv-url-input" id="tv-url-input"
-                    placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
-                <button id="updateButton">Открыть</button>
-                <button id="newWindow">Открыть в новом окне</button>
+                <!-- <button id="pasteButton">Вставить из буфера обмена</button> -->
+                <div class="refs-container">
+                    <input type="url" name="tv-url-input" id="tv-url-input"
+                        placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
+                    <div class="button-wrap">
+                        <button id="updateButton">Открыть</button>
+                        <button id="newWindow">Открыть в новом окне</button>
+                    </div>
+                </div>
             </div>
         </section>
     </header>
@@ -190,21 +194,105 @@
         <label for="separate-heatmaps" class="bojan__label">
             <h3 class="bojan__label__header">Теплокарты и средние позиции отдельных игроков</h3>
         </label>
-        <div class="bojan__content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam beatae recusandae
-            mollitia ipsum tempore minima cum voluptas, nesciunt dolore quibusdam accusantium et atque cumque veniam
-            error ab labore, eos possimus.</div>
+        <div class="bojan__content"></div>
     </section>
     <section class="main-section">
         <input type="checkbox" class="bojan__control" id="common-tooltips">
         <label for="common-tooltips" class="bojan__label">
             <h3 class="bojan__label__header">Помощь</h3>
         </label>
-        <div class="bojan__content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam beatae recusandae
-            mollitia ipsum tempore minima cum voluptas, nesciunt dolore quibusdam accusantium et atque cumque veniam
-            error ab labore, eos possimus.</div>
+        <div class="bojan__content">
+            <article class="help-rule">
+                <article class="help-rule">
+                    <h3 class="help-rule__header">Тепловые карты</h3>
+                    <p class="help-rule__paragraph">Теплокарты мяча показывают в каких частях поля чаще находился мяч.
+                    </p>
+                    <p class="help-rule__paragraph">Теплокарты команд показывают где чаще находились все игроки команды.
+                    </p>
+                    <p class="help-rule__paragraph">Индивидуальные теплокарты выделяют зоны в которых чаще находился
+                        конкретный игрок .</p>
+                </article>
+                <article class="help-rule">
+                    <h3 class="help-rule__header">Средние позиции</h3>
+                    <p class="help-rule__paragraph">Средняя позиция игрока вычисляется как среднее арифметическое точек
+                        на которых он появляется в отчете. Поэтому перемещения игрока во время замен могут вносить
+                        погрешность, если игрок в матче или отдельной тактике отыграл недолго.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                </article>
+                <article class="help-rule">
+                    <h3 class="help-rule__header">Составы команд</h3>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit. Unde accusamus voluptatibus doloremque ipsam repudiandae iure minus. Neque
+                        aperiam
+                        ad dolor molestias, rem, fuga totam id non earum recusandae dignissimos laudantium.</p>
+                </article>
+                <article class="help-rule">
+                    <h3 class="help-rule__header">Разбиение по тактикам</h3>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit. Unde accusamus voluptatibus doloremque ipsam repudiandae iure minus. Neque
+                        aperiam
+                        ad dolor molestias, rem, fuga totam id non earum recusandae dignissimos laudantium.</p>
+                </article>
+                <article class="help-rule">
+                    <h3 class="help-rule__header">Доска ударов</h3>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
+                        accusamus
+                        voluptatibus doloremque ipsam repudiandae iure minus. Neque aperiam ad dolor molestias, rem,
+                        fuga
+                        totam id non earum recusandae dignissimos laudantium.</p>
+                    <p class="help-rule__paragraph">Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit. Unde accusamus voluptatibus doloremque ipsam repudiandae iure minus. Neque
+                        aperiam
+                        ad dolor molestias, rem, fuga totam id non earum recusandae dignissimos laudantium.</p>
+                </article>
+                <h3 class="help-rule__header">Общие вопросы</h3>
+                <p class="help-rule__paragraph">Оптимально использовать данную инфографику на ПК либо планшетах более
+                    768 пикселей. На более узком экране карта ударов полностью доступна лишь при уменьшинии масштаба
+                    отображения. </p>
+                <p class="help-rule__paragraph">При просмотре на смартфоне желательно использовать его в альбомной
+                    ориентации. При
+                    ширине экрана ниже 375 пикселей возможно некорретное позиционирование теплокарт и средних позиций
+                </p>
+                <p class="help-rule__paragraph">К возможным багам и неточностям отображения, особенно на карте ударов,
+                    просьба относиться с пониманием. Данный продукт экспериментальный и поддерживается бесплатно на
+                    общественных началах.</p>
+            </article>
+        </div>
     </section>
-
-
     <!-- <script src="javascripts/heatmap.min.js"></script> -->
 
     <script src="javascripts/hm.js"></script>

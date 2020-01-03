@@ -11,7 +11,8 @@ const cssfiles = [
     CSS_PATH + "mainsheet.css",
     CSS_PATH + "players.css",
     CSS_PATH + "hmsheet.css",
-    CSS_PATH + "shots.css"
+    CSS_PATH + "shots.css",
+    CSS_PATH + "style.css"
 ]
 
 const scripts = [

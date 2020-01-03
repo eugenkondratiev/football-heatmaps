@@ -863,23 +863,23 @@ window.onload = function () {
   }
 
   /**===================================================================================================== */
-  const urlPaste = document.querySelector('#pasteButton');
+  // const urlPaste = document.querySelector('#pasteButton');
   const urlInput = document.querySelector("#tv-url-input");
-  if (navigator.clipboard) {
-    urlPaste.addEventListener('click', e => {
-      // e.preventDefault();
-      navigator.clipboard.readText()
-        .then(
-          clipText => {
-            urlInput.value = clipText;
-          })
-        .catch(e => {
-          console.log("Работа с буфером сейчас не разрешена или не доступна в вашем браузере!");
-        });
-    });
-  } else {
-    urlPaste.remove();
-  }
+  // if (navigator.clipboard) {
+  //   urlPaste.addEventListener('click', e => {
+  //     // e.preventDefault();
+  //     navigator.clipboard.readText()
+  //       .then(
+  //         clipText => {
+  //           urlInput.value = clipText;
+  //         })
+  //       .catch(e => {
+  //         console.log("Работа с буфером сейчас не разрешена или не доступна в вашем браузере!");
+  //       });
+  //   });
+  // } else {
+  //   urlPaste.remove();
+  // }
 
   document.querySelector('#updateButton').addEventListener('click', e => {
     e.preventDefault();
