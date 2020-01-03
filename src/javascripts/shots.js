@@ -147,7 +147,7 @@ function formShotsString(player) {
 function displayAllShots(display, team, hard = true) {
   const shotsSelector = "." + team + "Shot";
   document.querySelectorAll(shotsSelector).forEach(shot => {
-    const checkbox = document.querySelector("#" + team + "PlayerList_" + shot.getAttribute("player") + " input");
+    const checkbox = document.querySelector("#" + team + "-player-list_" + shot.getAttribute("player") + " input");
     let checked = checkbox ? checkbox.checked : false;
     shot.style.display = (display)
       ? "block"
