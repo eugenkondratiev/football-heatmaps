@@ -13,8 +13,8 @@
     width: 50px;
     height: 50px;
     position: relative;
-    left: 45px;
-    top: -95px;
+    left: 35px;
+    top: -85px;
 }
 
 .loader {
@@ -39,7 +39,6 @@
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
-
     100% {
         -webkit-transform: rotate(360deg);
         -moz-transform: rotate(360deg);
