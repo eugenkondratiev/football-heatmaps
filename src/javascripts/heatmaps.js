@@ -163,7 +163,7 @@ window.onload = function () {
               }
               if (element.G && !element.U) { // goal event in next episode
                 const ball = element.coordinates.ball;
-                console.log(element.minute, element.U, ball)
+                console.log("goal event in next episode - ", element.minute, element.U, element.V,element.G, ball)
                 const ballcoords = {
                   x: ball.w,
                   y: ball.h,
@@ -173,11 +173,12 @@ window.onload = function () {
                 let lastShot;
                 if (element.G.team == 1 || element.G.team == 3) {
                   lastShot = shots.home[shots.home.length - 1];
-                  // countShot("G", rep.home[newShot.player]);
-                } else {
-                  lastShot = shots.away[shots.home.length - 1];;
+                  // console.log("shots.home - ", shots.home);
+                // } else {
+                  lastShot = shots.away[shots.away.length - 1];
                 }
-                // console.log(episode);console.log(lastShot);
+
+                // console.log("episode -", episode);console.log("lastShot - ", lastShot);
                 lastShot.type = "G";
                 lastShot.endpoint = endpoint;
                 lastShot.player = element.G.player;

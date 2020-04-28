@@ -16,8 +16,9 @@ const sass = require('gulp-sass'),
     csso = require('gulp-csso'),
     gulpif = require('gulp-if'),
     cache = require('gulp-cache'),
-    // const csso = require('csso');
-    concat = require('gulp-concat'),
+    babelify = require('babelify');
+// const csso = require('csso');
+concat = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
     babel = require('gulp-babel'),
     // cssimport = require("gulp-cssimport"),
@@ -44,12 +45,31 @@ task('css', () =>
 task('scripts', () => src(c.scripts)
     // task('scripts', () => src(c.SRC_PATH + 'javascripts/*')
     .pipe(sourcemaps.init())
+    /*
     .pipe(gulpif("!*.min.js",babel({
         presets: ["@babel/preset-env"
     //     presets: ['@babel/env'
          ]
     })))
-    .pipe(gulpif("!*.min.js",uglify()))
+    */
+   
+    // .pipe(gulpif("!*.min.js", babel({
+    //     presets: [
+    //         ["babel-preset-env", { "targets": "> 0.25%, not dead"/*, "useBuiltIns": "entry"*/ }]
+    //         // [ "@babel/preset-env", { "targets": "> 0.25%, not dead", "useBuiltIns": "entry" } ]
+    //     ],
+    //     plugins: [
+    //         ["@babel/plugin-proposal-class-properties", { "loose": false }],
+    //         ["@babel/plugin-transform-arrow-functions", { "spec": false }],
+    //         "@babel/plugin-proposal-export-default-from",
+    //         ["@babel/plugin-transform-runtime", { "regenerator": true }]
+    //     ]
+    //     // ,
+    //     // sourceMaps: false,
+    // })
+    // ))
+    
+    .pipe(gulpif("!*.min.js", uglify()))
     .pipe(concat("hm.js"))
     .pipe(sourcemaps.write('.'))
     .pipe(dest(c.DEST_PATH + 'javascripts/'))
