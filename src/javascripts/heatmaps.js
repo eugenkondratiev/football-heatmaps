@@ -30,15 +30,14 @@ window.onload = function () {
         // root.style.setProperty('--border-color-away', "#" + rep.away.team.color);
         // root.style.setProperty('--color-away', "#" + rep.away.team.color);
         function setTeamsColors() {
-          const away = document.getElementById("player_default_away").style;
-          const home = document.getElementById("player_default_away").style;
-          away.backgroundColor = rep.away.team.back;
-          away.borderColor = rep.away.team.color;
-          away.color = rep.away.team.color;
-          home.color = rep.home.team.color;
-          home.borderColor = rep.home.team.color;
-          home.backgroundColor = rep.home.team.back;
-
+          const away = document.querySelector("#player_default_away .player_shape").style;
+          const home = document.querySelector("#player_default_home .player_shape").style;          
+          away.backgroundColor = "#" + rep.away.team.back;
+          away.borderColor = "#" + rep.away.team.color;
+          away.color = "#" + rep.away.team.color;
+          home.color = "#" + rep.home.team.color;
+          home.borderColor = "#" + rep.home.team.color;
+          home.backgroundColor = "#" + rep.home.team.back;
         }
         setTeamsColors();
 
@@ -163,7 +162,7 @@ window.onload = function () {
               }
               if (element.G && !element.U) { // goal event in next episode
                 const ball = element.coordinates.ball;
-                console.log("goal event in next episode - ", element.minute, element.U, element.V,element.G, ball)
+                console.log("goal event in next episode - ", element.minute, element.U, element.V, element.G, ball)
                 const ballcoords = {
                   x: ball.w,
                   y: ball.h,
@@ -174,7 +173,7 @@ window.onload = function () {
                 if (element.G.team == 1 || element.G.team == 3) {
                   lastShot = shots.home[shots.home.length - 1];
                   // console.log("shots.home - ", shots.home);
-                // } else {
+                   } else {
                   lastShot = shots.away[shots.away.length - 1];
                 }
 
