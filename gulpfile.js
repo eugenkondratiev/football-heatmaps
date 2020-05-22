@@ -24,9 +24,9 @@ concat = require('gulp-concat'),
     // cssimport = require("gulp-cssimport"),
     autoprefixer = require('gulp-autoprefixer');
 
-console.log(c.DEST_FILES_PATH);
+console.log(c.CLEAN_FILES_ARRAY, c.CSS_PATH, c.JS_PATH);
 
-task('clean', () => src(c.DEST_FILES_PATH, { read: false })
+task('clean', () => src(c.CLEAN_FILES_ARRAY, { read: false })
     .pipe(clean())
 );
 
@@ -39,7 +39,7 @@ task('css', () =>
         .pipe(csso())
         .pipe(concat('hmsheet.min.css'))
         .pipe(sourcemaps.write('.'))
-        .pipe(dest(c.DEST_PATH + 'stylesheets/'))
+        .pipe(dest(c.CSS_DEST_PATH))
 )
 
 task('scripts', () => src(c.scripts)
@@ -72,7 +72,7 @@ task('scripts', () => src(c.scripts)
     .pipe(gulpif("!*.min.js", uglify()))
     .pipe(concat("hm.js"))
     .pipe(sourcemaps.write('.'))
-    .pipe(dest(c.DEST_PATH + 'javascripts/'))
+    .pipe(dest(c.JS_DEST_PATH))
 
 )
 

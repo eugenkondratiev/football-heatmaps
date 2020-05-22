@@ -31,7 +31,7 @@ window.onload = function () {
         // root.style.setProperty('--color-away', "#" + rep.away.team.color);
         function setTeamsColors() {
           const away = document.querySelector("#player_default_away .player_shape").style;
-          const home = document.querySelector("#player_default_home .player_shape").style;          
+          const home = document.querySelector("#player_default_home .player_shape").style;
           away.backgroundColor = "#" + rep.away.team.back;
           away.borderColor = "#" + rep.away.team.color;
           away.color = "#" + rep.away.team.color;
@@ -173,10 +173,9 @@ window.onload = function () {
                 if (element.G.team == 1 || element.G.team == 3) {
                   lastShot = shots.home[shots.home.length - 1];
                   // console.log("shots.home - ", shots.home);
-                   } else {
+                } else {
                   lastShot = shots.away[shots.away.length - 1];
                 }
-
                 // console.log("episode -", episode);console.log("lastShot - ", lastShot);
                 lastShot.type = "G";
                 lastShot.endpoint = endpoint;
