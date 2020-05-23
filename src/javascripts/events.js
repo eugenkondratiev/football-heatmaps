@@ -52,11 +52,42 @@ function afterLoadEvents(showableTacticks) {
         }
         window.open(formHeatmapUrl(urlInput.value), '_blank');
     });
+    function normalizeTacticAvgPositions() {
+        if (homeTacticPoints.length > 1) {
+            for (let t = 1; t < homeTacticPoints.length; t++) {
+                if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+                for (let n = 1; n <= MAX_PLAYERS; n++) {
+                    const hp = document.querySelector("#homeAvgPoints_" + t + "_" + n);
+                    // hp.id = "homeAvgPoints_" + t + "_" + n;
+                    const rank = homeTacticPoints[t].rankByMinutes
+                    hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+
+                }
+            }
+        }
+
+        if (awayTacticPoints.length > 1) {
+            for (let t = 1; t < awayTacticPoints.length; t++) {
+                if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+                for (let n = 1; n <= MAX_PLAYERS; n++) {
+                    const ap = document.querySelector("#awayAvgPoints_" + t + "_" + n);
+                    // hp.id = "awayAvgPoints_" + t + "_" + n;
+                    const rank = awayTacticPoints[t].rankByMinutes
+                    ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+
+                }
+            }
+        }
+    }
     setTimeout(() => {
         document.querySelector("#shots-chalkboard ~ .bojan__content")
             .appendChild(
-                createSlider("_", showableTacticks, filterShotsByTime)
+                createSlider("shots", showableTacticks, filterShotsByTime)
             )
+        document.querySelector("#norm-tactic-avg").addEventListener("click", function (e) {
+            e.preventDefault();
+            normalizeTacticAvgPositions();
+        })
     }, 2000);
 
 };

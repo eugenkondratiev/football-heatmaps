@@ -458,7 +458,7 @@ window.onload = function () {
             }
             const heatmapInstanceAvg = avgMapCreate("#avgPositionsHome" + t);
             heatmapInstanceAvg.setData(defaultData);
-
+            
             const heatmapPlayers = h337.create({
               container: document.querySelector(tacticId),
               maxOpacity: MAX_OPACITY,

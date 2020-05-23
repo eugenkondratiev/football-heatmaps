@@ -7,7 +7,7 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
 
     const filterWrapper = document.createElement("div");
     filterWrapper.classList.add("time-slider");
-    filterWrapper.id = prefix + "Filter";
+    filterWrapper.id = prefix + "-time-filter";
     setLimits(0, 125);
     function formTackticksRow(data = [0, 125], team = "home") {
         const t = document.createElement("div");
@@ -46,7 +46,6 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
     einput.id = prefix + "-end-input";
     sinput.addEventListener('change', function (e) {
         e.preventDefault();
-        console.log(this.value.this);
         if (+this.value > +filterWrapper.getAttribute("end") - 3) {
             this.value = +filterWrapper.getAttribute("end") - 3;
         }
@@ -91,7 +90,7 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
         cb(_start, _end);
 
     }
-    
+
     if (tacticksArray[0].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[0]));
 
     if (tacticksArray[1].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[1], "away"));
