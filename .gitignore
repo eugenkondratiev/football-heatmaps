@@ -8,5 +8,7 @@ peflembedded
 *.map
 
 
+public
+public/**
 
 

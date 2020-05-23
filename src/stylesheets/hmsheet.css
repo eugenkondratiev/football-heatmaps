@@ -36,7 +36,20 @@
     min-width: 11em;
     display: flex;
     justify-content: center;
+    align-items: center;
+}
 
+.button-wrap a {
+    display: flex;
+    align-items: center;
+    margin: .21em;
+    padding: .41em;
+    width: auto;
+    height: auto;
+}
+
+.button-wrap a img {
+    display: inline-block;
 }
 
 .refs-container {
@@ -62,15 +75,18 @@
     padding: .3em;
     min-width: 50%;
 }
+
 @media screen and (max-width:769px) {
     #tv-url-input {
         min-width: 90%;
     }
+
     .button-wrap {
         justify-content: space-around;
         margin: 0.5em;
     }
 }
+
 /*---------------------------------------------------------  */
 .heatmap-container-wrapper {
     /* width:50%;  */

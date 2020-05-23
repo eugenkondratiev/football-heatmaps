@@ -859,6 +859,16 @@ window.onload = function () {
   //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
   function formHeatmapUrl(_urlINput) {
     return window.location.origin + window.location.pathname + "?" + _urlINput.replace('http://pefl.ru/tv/#/', '');
+  };
+
+  function formTVUrl() {
+    let locationString  = window.location.href;
+    locationString = locationString
+      .replace("http://pefl.ru/heatmaps.html?", "http://pefl.ru/tv/#/")
+      .replace("http://localhost:8080//heatmaps.html?", 'http://pefl.ru/tv/#/');
+      // console.log(locationString);
+
+    return locationString;
   }
 
   /**===================================================================================================== */
@@ -879,6 +889,8 @@ window.onload = function () {
   // } else {
   //   urlPaste.remove();
   // }
+  document.getElementById("tv-url").href = formTVUrl();
+  document.getElementById("json-url").href = formJsonUrl();
 
   document.querySelector('#updateButton').addEventListener('click', e => {
     e.preventDefault();
@@ -896,4 +908,5 @@ window.onload = function () {
     }
     window.open(formHeatmapUrl(urlInput.value), '_blank');
   });
+  // document.querySelector(".button-wrap a:nth-child(1)");
 }

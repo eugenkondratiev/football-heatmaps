@@ -32,6 +32,12 @@
                         placeholder="Вставьте сюда ссылку на ТВ-трансляцию">
                     <div class="button-wrap">
                         <button id="updateButton">Открыть</button>
+                        <a id="tv-url" href="#" target="_blank" rel="noopener noreferrer">
+                            <img src="http://pefl.ru/skins/refl/img/i3.gif" alt="ТВ-ссыль" height="18">
+                        </a>
+                        <a id="json-url" href="#" target="_blank" rel="noopener noreferrer">
+                            <img  src="images/json.png" alt="JSON-ссыль" height="18">
+                        </a>
                         <button id="newWindow">Открыть в новом окне</button>
                     </div>
                 </div>
@@ -67,7 +73,6 @@
                     </div>
 
                 </div>
-
             </div>
             <h4></h4>
             <div class="heatmap2-containers-wrapper">
@@ -76,7 +81,6 @@
                         <img src="images/littleField.png" alt="">
                         <div class="overlay">Хозяева</div>
                     </div>
-
                 </div>
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-away">
@@ -100,7 +104,6 @@
                         <img src="images/littleField.png" alt="">
                         <div class="overlay">Хозяева. Средние позиции основы.</div>
                     </div>
-
                 </div>
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-avgAway">
@@ -114,11 +117,9 @@
                         <img src="images/littleField.png" alt="">
                         <div class="overlay">Средние позиции</div>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </section>
 
     <section class="main-section">
@@ -155,7 +156,6 @@
                     <a href="#" id="filter-show-all" style="font-weight: bold;"> Показать все</a>
                 </p>
             </div>
-
             <div class="shots-container-wrapper" data-homes="0" data-aways="0" data-players="all">
                 <div class="shots-container" id="chalkboard">
                     <img src="images/bigField.png" alt="">
@@ -239,7 +239,7 @@
                     <p class="help-rule__paragraph">В строке игрока отбражаются удары, разделенные символом "|". Удары|В
                         створ|Голы|Блокированые|Попадание в штангу или перекладину. Об этом так же говорит всплывающая
                         подсказка.</p>
-                    <p class="help-rule__paragraph">Чексбоксы отдельного игрока позволяют отобразить на доске ударов
+                    <p class="help-rule__paragraph">Чексбоксы-"галочки" отдельного игрока позволяют отобразить на доске ударов
                         удары только одного или нескольких выбранных игроков. Если все чекбоксы сброшены, то
                         отображаются все удары команды </p>
                     <p class="help-rule__paragraph">Пробег за матч рассчитывается для ширины поля 105м.</p>
@@ -281,9 +281,6 @@
             </article>
         </div>
     </section>
-    <!-- <script src="javascripts/heatmap.min.js"></script> -->
-
     <script src="js/hm/hm.js"></script>
 </body>
-
 </html>

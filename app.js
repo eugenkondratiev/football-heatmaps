@@ -28,15 +28,19 @@ function setCustomCacheControl(res, path) {
 
 app.use(cookieParser());
 // app.use(serveStatic(path.join(__dirname, 'public/peflembedded/min'), { 'index': ['heatmaps.html', 'heatmaps.htm'] }))
-app.use(serveStatic(path.join(__dirname, 'views'), {
-  maxAge: '1d',
-  setHeaders: setCustomCacheControl
-}));
+app.use(serveStatic(path.join(__dirname, 'views')
+// , 
+// {
+//   // maxAge: '1d',
+//   // setHeaders: setCustomCacheControl
+// }
+));
 
 app.use(serveStatic(path.join(__dirname, 'public'), {
-  'index': ['heatmaps.html', 'heatmaps.htm'],
-  maxAge: '1d',
-  setHeaders: setCustomCacheControl
+  'index': ['heatmaps.html', 'heatmaps.htm']
+  
+  //, maxAge: '1d',
+  // setHeaders: setCustomCacheControl
 }))
 // app.use(serveStatic(path.join(__dirname, 'public')));
 app.set('trust proxy', true);
