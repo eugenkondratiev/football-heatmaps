@@ -14,7 +14,8 @@ const cssfiles = [
     CSS_PATH + "players.css",
     CSS_PATH + "hmsheet.css",
     CSS_PATH + "shots.css",
-    CSS_PATH + "style.css"
+    CSS_PATH + "style.css",
+    CSS_PATH + "sliders.css"
 ]
 
 const scripts = [
@@ -23,7 +24,9 @@ const scripts = [
     JS_PATH + "init.js",
     JS_PATH + "utils.js",
     JS_PATH + "shots.js",
-    JS_PATH + "heatmaps.js"
+    JS_PATH + "heatmaps.js",
+    JS_PATH + "events.js",
+    JS_PATH + "doubleSlider.js"
 ]
 const CLEAN_FILES_ARRAY = [
     CSS_DEST_PATH + "hmsheet.min.css",

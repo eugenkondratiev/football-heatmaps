@@ -22,7 +22,8 @@ const HOME = 1;
 const AWAY = 2;
 const SUB_OUT = 1;
 const SUB_IN = 2;
-
+const SHOW = true;
+const HIDE = false;
 const MIN_MINUTES_FOR_SHOW_TACTIC = 3;
 
 const shotsCoords = { x1: 39, y1: 38, x2: 712, y2: 458 };

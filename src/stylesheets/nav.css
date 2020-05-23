@@ -2,7 +2,13 @@
     width: 99%;
     margin: .3em auto;
 }
-
+.bojan__label, button {
+    border: #c9f8b7;
+    box-sizing: border-box;
+    padding: 1em 0;
+    background-color:#C9F8B7;
+    box-shadow: inset -3px 0px 5px 1px #82ad74;
+}
 
 .bojan__control {
     display: none;
@@ -16,7 +22,7 @@
     justify-content: center;
 }
 
-.bojan__label {
+.bojan__label{
     display: block;
     position: relative;
     width: 100%;

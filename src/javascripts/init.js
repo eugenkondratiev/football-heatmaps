@@ -25,6 +25,7 @@ const awayMileage = [];
 
 const homePointsFull = [];
 const awayPointsFull = [];
+const showableTacticks = [];
 
 for (let i = 0; i <= MAX_PLAYERS ; i++) {
     homePoints.push([]);

@@ -1,5 +1,5 @@
 /**===================================================================================================== */
-;function createShotLine(shot, shotinfo, color) {
+; function createShotLine(shot, shotinfo, color) {
   const line = document.createElement('div');
   line.classList.add('shotline');
   line.style.top = shot.startpoint.y - 1 + "px";
@@ -65,6 +65,7 @@ function createShot(shot, shotinfo) {
 
   shotPict.setAttribute("player", shot.player);
   shotPict.setAttribute("shotType", shot.type);
+  shotPict.setAttribute("minute", shot.minute);
 
   shotPict.appendChild(createShotLine(shot, shotinfo, _strokeStyle));
   shotPict.appendChild(createShotEnd(shot, shotinfo, _strokeStyle));
@@ -153,6 +154,17 @@ function displayAllShots(display, team, hard = true) {
       ? "block"
       : (checked && !hard) ? "block" : "none";
   })
+}
+function filterShotsByTime(start, end) {
+  console.log(start, end, start < end);
+  document.querySelectorAll("[class$=Shot]").forEach(shot => {
+    const minute = +shot.getAttribute("minute");
+    const matchPeriod = (minute >= +start && minute <= +end);
+    // console.log(matchPeriod, +shot.getAttribute("minute"), shot);
+    shot.style.display = (matchPeriod)
+      ? "block"
+      : "none";
+  });
 }
 
 function changeCheckboxCount(action = -1, team = "home") {

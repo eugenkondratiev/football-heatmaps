@@ -160,7 +160,7 @@ window.onload = function () {
                   // countShot(shotType, rep.away[newShot.player])
                 };
               }
-              if (element.G && !element.U) { // goal event in next episode
+              if ((element.G || element.V) && !element.U) { // goal event in next episode
                 const ball = element.coordinates.ball;
                 console.log("goal event in next episode - ", element.minute, element.U, element.V, element.G, ball)
                 const ballcoords = {
@@ -170,16 +170,24 @@ window.onload = function () {
                 };
                 const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
                 let lastShot;
-                if (element.G.team == 1 || element.G.team == 3) {
+                // if ((element.G.team == 1 || element.G.team == 3)) {
+                if (element.G && (element.G.team == 1 || element.G.team == 3) || element.V && (element.V.team == 1 || element.V.team == 3)) {
                   lastShot = shots.home[shots.home.length - 1];
                   // console.log("shots.home - ", shots.home);
                 } else {
                   lastShot = shots.away[shots.away.length - 1];
                 }
                 // console.log("episode -", episode);console.log("lastShot - ", lastShot);
-                lastShot.type = "G";
+                if (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].messages.some(el => el.mes.match(/авес|аброс|линны/g))) {
+                  lastShot.startpoint = lastShot.endpoint;
+
+                }
+
+                // lastShot.type = "G";
+                lastShot.type = element.G ? "G" : "V";
                 lastShot.endpoint = endpoint;
-                lastShot.player = element.G.player;
+                // lastShot.player = element.G.player;
+                lastShot.player = element.G ? element.G.player : element.V.player;
               }
             } catch (error) {
               console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
@@ -304,33 +312,37 @@ window.onload = function () {
           countShot(shot.type, rep.away.players[shot.player - 1]);
         });
         /**===================================================================================================== */
-        function avgMapCreate(_id) {
+        function avgMapCreate(_id, radiusKef = TEAM_RADIUS_KEFF, min = MIN_OPACITY, max = MAX_OPACITY) {
           return h337.create({
             container: document.querySelector(_id), //'#heatmap-avgSubHome'),
-            maxOpacity: MAX_OPACITY,
-            minOpacity: MIN_OPACITY,
-            radius: POINT_RADIUS * TEAM_RADIUS_KEFF
+            maxOpacity: max,
+            minOpacity: min,
+            radius: POINT_RADIUS * radiusKef
 
           });
         }
-        const heatmapInstance = h337.create({
-          container: document.querySelector('#heatmap-home'),
-          maxOpacity: MAX_OPACITY,
-          minOpacity: MIN_OPACITY,
-          radius: POINT_RADIUS * TEAM_RADIUS_KEFF
-        });
-        const heatmapInstance2 = h337.create({
-          container: document.querySelector('#heatmap-away'),
-          maxOpacity: MAX_OPACITY,
-          minOpacity: MIN_OPACITY,
-          radius: POINT_RADIUS * TEAM_RADIUS_KEFF
-        });
-        const heatmapInstance3 = h337.create({
-          container: document.querySelector('#heatmap-ball'),
-          maxOpacity: MAX_OPACITY,
-          minOpacity: MIN_OPACITY,
-          radius: POINT_RADIUS * BALL_RADIUS_KEFF
-        });
+        // const heatmapInstance = h337.create({
+        //   container: document.querySelector('#heatmap-home'),
+        //   maxOpacity: MAX_OPACITY,
+        //   minOpacity: MIN_OPACITY,
+        //   radius: POINT_RADIUS * TEAM_RADIUS_KEFF
+        // });
+        const heatmapInstance = avgMapCreate('#heatmap-home');
+        const heatmapInstance2 = avgMapCreate('#heatmap-away');
+        const heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
+
+        // const heatmapInstance2 = h337.create({
+        //   container: document.querySelector('#heatmap-away'),
+        //   maxOpacity: MAX_OPACITY,
+        //   minOpacity: MIN_OPACITY,
+        //   radius: POINT_RADIUS * TEAM_RADIUS_KEFF
+        // });
+        // const heatmapInstance3 = h337.create({
+        //   container: document.querySelector('#heatmap-ball'),
+        //   maxOpacity: MAX_OPACITY,
+        //   minOpacity: MIN_OPACITY,
+        //   radius: POINT_RADIUS * BALL_RADIUS_KEFF
+        // });
         const heatmapInstance4 = avgMapCreate('#heatmap-avgHome');
         const heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
         // const heatmapInstance6 = avgMapCreate('#heatmap-avgSubHome');
@@ -397,14 +409,18 @@ window.onload = function () {
           for (let t = 1; t < homeTacticPoints.length; t++) {
             if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
             //----------- calc avg for different tactics
+            homeTacticPoints[t].rankByMinutes = [];
             homeTacticPoints[t].averages.forEach((positions, _n) => {
               const avg = positions.length;
+              homeTacticPoints[t].rankByMinutes[_n] = [_n, avg];
               if (_n === 0 || avg < 2) return;
               positions.forEach((pos, i, _arr) => {
                 positions[0].x += (pos.x / avg);
                 positions[0].y += (pos.y / avg);
               })
-            })
+            });
+            homeTacticPoints[t].rankByMinutes.sort((a, b) => b[1] - a[1]);
+
             // show tactic
             const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
             const newDiv = divWrapper.cloneNode(true);
@@ -431,7 +447,9 @@ window.onload = function () {
             for (let n = 1; n <= MAX_PLAYERS; n++) {
               const hp = document.querySelector('#player_default_home').cloneNode(true);
               hp.id = "homeAvgPoints_" + t + "_" + n;
-              hp.style.display = n < 12 ? "inherit" : "none";
+              const rank = homeTacticPoints[t].rankByMinutes
+              hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+              // hp.style.display = n < 12 ? "inherit" : "none";
               hp.style.left = homeTacticPoints[t].averages[n][0].x - 5 + "px";
               hp.style.top = homeTacticPoints[t].averages[n][0].y - 5 + "px";
               hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
@@ -474,14 +492,18 @@ window.onload = function () {
         if (awayTacticPoints.length > 1) {
           for (let t = 1; t < awayTacticPoints.length; t++) {
             if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+            awayTacticPoints[t].rankByMinutes = [];
             awayTacticPoints[t].averages.forEach((positions, _n) => {
               const avg = positions.length;
+              awayTacticPoints[t].rankByMinutes[_n] = [_n, avg];
               if (_n === 0 || avg < 2) return;
               positions.forEach((pos, i, _arr) => {
                 positions[0].x += (pos.x / avg);
                 positions[0].y += (pos.y / avg);
               })
             })
+            awayTacticPoints[t].rankByMinutes.sort((a, b) => b[1] - a[1]);
+
             const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
             const newDiv = divWrapper.cloneNode(true);
             const tacticId = "#heatmap-tacticaway" + t;
@@ -509,7 +531,10 @@ window.onload = function () {
               // for (let n = 1; n < 12; n++) { 
               const ap = document.querySelector('#player_default_away').cloneNode(true);
               ap.id = "awayAvgPoints_" + t + "_" + n;
-              ap.style.display = n < 12 ? "inherit" : "none";
+              const rank = awayTacticPoints[t].rankByMinutes
+              ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+              // ap.style.display = awayTacticPoints[t].rankByMinutes.find(el => el[0] === n)[0] < 11 ? "inherit" : "none";
+              // ap.style.display = n < 12 ? "inherit" : "none";
               ap.style.left = awayTacticPoints[t].averages[n][0].x - 5 + "px";
               ap.style.top = awayTacticPoints[t].averages[n][0].y - 5 + "px";
               ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
@@ -544,6 +569,9 @@ window.onload = function () {
 
           }
         }
+        showableTacticks.push(homeTacticPoints.filter((t, n) => (n > 0 && t.period > 3)).map(el => [el.start, el.end]));
+
+        showableTacticks.push(awayTacticPoints.filter((t, n) => (n > 0 && t.period > 3)).map(el => [el.start, el.end]));
 
         function showPlayersHeatmaps() {
           // const newHeatmapsHeader = document.querySelector("#game-info").cloneNode(true);
@@ -633,7 +661,7 @@ window.onload = function () {
         //console.log('homeAvgPoints  - ', homeAvgPoints);
         //console.log('awayAvgPoints  - ', awayAvgPoints);
         //-------------------------------------------------------------------------
-        function showHideAllColoboks(team, n, _tacticPoints) {
+        function showHideAllColoboks(team, n, _tacticPoints, isVisible = SHOW) {
           const _home = team || "home";
           const _n = n || 1;
           const tacticPoints = _tacticPoints || homeTacticPoints;
@@ -643,14 +671,15 @@ window.onload = function () {
           //  console.log(_colobokId, _colobokId2);
           const _style = document.getElementById(_colobokId).style;
           const _style2 = document.getElementById(_colobokId2).style;
-          _style.display = _style.display == "none" ? "inherit" : "none";
-          _style2.display = _style2.display == "none" ? "inherit" : "none";
+          _style.display = isVisible ? "inherit" : "none";
+          _style2.display = isVisible ? "inherit" : "none";
           if (tacticPoints.length > 1) {
             for (let t = 1; t < tacticPoints.length; t++) {
               if (tacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
               const _colobokId = _home + "AvgPoints_" + t + "_" + _n;
 
-              document.getElementById(_colobokId).style.display = document.getElementById(_colobokId).style.display == "none" ?
+              document.getElementById(_colobokId).style.display = isVisible ?
+                // document.getElementById(_colobokId).style.display = document.getElementById(_colobokId).style.display == "none" ?
                 "inherit" :
                 "none";
             }
@@ -686,7 +715,10 @@ window.onload = function () {
             apName.addEventListener('click', function (e) {
               e.preventDefault();
               this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
-              showHideAllColoboks("away", this.id.replace("away-player-list_", '').replace("_name", ''), awayTacticPoints);
+              showHideAllColoboks("away", this.id.replace("away-player-list_", '').replace("_name", '')
+                , awayTacticPoints
+                , this.style.fontWeight == "bold" ? SHOW : HIDE
+              );
             });
             if (rep.away.players[n - 1].sub) {
               apName.appendChild(getSubArrow(rep.away.players[n - 1].sub));
@@ -737,6 +769,7 @@ window.onload = function () {
             apBoth.id = "both" + apBoth.id;
             document.getElementById('heatmap-avgBoth').appendChild(apBoth);
             const apToINdividualHeatmap = ap.cloneNode(true);
+            apToINdividualHeatmap.style.display = (awayAvgPoints[n].x > 8 && awayAvgPoints[n].y > 8) ? "inherit" : "none";
             apToINdividualHeatmap.id = apToINdividualHeatmap.id + "_individual";
             document.querySelector('#heatmap-away' + n).appendChild(apToINdividualHeatmap);
 
@@ -765,7 +798,11 @@ window.onload = function () {
             hpName.addEventListener('click', function (e) {
               e.preventDefault();
               this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
-              showHideAllColoboks("home", this.id.replace("home-player-list_", '').replace("_name", ''), homeTacticPoints);
+              showHideAllColoboks("home"
+                , this.id.replace("home-player-list_", '').replace("_name", '')
+                , homeTacticPoints
+                , this.style.fontWeight == "bold" ? SHOW : HIDE
+              );
             });
             if (rep.home.players[n - 1].sub) {
               hpName.appendChild(getSubArrow(rep.home.players[n - 1].sub));
@@ -816,6 +853,8 @@ window.onload = function () {
             hpBoth.id = "both" + hpBoth.id;
             document.getElementById('heatmap-avgBoth').appendChild(hpBoth);
             const hpToINdividualHeatmap = hp.cloneNode(true);
+            hpToINdividualHeatmap.style.display = (homeAvgPoints[n].x > 8 && homeAvgPoints[n].y > 8) ? "inherit" : "none";
+
             hpToINdividualHeatmap.id = hpToINdividualHeatmap.id + "_individual";
             document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
           }
@@ -857,56 +896,9 @@ window.onload = function () {
   xmlhttp.send();
   //-----------------------------------------------------------------
   //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
-  function formHeatmapUrl(_urlINput) {
-    return window.location.origin + window.location.pathname + "?" + _urlINput.replace('http://pefl.ru/tv/#/', '');
-  };
 
-  function formTVUrl() {
-    let locationString  = window.location.href;
-    locationString = locationString
-      .replace("http://pefl.ru/heatmaps.html?", "http://pefl.ru/tv/#/")
-      .replace("http://localhost:8080//heatmaps.html?", 'http://pefl.ru/tv/#/');
-      // console.log(locationString);
 
-    return locationString;
-  }
 
-  /**===================================================================================================== */
-  // const urlPaste = document.querySelector('#pasteButton');
-  const urlInput = document.querySelector("#tv-url-input");
-  // if (navigator.clipboard) {
-  //   urlPaste.addEventListener('click', e => {
-  //     // e.preventDefault();
-  //     navigator.clipboard.readText()
-  //       .then(
-  //         clipText => {
-  //           urlInput.value = clipText;
-  //         })
-  //       .catch(e => {
-  //         console.log("Работа с буфером сейчас не разрешена или не доступна в вашем браузере!");
-  //       });
-  //   });
-  // } else {
-  //   urlPaste.remove();
-  // }
-  document.getElementById("tv-url").href = formTVUrl();
-  document.getElementById("json-url").href = formJsonUrl();
-
-  document.querySelector('#updateButton').addEventListener('click', e => {
-    e.preventDefault();
-    if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
-      alert('Вставьте корректную ссылку на ТВ матча в поле ввода!');
-      return;
-    }
-    window.location.assign(formHeatmapUrl(urlInput.value));
-  });
-  document.querySelector('#newWindow').addEventListener('click', e => {
-    e.preventDefault();
-    if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
-      alert('Вставьте корректную ссылку на ТВ матча в поле ввода!');
-      return;
-    }
-    window.open(formHeatmapUrl(urlInput.value), '_blank');
-  });
+  afterLoadEvents(showableTacticks);
   // document.querySelector(".button-wrap a:nth-child(1)");
 }

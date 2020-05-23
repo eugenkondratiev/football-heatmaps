@@ -91,11 +91,11 @@ task('images:watch', () =>
     watch(c.SRC_PATH + 'images/*.*', series('images'))
 );
 
-task('default', series('clean',
+task('default',// series('clean',
     parallel(
         series('css', 'css:watch'),
         series('images', 'images:watch'),
         series('scripts', 'scripts:watch')
     )
-)
+// )
 );
