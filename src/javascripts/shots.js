@@ -156,7 +156,7 @@ function displayAllShots(display, team, hard = true) {
   })
 }
 function filterShotsByTime(start, end) {
-  console.log(start, end, start < end);
+  // console.log(start, end, start < end);
   document.querySelectorAll("[class$=Shot]").forEach(shot => {
     const minute = +shot.getAttribute("minute");
     const matchPeriod = (minute >= +start && minute <= +end);

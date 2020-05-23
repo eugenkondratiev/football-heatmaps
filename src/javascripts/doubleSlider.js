@@ -1,15 +1,40 @@
 ;
 function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb) {
 
+
+    console.log(tacticksArray[0]);
+    console.log(tacticksArray[1]);
+
     const filterWrapper = document.createElement("div");
-    filterWrapper.classList.add("time-slider-wrapper");
+    filterWrapper.classList.add("time-slider");
     filterWrapper.id = prefix + "Filter";
     setLimits(0, 125);
+    function formTackticksRow(data = [0, 125], team = "home") {
+        const t = document.createElement("div");
+        t.classList.add("time-slider__tacticks");
+        const _label = document.createElement("span");
+        _label.innerText = team === "home" ? "Тактики хозяев" : "Тактики гостей";
+        t.appendChild(_label);
+        const _ul = document.createElement("ul");
+        data.forEach(el => {
+            ; const _li = document.createElement("li");
+            _li.innerText = el[0] + " - " + el[1];
+            _li.classList.add("time-slider__tacticks__ref");
+            _li.addEventListener("click", function (e) {
+                e.preventDefault();
+                setLimits(el[0], el[1]);
+                updateValues();
+            })
 
-    const ht = document.createElement("div");
-    ht.classList.add("time-slider__tacticks");
-    const at = document.createElement("div");
-    at.classList.add("time-slider__tacticks");
+            _ul.appendChild(_li);
+        })
+        t.appendChild(_ul);
+
+        return t;
+
+    }
+
+
 
     const inputs = document.createElement("div");
     inputs.classList.add("time-slider__inputs");
@@ -30,7 +55,6 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
     })
     einput.addEventListener('change', function (e) {
         e.preventDefault();
-        console.log("END  ", this.value);
         if (+this.value < +filterWrapper.getAttribute("start") + 3) {
             this.value = +filterWrapper.getAttribute("start") + 3;
         }
@@ -55,6 +79,7 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
         filterWrapper.setAttribute("start", start);
         filterWrapper.setAttribute("end", end);
     }
+
     function updateValues() {
         const _start = +filterWrapper.getAttribute("start");
         const _end = +filterWrapper.getAttribute("end");
@@ -66,8 +91,11 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
         cb(_start, _end);
 
     }
-    filterWrapper.appendChild(ht);
-    filterWrapper.appendChild(at);
+    
+    if (tacticksArray[0].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[0]));
+
+    if (tacticksArray[1].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[1], "away"));
+
     filterWrapper.appendChild(inputs);
 
     updateValues();

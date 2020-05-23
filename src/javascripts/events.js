@@ -52,9 +52,11 @@ function afterLoadEvents(showableTacticks) {
         }
         window.open(formHeatmapUrl(urlInput.value), '_blank');
     });
+    setTimeout(() => {
+        document.querySelector("#shots-chalkboard ~ .bojan__content")
+            .appendChild(
+                createSlider("_", showableTacticks, filterShotsByTime)
+            )
+    }, 2000);
 
-    document.querySelector("#shots-chalkboard ~ .bojan__content")
-        .appendChild(
-            createSlider("_", showableTacticks, filterShotsByTime )
-        )
 };
