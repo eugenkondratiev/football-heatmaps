@@ -34,3 +34,5 @@ const FIELD_LONGTITUDE = 105;
 
 const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1);
 // const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
+
+const SHOT_TOOLTIP = "Удары|В створ|Голы-автоголы   |Блокированные|Каркас"

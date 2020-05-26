@@ -2,12 +2,17 @@
 function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb) {
 
 
-    console.log(tacticksArray[0]);
-    console.log(tacticksArray[1]);
+    // console.log(tacticksArray[0]);
+    // console.log(tacticksArray[1]);
 
     const filterWrapper = document.createElement("div");
     filterWrapper.classList.add("time-slider");
     filterWrapper.id = prefix + "-time-filter";
+    filterWrapper.addEventListener("change", function(e){
+        e.preventDefault();
+        updateValues();
+    })
+    
     setLimits(0, 125);
     function formTackticksRow(data = [0, 125], team = "home") {
         const t = document.createElement("div");

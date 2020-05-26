@@ -24,9 +24,11 @@ function createShotStart(shot, shotinfo, color) {
     ? 'Гол'
     : shot.type == "V"
       ? 'Удар в створ'
-      : shot.type == "Block"
-        ? 'Блок'
-        : shot.type == "B" ? 'Каркас ворот' : 'Мимо';
+      : shot.type == "W"
+        ? 'Автогол'
+        : shot.type == "Block"
+          ? 'Блок'
+          : shot.type == "B" ? 'Каркас ворот' : 'Мимо';
 
   shotStart.addEventListener('mouseenter', function (e) {
     // console.log(shot.minute, shot.episode, shot.player, shotinfo.playerName, typeString);
@@ -56,7 +58,11 @@ function createShot(shot, shotinfo) {
     ? 'red'
     : shot.type == "V"
       ? 'yellow'
-      : shot.type == "Block" ? 'black' : 'blue';
+      : shot.type == "Block"
+        ? 'black'
+        : shot.type == "B"
+          ? 'black'
+          : shot.type == "W" ? "darkkhaki" : 'blue';
 
   const shotPict = document.createElement('div');
   shotPict.classList.add('shot');
@@ -128,20 +134,28 @@ function countShot(newShotType, player) {
     }
     player.stvor++
   }
+  if (newShotType == "W") {
+    if (!player.autogoals) {
+      player.autogoals = 1; return;
+    }
+    player.autogoals++
+  }
+
 }
 /**===================================================================================================== */
 function formShotsString(player) {
+  const autogoals = player.autogoals ? ("" + -parseInt(player.autogoals)) : ""
   const goals = player.goals ? parseInt(player.goals) : 0;
   const stvor = goals + (player.stvor ? parseInt(player.stvor) : 0);
   const sum = stvor + (player.miss ? parseInt(player.miss) : 0);
-  const goalsString = "|" + goals;
+  const goalsString = "|" + goals + autogoals;
   const bars = player.bar ? "|" + (parseInt(player.bar)) : " ";
   const blocks = player.block ? "|" + (parseInt(player.block)) : " ";
 
-  return sum + bars + blocks == 0
+  return (sum + bars + blocks == 0) && autogoals == ""
     ? " "
     : sum == 0
-      ? "        " + blocks + bars
+      ? "        " + autogoals + blocks + bars
       : (sum > 9 ? sum : " " + sum) + "|" + stvor + goalsString + " " + blocks + bars;
 }
 /**===================================================================================================== */
@@ -208,6 +222,11 @@ function changeVisibilityByType(e) {
   document.querySelectorAll(shotsSelector).forEach(shot => {
     shot.style.display = !checked ? "block" : "none";
   });
+  if (type == "G") { // цепляем и автоголы
+    document.querySelectorAll(".shot[shottype=W]").forEach(shot => {
+      shot.style.display = !checked ? "block" : "none";
+    });
+  }
   this.style.fontWeight = checked ? "normal" : "bold";
 }
 //=================================================
@@ -229,7 +248,12 @@ function showAllShots() {
   displayAllShots(true, "away");
   document.querySelectorAll(".squadAndShots-containers-wrapper input[type=checkbox]").forEach(chbox => {
     chbox.checked = false;
-  })
+  });
+  const timeFilter = document.getElementById("shots-time-filter");
+  console.log();
+  timeFilter.setAttribute("start", 0);
+  timeFilter.setAttribute("end", 125);
+  timeFilter.dispatchEvent(new Event('change', { bubbles: true }));
 }
 document.getElementsByClassName("shots-container")[0].addEventListener('click', function (e) {
   showAllShots();

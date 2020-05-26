@@ -9,6 +9,9 @@
     background-color:#C9F8B7;
     box-shadow: inset -3px 0px 5px 1px #82ad74;
 }
+button {
+    padding: 1em .88rem;
+}
 
 .bojan__control {
     display: none;

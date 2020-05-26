@@ -118,7 +118,7 @@ window.onload = function () {
 
             let coords;
             try {
-              if (element.U && !penalties) { // shots handle
+              if ((element.U || element.W) && !penalties) { // shots handle
                 const ball = element.coordinates.ball;
                 // console.log(element.minute, element.U, ball)
                 const ballcoords = {
@@ -126,7 +126,15 @@ window.onload = function () {
                   y: ball.h,
                   value: 1
                 };
-                const shotType = element.G ? "G" : element.V ? "V" : element.B ? "B" : element.U.team > 2 ? "Block" : "U";
+                const shotType = element.G
+                  ? "G"
+                  : element.V
+                    ? "V"
+                    : element.W
+                      ? "W"
+                      : element.B
+                        ? "B"
+                        : element.U.team > 2 ? "Block" : "U";
 
                 const shotStart = (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].coordinates) ?
                   episodes[episode - 1].coordinates.ball :
@@ -150,9 +158,11 @@ window.onload = function () {
                   episode: episode,
                   type: shotType,
                   minute: element.minute,
-                  player: element.U.player
+                  player: element.U ? element.U.player : element.W.player
                 };
-                if (element.U.team == 1 || element.U.team == 3) {
+                if (element.U && (element.U.team == 1 || element.U.team == 3)
+                  || element.W && (element.W.team == 2 || element.W.team == 4)
+                ) {
                   shots.home.push(newShot);
                   // countShot(shotType, rep.home[newShot.player])
                 } else {
@@ -160,9 +170,10 @@ window.onload = function () {
                   // countShot(shotType, rep.away[newShot.player])
                 };
               }
-              if ((element.G || element.V) && !element.U) { // goal event in next episode
+              if ((element.G || element.V || element.B) && !element.U) { // goal/block/ event in next episode
                 const ball = element.coordinates.ball;
-                console.log("goal event in next episode - ", element.minute, element.U, element.V, element.G, ball)
+                console.log("goal event in next episode -  min=", element.minute, " U=", element.U," W=", element.W,
+                  " V=", element.V, " G=", element.G, " B=", element.B, ball)
                 const ballcoords = {
                   x: ball.w,
                   y: ball.h,
@@ -171,23 +182,28 @@ window.onload = function () {
                 const endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
                 let lastShot;
                 // if ((element.G.team == 1 || element.G.team == 3)) {
-                if (element.G && (element.G.team == 1 || element.G.team == 3) || element.V && (element.V.team == 1 || element.V.team == 3)) {
+                if (element.G && (element.G.team == 1 || element.G.team == 3)
+                  || element.V && (element.V.team == 1 || element.V.team == 3)
+                  || element.B && (element.B.team == 1 || element.B.team == 3)
+                ) {
                   lastShot = shots.home[shots.home.length - 1];
                   // console.log("shots.home - ", shots.home);
                 } else {
                   lastShot = shots.away[shots.away.length - 1];
                 }
                 // console.log("episode -", episode);console.log("lastShot - ", lastShot);
-                if (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].messages.some(el => el.mes.match(/авес|аброс|линны/g))) {
+                if (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].messages.some(el => el.mes.match(/авес|аброс|линны/g))
+                  // || element.B && (episodes[episode - 1].U) //|| episodes[episode - 2].U || episodes[episode - 3].U 
+                ) {
                   lastShot.startpoint = lastShot.endpoint;
 
                 }
 
                 // lastShot.type = "G";
-                lastShot.type = element.G ? "G" : "V";
+                lastShot.type = element.G ? "G" : element.V ? "V" : "B";
                 lastShot.endpoint = endpoint;
                 // lastShot.player = element.G.player;
-                lastShot.player = element.G ? element.G.player : element.V.player;
+                lastShot.player = element.G ? element.G.player : element.V ? element.V.player : element.B.player;
               }
             } catch (error) {
               console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
@@ -458,7 +474,7 @@ window.onload = function () {
             }
             const heatmapInstanceAvg = avgMapCreate("#avgPositionsHome" + t);
             heatmapInstanceAvg.setData(defaultData);
-            
+
             const heatmapPlayers = h337.create({
               container: document.querySelector(tacticId),
               maxOpacity: MAX_OPACITY,
@@ -750,7 +766,7 @@ window.onload = function () {
               }))
               const apShotsTooltip = document.createElement('div');
               apShotsTooltip.className = "tooltiptext";
-              apShotsTooltip.innerText = "Удары|В створ|Голы   |Блокированные|Каркас";
+              apShotsTooltip.innerText = SHOT_TOOLTIP;
               apShots.appendChild(apShotsTooltip);
             }
             newPlayer.appendChild(apShotsCheckbox);
@@ -835,7 +851,7 @@ window.onload = function () {
               }))
               const hpShotsTooltip = document.createElement('div');
               hpShotsTooltip.className = "tooltiptext";
-              hpShotsTooltip.innerText = "Удары|В створ|Голы   |Блокированные|Каркас";
+              hpShotsTooltip.innerText = SHOT_TOOLTIP;
               hpShots.appendChild(hpShotsTooltip);
             }
             newHomePlayer.appendChild(hpShotsCheckbox);
@@ -888,8 +904,11 @@ window.onload = function () {
       } else {
         alert('Вставьте верно ссылку на матч!');
       }
+      setTimeout(afterLoadEvents, 1000);
+
     }
     // }, 500)
+
   };
 
   xmlhttp.open("GET", formJsonUrl(tvurl), true);
@@ -899,6 +918,6 @@ window.onload = function () {
 
 
 
-  afterLoadEvents(showableTacticks);
+  // afterLoadEvents(showableTacticks);
   // document.querySelector(".button-wrap a:nth-child(1)");
 }

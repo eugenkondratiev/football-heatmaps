@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Тепловые карты</title>
-    <link rel="stylesheet" href="css/hmsheet.min.css">
-    <link rel="icon" href="images/faviconka_hm.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="images/faviconka_hm.ico" type="image/x-icon">
+    <link rel="stylesheet" href="public/css/hmsheet.min.css">
+    <link rel="icon" href="public/images/faviconka_hm.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="public/images/faviconka_hm.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -36,7 +36,7 @@
                             <img src="http://pefl.ru/skins/refl/img/i3.gif" alt="ТВ-ссыль" height="18">
                         </a>
                         <a id="json-url" href="#" target="_blank" rel="noopener noreferrer" title = "Открыть JSON с данными">
-                            <img  src="images/json.png" alt="JSON-ссыль" height="18">
+                            <img src="public/images/json.png" alt="JSON-ссыль" height="18">
                         </a>
                         <button id="newWindow">Открыть в новом окне</button>
                     </div>
@@ -46,7 +46,7 @@
     </header>
     <div class="clear"></div>
     <section class="main-section">
-        <input type="checkbox" class="bojan__control" id="main-heatmaps" checked=checked>
+        <input type="checkbox" class="bojan__control" id="main-heatmaps">
         <label class="bojan__label" for="main-heatmaps">
             <h3 class="bojan__label__header">Тепловые карты матча</h3>
         </label>
@@ -54,7 +54,7 @@
             <h4 id="game-info">game info<span></span></h4>
             <div class="heatmap-container-wrapper">
                 <div class="heatmap-container" id="heatmap-ball">
-                    <img src="images/littleField.png" alt="">
+                    <img src="public/images/littleField.png" alt="">
                     <div class="overlay">Мяч</div>
 
                     <div id="player_default_away" title="" class="player_container medium_size"
@@ -78,13 +78,13 @@
             <div class="heatmap2-containers-wrapper">
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-home">
-                        <img src="images/littleField.png" alt="">
+                        <img src="public/images/littleField.png" alt="">
                         <div class="overlay">Хозяева</div>
                     </div>
                 </div>
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-away">
-                        <img src="images/littleField.png" alt="">
+                        <img src="public/images/littleField.png" alt="">
                         <div class="overlay">Гости</div>
                     </div>
 
@@ -101,20 +101,20 @@
             <div class="heatmap3-containers-wrapper">
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-avgHome">
-                        <img src="images/littleField.png" alt="">
+                        <img src="public/images/littleField.png" alt="">
                         <div class="overlay">Хозяева. Средние позиции основы.</div>
                     </div>
                 </div>
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-avgAway">
-                        <img src="images/littleField.png" alt="">
+                        <img src="public/images/littleField.png" alt="">
                         <div class="overlay">Хозяева. Средние позиции основы</div>
                     </div>
 
                 </div>
                 <div class="heatmap-container-wrapper">
                     <div class="heatmap-container" id="heatmap-avgBoth">
-                        <img src="images/littleField.png" alt="">
+                        <img src="public/images/littleField.png" alt="">
                         <div class="overlay">Средние позиции</div>
                     </div>
                 </div>
@@ -138,11 +138,11 @@
                     </div>
                 </div>
             </div>
-            <div><button id="norm-tactic-avg">Нормализовать средние позиции</button></div>
+            <div><button id="norm-tactic-avg">Нормализовать средние позиции по тактикам</button></div>
         </div>
     </section>
     <section class="main-section">
-        <input type="checkbox" class="bojan__control" id="shots-chalkboard">
+        <input type="checkbox" class="bojan__control" id="shots-chalkboard" checked=checked>
         <label for="shots-chalkboard" class="bojan__label">
             <h3 class="bojan__label__header">Карта ударов</h3>
         </label>
@@ -159,7 +159,7 @@
             </div>
             <div class="shots-container-wrapper" data-homes="0" data-aways="0" data-players="all">
                 <div class="shots-container" id="chalkboard">
-                    <img src="images/bigField.png" alt="">
+                    <img src="public/images/bigField.png" alt="">
                     <div class="overlay">Меловая доска ударов
                         <div id="one-shot-legend" style="display: none;">
                         </div>
@@ -282,6 +282,6 @@
             </article>
         </div>
     </section>
-    <script src="js/hm/hm.js"></script>
+    <script src="public/js/hm/hm.js"></script>
 </body>
 </html>

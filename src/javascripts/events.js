@@ -1,7 +1,8 @@
 //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
 ;
 
-function afterLoadEvents(showableTacticks) {
+function afterLoadEvents() {
+    //showableTacticks) {
     function formHeatmapUrl(_urlINput) {
         return window.location.origin + window.location.pathname + "?" + _urlINput.replace('http://pefl.ru/tv/#/', '');
     };
@@ -58,7 +59,6 @@ function afterLoadEvents(showableTacticks) {
                 if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
                 for (let n = 1; n <= MAX_PLAYERS; n++) {
                     const hp = document.querySelector("#homeAvgPoints_" + t + "_" + n);
-                    // hp.id = "homeAvgPoints_" + t + "_" + n;
                     const rank = homeTacticPoints[t].rankByMinutes
                     hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
 
@@ -71,7 +71,6 @@ function afterLoadEvents(showableTacticks) {
                 if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
                 for (let n = 1; n <= MAX_PLAYERS; n++) {
                     const ap = document.querySelector("#awayAvgPoints_" + t + "_" + n);
-                    // hp.id = "awayAvgPoints_" + t + "_" + n;
                     const rank = awayTacticPoints[t].rankByMinutes
                     ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
 
