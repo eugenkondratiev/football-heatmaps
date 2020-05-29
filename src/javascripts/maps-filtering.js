@@ -27,9 +27,9 @@ function filterMapsByTime(_start, end) {
         row.filter(el=> el != null).forEach(point => filteredAwayPoints.push(point))
     });
 
-    console.log(endEpisode - startEpisode, filteredBall);
-    console.log(endEpisode - startEpisode, filteredHomePoints);
-    console.log(endEpisode - startEpisode, filteredAwayPoints);
+    console.log((end - start), filteredBall);
+    console.log((end - start), filteredHomePoints);
+    console.log((end - start), filteredAwayPoints);
 
     updateMainMaps(filteredHomePoints, filteredAwayPoints, filteredBall);
 

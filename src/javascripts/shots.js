@@ -254,7 +254,7 @@ const fBlocks = document.getElementById("filterBlocks");
 fBlocks.addEventListener('click', changeVisibilityByType.bind(fBlocks));
 
 function filterRangeMaximize(_timeFilterId) {
-  const timeFilter = document.getElementById("shots-time-filter");
+  const timeFilter = document.getElementById(_timeFilterId);
   timeFilter.setAttribute("start", 0);
   timeFilter.setAttribute("end", 125);
   timeFilter.dispatchEvent(new Event('change', { bubbles: true }));

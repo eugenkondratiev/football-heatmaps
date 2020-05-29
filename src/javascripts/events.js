@@ -94,6 +94,7 @@ function afterLoadEvents() {
         document.getElementById("reset-maps-filtering").addEventListener("click", function (e) {
             e.preventDefault();
             filterMapsByTime(0, 125);
+            filterRangeMaximize("maps-time-filter");
         })
     }, 1000);
 
