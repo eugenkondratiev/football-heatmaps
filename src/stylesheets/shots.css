@@ -69,3 +69,10 @@
     top: 150px;
     left: 149px;
 }
+
+a[data-checked="false"] {
+    font-weight: bold;
+}
+a[data-checked="true"] {
+    font-weight: normal;
+}

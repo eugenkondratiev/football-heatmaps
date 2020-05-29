@@ -25,6 +25,7 @@ const scripts = [
     JS_PATH + "utils.js",
     JS_PATH + "shots.js",
     JS_PATH + "heatmaps.js",
+    JS_PATH + "maps-filtering.js",
     JS_PATH + "events.js",
     JS_PATH + "doubleSlider.js"
 ]

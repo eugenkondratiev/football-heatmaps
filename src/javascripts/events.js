@@ -82,11 +82,19 @@ function afterLoadEvents() {
         document.querySelector("#shots-chalkboard ~ .bojan__content")
             .appendChild(
                 createSlider("shots", showableTacticks, filterShotsByTime)
+            );
+        document.querySelector("#maps-filtered ~ .bojan__content")
+            .appendChild(
+                createSlider("maps", showableTacticks, filterMapsByTime)
             )
-        document.querySelector("#norm-tactic-avg").addEventListener("click", function (e) {
+        document.getElementById("norm-tactic-avg").addEventListener("click", function (e) {
             e.preventDefault();
             normalizeTacticAvgPositions();
+        });
+        document.getElementById("reset-maps-filtering").addEventListener("click", function (e) {
+            e.preventDefault();
+            filterMapsByTime(0, 125);
         })
-    }, 2000);
+    }, 1000);
 
 };

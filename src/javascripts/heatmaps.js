@@ -2,6 +2,32 @@
 ; function createHeatMap(rep, corners, jsoncorners) {
   //TODO  вынести расчет в функцию (jsonreport) => массив тепловых карты мяча,команд, игроков команд.
 }
+
+let maximumValue = MAX_VALUE;
+let heatmapInstance ;
+let heatmapInstance2;
+let heatmapInstance3;
+let heatmapInstance4 ;
+let heatmapInstance5;
+let heatmapInstance8 ;
+//-------------------------------------------------
+function calculateAvgPositions(_points) {
+  const _avgPoints = [];
+  for (let i = 0; i <= MAX_PLAYERS; i++) {
+    _avgPoints.push({ x: 0, y: 0 });
+  }
+  _points.forEach((hmap, _n) => {
+    const avg = hmap.length;
+    if (_n === 0 || avg < 1) return;
+
+    hmap.forEach((point, i) => {
+      _avgPoints[_n].x += point.x / avg;
+      _avgPoints[_n].y += point.y / avg;
+    })
+  })
+  return _avgPoints;
+}
+
 //==============================================================================
 let startTime = Date.now();
 // console.log(new Date(startTime).toLocaleTimeString());
@@ -172,7 +198,7 @@ window.onload = function () {
               }
               if ((element.G || element.V || element.B) && !element.U) { // goal/block/ event in next episode
                 const ball = element.coordinates.ball;
-                console.log("goal event in next episode -  min=", element.minute, " U=", element.U," W=", element.W,
+                console.log("goal event in next episode -  min=", element.minute, " U=", element.U, " W=", element.W,
                   " V=", element.V, " G=", element.G, " B=", element.B, ball)
                 const ballcoords = {
                   x: ball.w,
@@ -343,9 +369,9 @@ window.onload = function () {
         //   minOpacity: MIN_OPACITY,
         //   radius: POINT_RADIUS * TEAM_RADIUS_KEFF
         // });
-        const heatmapInstance = avgMapCreate('#heatmap-home');
-        const heatmapInstance2 = avgMapCreate('#heatmap-away');
-        const heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
+        heatmapInstance = avgMapCreate('#heatmap-home');
+        heatmapInstance2 = avgMapCreate('#heatmap-away');
+        heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
 
         // const heatmapInstance2 = h337.create({
         //   container: document.querySelector('#heatmap-away'),
@@ -359,11 +385,10 @@ window.onload = function () {
         //   minOpacity: MIN_OPACITY,
         //   radius: POINT_RADIUS * BALL_RADIUS_KEFF
         // });
-        const heatmapInstance4 = avgMapCreate('#heatmap-avgHome');
-        const heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
-        // const heatmapInstance6 = avgMapCreate('#heatmap-avgSubHome');
-        const heatmapInstance7 = avgMapCreate('#chalkboard');
-        const heatmapInstance8 = avgMapCreate('#heatmap-avgBoth');
+        heatmapInstance4 = avgMapCreate('#heatmap-avgHome');
+        heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
+        heatmapInstance7 = avgMapCreate('#chalkboard');
+        heatmapInstance8 = avgMapCreate('#heatmap-avgBoth');
 
         const heatPoints = [{
           x: 19,
@@ -391,24 +416,30 @@ window.onload = function () {
         }
         ];
 
-        const maximumValue = MAX_VALUE;
-        const data = {
-          max: maximumValue * TEAM_MAX_KEFF,
-          data: homePoints[0]
-        };
+        
+
+
+        updateMainMaps(homePoints[0], awayPoints[0], ballPoints);
+
+        // const data = {
+        //   max: maximumValue * TEAM_MAX_KEFF,
+        //   data: homePoints[0]
+        // };
+
+        // heatmapInstance.setData(data);
+        // heatmapInstance2.setData({
+        //   max: maximumValue * TEAM_MAX_KEFF,
+        //   data: awayPoints[0]
+        // });
+        // heatmapInstance3.setData({
+        //   max: maximumValue * BALL_MAX_KEFF,
+        //   data: ballPoints
+        // });
+
         const defaultData = {
           max: maximumValue * TEAM_MAX_KEFF,
           data: heatPoints
         };
-        heatmapInstance.setData(data);
-        heatmapInstance2.setData({
-          max: maximumValue * TEAM_MAX_KEFF,
-          data: awayPoints[0]
-        });
-        heatmapInstance3.setData({
-          max: maximumValue * BALL_MAX_KEFF,
-          data: ballPoints
-        });
         heatmapInstance4.setData(defaultData);
         heatmapInstance5.setData(defaultData);
         // heatmapInstance6.setData(defaultData);
@@ -656,24 +687,27 @@ window.onload = function () {
         awayTacticChanges.push(awayPoints[0].length - 1);
 
 
-        homePoints.forEach((hmap, _n) => {
-          const avg = hmap.length;
-          if (_n === 0 || avg < 1) return;
+        homeAvgPoints = calculateAvgPositions(homePoints).slice();
+        awayAvgPoints = calculateAvgPositions(awayPoints).slice();
 
-          hmap.forEach((point, i) => {
-            homeAvgPoints[_n].x += point.x / avg;
-            homeAvgPoints[_n].y += point.y / avg;
-          })
-        })
-        awayPoints.forEach((hmap, _n) => {
-          const avg = hmap.length;
-          if (_n === 0 || avg < 1) return;
+        // homePoints.forEach((hmap, _n) => {
+        //   const avg = hmap.length;
+        //   if (_n === 0 || avg < 1) return;
 
-          hmap.forEach((point, i) => {
-            awayAvgPoints[_n].x += point.x / avg;
-            awayAvgPoints[_n].y += point.y / avg;
-          })
-        })
+        //   hmap.forEach((point, i) => {
+        //     homeAvgPoints[_n].x += point.x / avg;
+        //     homeAvgPoints[_n].y += point.y / avg;
+        //   })
+        // })
+        // awayPoints.forEach((hmap, _n) => {
+        //   const avg = hmap.length;
+        //   if (_n === 0 || avg < 1) return;
+
+        //   hmap.forEach((point, i) => {
+        //     awayAvgPoints[_n].x += point.x / avg;
+        //     awayAvgPoints[_n].y += point.y / avg;
+        //   })
+        // })
         //console.log('homeAvgPoints  - ', homeAvgPoints);
         //console.log('awayAvgPoints  - ', awayAvgPoints);
         //-------------------------------------------------------------------------
@@ -920,4 +954,20 @@ window.onload = function () {
 
   // afterLoadEvents(showableTacticks);
   // document.querySelector(".button-wrap a:nth-child(1)");
+}
+
+function updateMainMaps(_homePoints, _awayPoints, _ballPoints) {
+
+  heatmapInstance.setData({
+    max: maximumValue * TEAM_MAX_KEFF,
+    data: _homePoints
+  });
+  heatmapInstance2.setData({
+    max: maximumValue * TEAM_MAX_KEFF,
+    data: _awayPoints
+  });
+  heatmapInstance3.setData({
+    max: maximumValue * BALL_MAX_KEFF,
+    data: _ballPoints
+  });
 }

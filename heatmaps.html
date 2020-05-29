@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +36,8 @@
                         <a id="tv-url" href="#" target="_blank" rel="noopener noreferrer" title="Открыть ТВ-трансляцию">
                             <img src="http://pefl.ru/skins/refl/img/i3.gif" alt="ТВ-ссыль" height="18">
                         </a>
-                        <a id="json-url" href="#" target="_blank" rel="noopener noreferrer" title = "Открыть JSON с данными">
+                        <a id="json-url" href="#" target="_blank" rel="noopener noreferrer"
+                            title="Открыть JSON с данными">
                             <img src="public/images/json.png" alt="JSON-ссыль" height="18">
                         </a>
                         <button id="newWindow">Открыть в новом окне</button>
@@ -121,7 +123,17 @@
             </div>
         </div>
     </section>
+    <section class="main-section">
+        <input type="checkbox" class="bojan__control" id="maps-filtered">
+        <label class="bojan__label" for="maps-filtered">
+            <h3 class="bojan__label__header">Фильтрация карт по времени</h3>
+        </label>
+        <div class="bojan__content">
+            <div><button id="reset-maps-filtering">Сбросить временные фильтры карт</button></div>
 
+            <h3></h3>
+        </div>
+    </section>
     <section class="main-section">
         <input type="checkbox" class="bojan__control" id="squads">
         <label for="squads" class="bojan__label">
@@ -138,7 +150,7 @@
                     </div>
                 </div>
             </div>
-            <div><button id="norm-tactic-avg">Нормализовать средние позиции по тактикам</button></div>
+            <div><button id="norm-tactic-avg">Нормализовать средние позиции</button></div>
         </div>
     </section>
     <section class="main-section">
@@ -148,14 +160,14 @@
         </label>
         <div class="bojan__content">
             <div style="text-align: center;">
-                <p class="shotFilters">
-                    <a href="#" id="filterGoals" data-type="G" style="font-weight: bold;"> Голы |</a>
-                    <a href="#" id="filterStvor" data-type="V" style="font-weight: bold;"> В створ |</a>
-                    <a href="#" id="filterMiss" data-type="U" style="font-weight: bold;"> Мимо |</a>
-                    <a href="#" id="filterBlocks" data-type="Block" style="font-weight: bold;"> Блокированные |</a>
-                    <a href="#" id="filterBars" data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
-                    <a href="#" id="filter-show-all" style="font-weight: bold;"> Показать все</a>
-                </p>
+                <a href="#" id="filterGoals" data-type="G" style="font-weight: bold;"> Голы |</a>
+                <a href="#" id="filterStvor" data-type="V" style="font-weight: bold;"> В створ |</a>
+                <a href="#" id="filterMiss" data-type="U" style="font-weight: bold;"> Мимо |</a>
+                <a href="#" id="filterBlocks" data-type="Block" style="font-weight: bold;"> Блокированные |</a>
+                <a href="#" id="filterBars" data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
+                <a href="#" id="filter-show-all" style="font-weight: bold;"> Показать все |</a>
+                <a href="#" id="filter-hide-all" style="font-weight: bold;"> Скрыть все</a>
+                <!-- </p> -->
             </div>
             <div class="shots-container-wrapper" data-homes="0" data-aways="0" data-players="all">
                 <div class="shots-container" id="chalkboard">
@@ -240,7 +252,8 @@
                     <p class="help-rule__paragraph">В строке игрока отбражаются удары, разделенные символом "|". Удары|В
                         створ|Голы|Блокированые|Попадание в штангу или перекладину. Об этом так же говорит всплывающая
                         подсказка.</p>
-                    <p class="help-rule__paragraph">Чексбоксы-"галочки" отдельного игрока позволяют отобразить на доске ударов
+                    <p class="help-rule__paragraph">Чексбоксы-"галочки" отдельного игрока позволяют отобразить на доске
+                        ударов
                         удары только одного или нескольких выбранных игроков. Если все чекбоксы сброшены, то
                         отображаются все удары команды </p>
                     <p class="help-rule__paragraph">Пробег за матч рассчитывается для ширины поля 105м.</p>
@@ -259,13 +272,15 @@
                 </article>
                 <article class="help-rule">
                     <h3 class="help-rule__header">Разбиение по тактикам</h3>
-                    <p class="help-rule__paragraph">В этом разделе отображаются теплокарты мяча и команды, а так же средние
+                    <p class="help-rule__paragraph">В этом разделе отображаются теплокарты мяча и команды, а так же
+                        средние
                         позиции отдельных команд за время использования отдельных тактик.</p>
                     <p class="help-rule__paragraph">Под отдельной тактикой движок понимает как смену тактик по условию
                         так и выход игрока на замену со сменой позиции. Тактики, использованные менее 3х минут, не
                         берутся в расчет.</p>
                     <p class="help-rule__paragraph">Если на карте средних позиций отдельной тактики нехватка игроков или
-                        наоборот, в верхнем левом углу показаны "лишние колобки", то выберите отображение нужных игроков в разделе "Составы команд".</p>
+                        наоборот, в верхнем левом углу показаны "лишние колобки", то выберите отображение нужных игроков
+                        в разделе "Составы команд".</p>
                 </article>
                 <article class="help-rule"></article>
                 <h3 class="help-rule__header">Общие вопросы</h3>
@@ -284,4 +299,5 @@
     </section>
     <script src="public/js/hm/hm.js"></script>
 </body>
+
 </html>

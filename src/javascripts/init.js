@@ -14,12 +14,11 @@ let sumInterval = 0;
  awayTacticPoints.push({start:0, end:1, period:0, startPoint:0, endPoint:1, team: [], ball: [], averages:[]});
  const init_HomeTacticPoints = [];
 init_HomeTacticPoints.push({start:0, end:1, period:0, team: [], ball: [], averages:[]});
-
-
+ 
 const homePoints = [];
 const awayPoints = [];
-const homeAvgPoints = [];
-const awayAvgPoints = [];
+let homeAvgPoints = [];
+let awayAvgPoints = [];
 const homeMileage = [];
 const awayMileage = [];     
 

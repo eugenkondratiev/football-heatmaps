@@ -62,7 +62,7 @@ function createShot(shot, shotinfo) {
         ? 'black'
         : shot.type == "B"
           ? 'black'
-          : shot.type == "W" ? "darkkhaki" : 'blue';
+          : shot.type == "W" ? "#FFA500" : 'blue';
 
   const shotPict = document.createElement('div');
   shotPict.classList.add('shot');
@@ -159,9 +159,15 @@ function formShotsString(player) {
       : (sum > 9 ? sum : " " + sum) + "|" + stvor + goalsString + " " + blocks + bars;
 }
 /**===================================================================================================== */
-function displayAllShots(display, team, hard = true) {
+function displayAllShots(display, team, hard = true, allHide = false) {
+  // console.log("display - ", display, "allHide - ", allHide);
+
   const shotsSelector = "." + team + "Shot";
   document.querySelectorAll(shotsSelector).forEach(shot => {
+    if (allHide) {
+      shot.style.display = "none";
+      return;
+    }
     const checkbox = document.querySelector("#" + team + "-player-list_" + shot.getAttribute("player") + " input");
     let checked = checkbox ? checkbox.checked : false;
     shot.style.display = (display)
@@ -219,6 +225,8 @@ function changeVisibilityByType(e) {
   const type = this.getAttribute("data-type");
   const shotsSelector = ".shot[shottype=" + type + "]";
   const checked = this.style.fontWeight == "bold";
+  // const checked = Boolean(this.getAttribute("data-checked"));
+  // console.log(checked, typeof checked, e);
   document.querySelectorAll(shotsSelector).forEach(shot => {
     shot.style.display = !checked ? "block" : "none";
   });
@@ -227,6 +235,9 @@ function changeVisibilityByType(e) {
       shot.style.display = !checked ? "block" : "none";
     });
   }
+  // this.setAttribute("data-checked", !checked)
+  // console.log(this.getAttribute("data-checked"), typeof this.getAttribute("data-checked")); 
+
   this.style.fontWeight = checked ? "normal" : "bold";
 }
 //=================================================
@@ -242,18 +253,30 @@ fBars.addEventListener('click', changeVisibilityByType.bind(fBars));
 const fBlocks = document.getElementById("filterBlocks");
 fBlocks.addEventListener('click', changeVisibilityByType.bind(fBlocks));
 
-
-function showAllShots() {
-  displayAllShots(true, "home");
-  displayAllShots(true, "away");
-  document.querySelectorAll(".squadAndShots-containers-wrapper input[type=checkbox]").forEach(chbox => {
-    chbox.checked = false;
-  });
+function filterRangeMaximize(_timeFilterId) {
   const timeFilter = document.getElementById("shots-time-filter");
-  console.log();
   timeFilter.setAttribute("start", 0);
   timeFilter.setAttribute("end", 125);
   timeFilter.dispatchEvent(new Event('change', { bubbles: true }));
+}
+function showAllShots(_show = true) {
+  displayAllShots(_show, "home", true, !_show);
+  displayAllShots(_show, "away", true, !_show);
+  if (_show) {
+    document.querySelectorAll(".squadAndShots-containers-wrapper input[type=checkbox]").forEach(chbox => {
+      chbox.checked = HIDE;
+    });
+    filterRangeMaximize("shots-time-filter");
+
+  }
+  document.querySelectorAll("a[id^=filter]:nth-of-type(-n+5)").forEach(aButton => {
+    aButton.style.fontWeight = _show ? "bold" : "normal";
+  });
+  // const timeFilter = document.getElementById("shots-time-filter");
+  // console.log();
+  // timeFilter.setAttribute("start", 0);
+  // timeFilter.setAttribute("end", 125);
+  // timeFilter.dispatchEvent(new Event('change', { bubbles: true }));
 }
 document.getElementsByClassName("shots-container")[0].addEventListener('click', function (e) {
   showAllShots();
@@ -261,4 +284,8 @@ document.getElementsByClassName("shots-container")[0].addEventListener('click', 
 document.getElementById("filter-show-all").addEventListener('click', function (e) {
   e.preventDefault();
   showAllShots();
+});
+document.getElementById("filter-hide-all").addEventListener('click', function (e) {
+  e.preventDefault();
+  showAllShots(HIDE);
 });
