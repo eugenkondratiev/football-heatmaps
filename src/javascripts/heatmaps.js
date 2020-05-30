@@ -4,26 +4,35 @@
 }
 
 let maximumValue = MAX_VALUE;
-let heatmapInstance ;
+let heatmapInstance;
 let heatmapInstance2;
 let heatmapInstance3;
-let heatmapInstance4 ;
+let heatmapInstance4;
 let heatmapInstance5;
-let heatmapInstance8 ;
+let heatmapInstance8;
 //-------------------------------------------------
 function calculateAvgPositions(_points) {
   const _avgPoints = [];
   for (let i = 0; i <= MAX_PLAYERS; i++) {
-    _avgPoints.push({ x: 0, y: 0 });
+    _avgPoints.push({ x: 0, y: 0, points: 0 });
   }
-  _points.forEach((hmap, _n) => {
+  _points.forEach((rawHmap, _n) => {
+    const hmap = rawHmap.filter(point => point != null);
     const avg = hmap.length;
     if (_n === 0 || avg < 1) return;
 
     hmap.forEach((point, i) => {
       _avgPoints[_n].x += point.x / avg;
       _avgPoints[_n].y += point.y / avg;
+      _avgPoints[_n].points++
     })
+
+    const order = _avgPoints.map((pl, i) => {
+      const playerPoints = { playerRank: i, points: pl.points }
+      return playerPoints;
+    })
+      .slice(1).sort((a, b) => (+b.points - +a.points));
+    _avgPoints[0].order = order;
   })
   return _avgPoints;
 }
@@ -416,10 +425,9 @@ window.onload = function () {
         }
         ];
 
-        
 
+        // updateMainMaps(homePoints[0], awayPoints[0], ballPoints);
 
-        updateMainMaps(homePoints[0], awayPoints[0], ballPoints);
 
         // const data = {
         //   max: maximumValue * TEAM_MAX_KEFF,
@@ -743,9 +751,9 @@ window.onload = function () {
             const ap = document.querySelector('#player_default_away').cloneNode(true);
             ap.id = "awayAvgPoints" + n;
             ap.plId = "aw" + n;
-            ap.style.display = n < 12 ? "inherit" : "none";
-            ap.style.left = awayAvgPoints[n].x - 5 + "px";
-            ap.style.top = awayAvgPoints[n].y - 5 + "px";
+            // ap.style.display = n < 12 ? "inherit" : "none";
+            // ap.style.left = awayAvgPoints[n].x - 5 + "px";
+            // ap.style.top = awayAvgPoints[n].y - 5 + "px";
             const apRow = "away-player-list_" + n;
             // const newPlayer = document.createElement('div',{id: apRow});
             let newPlayer = document.createElement('div');
@@ -757,7 +765,7 @@ window.onload = function () {
             const apNameDiv = document.createElement('div');
             apNameDiv.className = "player-list-name";
             const apName = document.createElement('a');
-            apName.style.fontWeight = n < 12 ? "bold" : "normal";
+            // apName.style.fontWeight = n < 12 ? "bold" : "normal";
             apName.id = apRow + '_name';
             apName.innerText = rep.away.players[n - 1].name;
             apName.href = '#';
@@ -821,13 +829,15 @@ window.onload = function () {
             const apToINdividualHeatmap = ap.cloneNode(true);
             apToINdividualHeatmap.style.display = (awayAvgPoints[n].x > 8 && awayAvgPoints[n].y > 8) ? "inherit" : "none";
             apToINdividualHeatmap.id = apToINdividualHeatmap.id + "_individual";
+            apToINdividualHeatmap.style.left = awayAvgPoints[n].x - 5 + "px";
+            apToINdividualHeatmap.style.top = awayAvgPoints[n].y - 5 + "px";
             document.querySelector('#heatmap-away' + n).appendChild(apToINdividualHeatmap);
 
             hp.id = "homeAvgPoints" + n;
             hp.plId = "hm" + n;
-            hp.style.display = n < 12 ? "inherit" : "none";
-            hp.style.left = homeAvgPoints[n].x - 5 + "px";
-            hp.style.top = homeAvgPoints[n].y - 5 + "px";
+            // hp.style.display = n < 12 ? "inherit" : "none";
+            // hp.style.left = homeAvgPoints[n].x - 5 + "px";
+            // hp.style.top = homeAvgPoints[n].y - 5 + "px";
             const hpRow = "home-player-list_" + n;
             const newHomePlayer = document.createElement('div');
             newHomePlayer.id = hpRow;
@@ -906,7 +916,9 @@ window.onload = function () {
             hpToINdividualHeatmap.style.display = (homeAvgPoints[n].x > 8 && homeAvgPoints[n].y > 8) ? "inherit" : "none";
 
             hpToINdividualHeatmap.id = hpToINdividualHeatmap.id + "_individual";
-            document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
+            hpToINdividualHeatmap.style.left = homeAvgPoints[n].x - 5 + "px";
+            hpToINdividualHeatmap.style.top = homeAvgPoints[n].y - 5 + "px";
+                        document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
           }
         }
         setTimeout(
