@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,8 +36,9 @@
                         <a id="tv-url" href="#" target="_blank" rel="noopener noreferrer" title="Открыть ТВ-трансляцию">
                             <img src="http://pefl.ru/skins/refl/img/i3.gif" alt="ТВ-ссыль" height="18">
                         </a>
-                        <a id="json-url" href="#" target="_blank" rel="noopener noreferrer" title = "Открыть JSON с данными">
-                            <img  src="images/json.png" alt="JSON-ссыль" height="18">
+                        <a id="json-url" href="#" target="_blank" rel="noopener noreferrer"
+                            title="Открыть JSON с данными">
+                            <img src="images/json.png" alt="JSON-ссыль" height="18">
                         </a>
                         <button id="newWindow">Открыть в новом окне</button>
                     </div>
@@ -128,8 +130,7 @@
         </label>
         <div class="bojan__content">
             <div><button id="reset-maps-filtering">Полный матч</button></div>
-
-<h3></h3>
+            <h5></h5>
         </div>
     </section>
     <section class="main-section">
@@ -166,13 +167,44 @@
                     <a href="#" id="filterBars" data-type="B" style="font-weight: bold;"> Штанги/перекладины |</a>
                     <a href="#" id="filter-show-all" style="font-weight: bold;"> Показать все |</a>
                     <a href="#" id="filter-hide-all" style="font-weight: bold;"> Скрыть все</a>
-                    </p>
+                </p>
             </div>
             <div class="shots-container-wrapper" data-homes="0" data-aways="0" data-players="all">
                 <div class="shots-container" id="chalkboard">
                     <img src="images/bigField.png" alt="">
                     <div class="overlay">Меловая доска ударов
                         <div id="one-shot-legend" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                -
+            </div>
+            <div class="clear"></div>
+        </div>
+    </section>
+    <section class="main-section">
+        <input type="checkbox" class="bojan__control" id="pass-chalkboard">
+        <label for="pass-chalkboard" class="bojan__label">
+            <h3 class="bojan__label__header">Карта пасов</h3>
+        </label>
+        <div class="bojan__content">
+            <div style="text-align: center;">
+                <p class="pass-filters">
+                    <a href="#" id="pass-filterGoods" data-type="good" style="font-weight: bold;"> Точные |</a>
+                    <a href="#" id="pass-filterBads" data-type="bad" style="font-weight: bold;"> Неточные |</a>
+                    <a href="#" id="pass-filterHigh" data-type="high" style="font-weight: bold;"> Верхом |</a>
+                    <a href="#" id="pass-filterCorners" data-type="corner" style="font-weight: bold;"> Угловые |</a>
+                    <a href="#" id="pass-filterThrows" data-type="throws" style="font-weight: bold;"> Ауты |</a>
+                    <a href="#" id="pass-filterFree" data-type="free" style="font-weight: bold;"> Штрафные |</a>
+                    <a href="#" id="pass-filter-show-all" style="font-weight: bold;"> Показать все |</a>
+                    <a href="#" id="pass-filter-hide-all" style="font-weight: bold;"> Скрыть все</a>
+                </p>
+            </div>
+            <div class="passes-container-wrapper" data-homes="0" data-aways="0" data-players="all">
+                <div class="passes-container" id="passesboard">
+                    <img src="images/bigField.png" alt="">
+                    <div class="overlay">Меловая доска пасов
+                        <div id="one-pass-legend" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -236,9 +268,25 @@
                         на которых он появляется в отчете. Поэтому перемещения игрока во время замен могут вносить
                         погрешность, если игрок в матче или отдельной тактике отыграл недолго.</p>
                     <p class="help-rule__paragraph">По умолчанию на общих,индивидуальных картах средних позиций и картах
-                        для отдельных тактик отображаются игроки основы. Для отображения/скрытия игрока на всех картах
+                        для отдельных тактик отображаются 11 игроков, сыгравших больше минут в отображаемый период. Для
+                        отображения/скрытия игрока на всех картах
                         средних позиций воспользуйтесь разделом "Составы команд".</p>
                     <p class="help-rule__paragraph">При наведении мыши на "колобка" появляется подсказка с его именем.
+                    </p>
+                </article>
+                <article class="help-rule">
+                    <h3 class="help-rule__header">Фильтрация карт по времени</h3>
+                    <p class="help-rule__paragraph">Раздел позволяет отобразить тепловые карты мяча и команд только за
+                        выбранный период
+                        либо вернуться к отображению полного матча.
+                    </p>
+                    <p class="help-rule__paragraph">Минимальный период - 4 минуты.
+                    </p>
+                    <p class="help-rule__paragraph">Период можно выбрать задав минуты начала и конца в окнах ввода
+                        либо выбрав из списков смен тактик хозяевами или гостями.
+                    </p>
+                    <p class="help-rule__paragraph">Отображение ударов за выбранный период работает аналогично, в
+                        разделе Карта ударов.
                     </p>
                 </article>
                 <article class="help-rule">
@@ -249,11 +297,17 @@
                     <p class="help-rule__paragraph">Синие и красные стрелки отображают заменных и вышедших на замену
                         игроков.</p>
                     <p class="help-rule__paragraph">В строке игрока отбражаются удары, разделенные символом "|". Удары|В
-                        створ|Голы|Блокированые|Попадание в штангу или перекладину. Об этом так же говорит всплывающая
+                        створ|Голы-автоголы|Блокированые|Попадание в штангу или перекладину. Об этом так же говорит
+                        всплывающая
                         подсказка.</p>
-                    <p class="help-rule__paragraph">Чексбоксы-"галочки" отдельного игрока позволяют отобразить на доске ударов
+                    <p class="help-rule__paragraph">Чексбоксы-"галочки" отдельного игрока позволяют отобразить на доске
+                        ударов
                         удары только одного или нескольких выбранных игроков. Если все чекбоксы сброшены, то
                         отображаются все удары команды </p>
+                    <p class="help-rule__paragraph"> Кнопка "нормализовать позиции игроков" позволяет отобразить на
+                        картах отдельных тактик
+                        по 11 игроков, сыгравших боьлше других в соответствующий период.
+                        Например, после манипуляций с видимостью в Составах команд</p>
                     <p class="help-rule__paragraph">Пробег за матч рассчитывается для ширины поля 105м.</p>
                 </article>
 
@@ -263,20 +317,23 @@
                     <p class="help-rule__paragraph">Меню над доской ударов позволяет показать/скрыть типы ударов. Жирным
                         шрифтом выделены типы ударов, отображаемые в данный момент. Нажатие на поле показвает все удары.
                     </p>
-                    <p class="help-rule__paragraph">Типы ударов выделены разным цветами. Красный - голы, желтый - удары
-                        в створ, Синий - удары мимо, Черный - блокированные удары, а так же попадания в каркас.</p>
+                    <p class="help-rule__paragraph">Типы ударов выделены разным цветами. Красный - голы, оранжеый -
+                        автоголы, желтый - удары
+                        в створ, синий - удары мимо, черный - блокированные удары, а так же попадания в каркас.</p>
                     <p class="help-rule__paragraph">По наведению на точку начала удара в верхнем правом углу доски
                         ударов выводится подсказка с информацией об выбранном ударе.</p>
                 </article>
                 <article class="help-rule">
                     <h3 class="help-rule__header">Разбиение по тактикам</h3>
-                    <p class="help-rule__paragraph">В этом разделе отображаются теплокарты мяча и команды, а так же средние
+                    <p class="help-rule__paragraph">В этом разделе отображаются теплокарты мяча и команды, а так же
+                        средние
                         позиции отдельных команд за время использования отдельных тактик.</p>
                     <p class="help-rule__paragraph">Под отдельной тактикой движок понимает как смену тактик по условию
                         так и выход игрока на замену со сменой позиции. Тактики, использованные менее 3х минут, не
                         берутся в расчет.</p>
                     <p class="help-rule__paragraph">Если на карте средних позиций отдельной тактики нехватка игроков или
-                        наоборот, в верхнем левом углу показаны "лишние колобки", то выберите отображение нужных игроков в разделе "Составы команд".</p>
+                        наоборот, в верхнем левом углу показаны "лишние колобки", то выберите отображение нужных игроков
+                        в разделе "Составы команд".</p>
                 </article>
                 <article class="help-rule"></article>
                 <h3 class="help-rule__header">Общие вопросы</h3>
@@ -295,4 +352,5 @@
     </section>
     <script src="js/hm/hm.js"></script>
 </body>
+
 </html>

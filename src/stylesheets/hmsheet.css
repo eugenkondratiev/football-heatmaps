@@ -114,7 +114,8 @@
 .heatmap2-containers-wrapper,
 .heatmap3-containers-wrapper,
 .squadAndShots-containers-wrapper,
-.shots-container-wrapper {
+.shots-container-wrapper,
+.passes-container-wrapper {
     align-self: center;
     margin: .4em auto;
     /* width: 760px; */
@@ -141,7 +142,8 @@
 
 }
 
-.shots-container-wrapper {
+.shots-container-wrapper,
+.passes-container-wrapper {
     /* width: 754px; */
     display: flex;
     align-items: center;
@@ -154,7 +156,8 @@
 .heatmap-container-wrapper-right,
 .thirdHeatmap,
 .squadContainer,
-.shots-container-wrapperrRight {
+.shots-container-wrapperrRight,
+.passes-container-wrapperrRight {
     align-self: center;
     width: 367px;
     /* height: 267px; */
@@ -169,7 +172,8 @@
 
 }
 
-.shots-container-wrapper-right {
+.shots-container-wrapper-right,
+.passes-container-wrapper-right {
     width: 754px;
     height: 500px;
 }
@@ -188,6 +192,7 @@
 .player-list-name,
 .player-list-eye,
 .player-list-shots,
+.player-list-pass,
 .playerShotCheckbox {
     float: left;
     background-color: inherit;
@@ -212,7 +217,8 @@
     /* cursor:pointer  */
 }
 
-.playerRow .player-list-shots {
+.playerRow .player-list-shots,
+.playerRow .player-list-pass {
     width: 18%;
 }
 
@@ -234,6 +240,7 @@
 .squad-wrapper-left,
 .heatmap-container-wrapper-right,
 .shots-container-wrapper-right,
+.passes-container-wrapper-right,
 .thirdHeatmap,
 .squad-wrapper-right {
     float: left;
@@ -247,7 +254,9 @@
 }
 
 .shots-container,
-.shots-container .heatmap-canvas {
+.passes-container,
+.shots-container .heatmap-canvas,
+.passes-container .heatmap-canvas {
     width: 754px;
     height: 500px;
 }
@@ -294,7 +303,8 @@
 
 /*==================================*/
 .heatmap-container .overlay,
-.shots-container .overlay {
+.shots-container .overlay,
+.passes-container .overlay {
     width: 100%;
     height: 100%;
     /* background:rgba(0,0,0,.5); */
@@ -308,4 +318,9 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 
+}
+
+.shots-container,
+.passes-container {
+    position: relative;
 }

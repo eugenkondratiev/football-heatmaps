@@ -1,0 +1,79 @@
+
+.overlay>.pass-legend,
+.overlay>#one-pass-legend {
+    width: 120px;
+    height: 100px;
+
+    color: lightgrey;
+    font-size: smaller;
+    position: absolute;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    top: 44px;
+    left: 250px;
+}
+
+.pass-legendHome {
+    left: 400px;
+}
+
+.legendRow,
+.pass-filters>a {
+    font-weight: bold;
+}
+.pass-filters {
+    max-width: 80%;
+    margin: .4em auto;
+}
+.overlay>#one-pass-legend {
+    top: 44px;
+    left: 380px;
+    width: 320px;
+    border: 1px solid lightgrey;
+    font-size: small;
+    height: 3.2em;
+    background-color: #A3DE8F;
+    border-radius: 5px;
+    border: 2px solid rgb(37, 97, 35);
+    color: rgb(37, 97, 35);
+    z-index: 88;
+}
+
+.pass-line {
+    content: "";
+    position: absolute;
+    border-top: 2px solid blue;
+    width: 147px;
+    top: 50px;
+    left: 50px;
+    transform: rotate(45deg);
+    transform-origin: 1px 1px;
+}
+
+.pass-start,
+.pass-end {
+    position: absolute;
+    border: 1px solid blue;
+    width: 9px;
+    height: 9px;
+    top: 46px;
+    left: 46px;
+    border-radius: 50%;
+    background-color: blue;
+}
+
+.pass-end {
+    width: 3px;
+    height: 3px;
+    top: 150px;
+    left: 149px;
+}
+
+a[data-checked="false"] {
+    font-weight: bold;
+}
+a[data-checked="true"] {
+    font-weight: normal;
+}

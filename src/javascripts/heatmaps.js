@@ -10,6 +10,7 @@ let heatmapInstance3;
 let heatmapInstance4;
 let heatmapInstance5;
 let heatmapInstance8;
+let heatmapInstance9;
 //-------------------------------------------------
 function calculateAvgPositions(_points) {
   const _avgPoints = [];
@@ -77,12 +78,43 @@ window.onload = function () {
         setTeamsColors();
 
         //--------------------------------------------------------------------
+        function calculatePlayerClosestToBall(coords) {
+          const ball = coords.ball;
+          let player;
+          let minLength = 10000;
+          coords.home.forEach(pl => {
+            if (getLength(pl, ball) < minLength) player = pl.n;
+          });
+
+          coords.away.forEach(pl => {
+            if (getLength(pl, ball) < minLength) player = pl.n + MAX_PLAYERS;
+          });
+
+          return player;
+
+        }
+        //--------------------------------------------------------------------
         const game = rep.game;
         game.shift();
         game.pop();
         let score = "0:0";
+        let currentPlayer = 0;
+        const flags = {
+          corner: false,
+          throwIn: false,
+          deadBall: false,
+          goalKick: false,
+          team: 0
+        }
+
         try {
           game.forEach((element, episode, episodes) => {
+            let coords;
+            if (element.C) {flags.corner = true; flags.team = element.C;}
+            if (element.A) {flags.throwIn = true; flags.team = element.A;}
+            if (element.F) {flags.deadBall = true; flags.team = element.F;}
+            if (element.T) {flags.goalKick = true; flags.team = element.T;}
+
             if (element.interval) sumInterval += parseInt(element.interval);
             if (!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
             if (element.S) { // substitutes handle
@@ -95,7 +127,103 @@ window.onload = function () {
                 rep.away.players[element.S.out - 1].sub = SUB_OUT;
               }
             }
-            if (element.messages[0]) { // изменение счета и пенальти
+            if (element.messages[0]) { // изменение счета и пенальти  and calculate passes
+              const pass = {};
+              let lastEpisode = episodes[episode - 1];
+
+              try {
+                if (element.coordinates) {
+                  const ball = element.coordinates.ball;
+                  let lastBall = lastEpisode.coordinates ? lastEpisode.coordinates.ball : undefined;
+                  
+                  const ballcoords = {
+                    x: ball.w,
+                    y: ball.h
+                  };
+                  // pass.endpoint = ballcoords;
+                  pass.endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                  pass.high = (ball.z === 1);
+                  pass.minute = element.minute;
+                  pass.episode = element.num;
+                  let passPlayer;
+                  let receivePlayer;
+
+                  if (flags.corner && element.messages[1]) { //handle corner kick
+                    // console.log(lastEpisode);
+                    pass.type = "corner";
+                    flags.corner = false;
+                    const lastBallcoords = {
+                      x: lastBall.w,
+                      y: lastBall.h
+                    };
+                    // pass.startpoint = lastBallcoords;
+                    passPlayer = getPlayerFromMessage(element.messages[0]);
+                    // currentPlayer = passPlayer;
+
+                    pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
+                    if (element.messages[2]) { // high pass , 2 episodes
+                      receivePlayer = getPlayerFromMessage(element.messages[2]);
+                      pass.good = receivePlayer < 19 && passPlayer < 19 || receivePlayer > 18 && passPlayer > 18;
+                    } else {
+                      pass.good = true;
+                      receivePlayer = getPlayerFromMessage(element.messages[1]);
+
+                    }
+                    // console.log("corner pass  ", pass);
+                    // console.log("messages  - ", element.messages);
+
+                    currentPlayer = receivePlayer;
+
+                    passes[passPlayer].push(pass);
+
+                  } else if (flags.throwIn && element.messages[0]) { // handle out
+                    pass.type = "throw";
+                    flags.throwIn = false;
+                    passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
+                    if (!passPlayer) lastEpisode = episodes[episode - 2];
+                    passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
+                    if (!passPlayer) lastEpisode = episodes[episode - 3];
+                    lastBall = lastEpisode.coordinates.ball;
+                    const lastBallcoords = {
+                      x: lastBall.w,
+                      y: lastBall.h
+                    };
+                    console.log("element", element);
+                    console.log("lastBall - ", lastBall);
+
+                    console.log("lastEpisode",lastEpisode, lastBallcoords);
+
+                    passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
+                    console.log("passPlayer - ", passPlayer);
+                    pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
+                    receivePlayer = getPlayerFromMessage(element.messages[element.messages.length - 1]);
+                    console.log("receivePlayer - ", receivePlayer);
+                    pass.good = receivePlayer < 19 && passPlayer < 19 || receivePlayer > 18 && passPlayer > 18;
+
+                    console.log("throw pass  ", pass);
+                    console.log("messages  - ", element.messages);
+
+                    currentPlayer = receivePlayer;
+
+                    passes[passPlayer].push(pass);
+                    ;
+                  } else if (flags.deadBall) { // handle free kick
+                    ;
+                  } else if (flags.goalKick) { // handle pass from goal line
+                    ;
+                  } else { //just pass
+                    ;
+                  }
+
+
+                };
+              } catch (error) {
+                console.log("error " , lastEpisode);
+
+                console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
+
+              }
+
               element.messages.forEach(mes => {
                 if (mes.mes.indexOf(' СЧЕТ ') > -1) {
                   score = mes.mes.replace(' СЧЕТ ', '');
@@ -108,6 +236,7 @@ window.onload = function () {
                 penalties = true; //может на будущее
                 throw "Серия пенальти!...";
               }
+
             }
             if (element.ZT) { // смена тактики
               if (element.ZT.team == 1) {
@@ -151,7 +280,6 @@ window.onload = function () {
               }
             }
 
-            let coords;
             try {
               if ((element.U || element.W) && !penalties) { // shots handle
                 const ball = element.coordinates.ball;
@@ -171,11 +299,18 @@ window.onload = function () {
                         ? "B"
                         : element.U.team > 2 ? "Block" : "U";
 
-                const shotStart = (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].coordinates) ?
+                // const shotStart = (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].coordinates) ?
+                //   episodes[episode - 1].coordinates.ball :
+                //   (episodes[episode - 2].messages.length > 0 && episodes[episode - 2].coordinates) ?
+                //     episodes[episode - 2].coordinates.ball :
+                //     (episodes[episode - 3].messages.length > 0 && episodes[episode - 3].coordinates) ?
+                //       episodes[episode - 3].coordinates.ball :
+                //       episodes[episode - 4].coordinates.ball;
+                const shotStart = (episodes[episode - 1].coordinates) ?
                   episodes[episode - 1].coordinates.ball :
-                  (episodes[episode - 2].messages.length > 0 && episodes[episode - 2].coordinates) ?
+                  (episodes[episode - 2].coordinates) ?
                     episodes[episode - 2].coordinates.ball :
-                    (episodes[episode - 3].messages.length > 0 && episodes[episode - 3].coordinates) ?
+                    (episodes[episode - 3].coordinates) ?
                       episodes[episode - 3].coordinates.ball :
                       episodes[episode - 4].coordinates.ball;
                 const startCoords = {
@@ -355,6 +490,15 @@ window.onload = function () {
           ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
 
         document.querySelector("#game-info").textContent = gameInfoSrting;
+        console.log("passes -", passes);
+        /**=========================================================================== */
+        // passes.slice(1,18).forEach(pass => {
+        //   countPass(pass.type, rep.home.players[pass.player - 1]);
+        // });
+        // passes.slice(19).forEach(pass => {
+        //   countPass(pass.type, rep.away.players[pass.player - 1]);
+        // });
+
         /**=========================================================================== */
         shots.home.forEach(shot => {
           countShot(shot.type, rep.home.players[shot.player - 1]);
@@ -398,6 +542,7 @@ window.onload = function () {
         heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
         heatmapInstance7 = avgMapCreate('#chalkboard');
         heatmapInstance8 = avgMapCreate('#heatmap-avgBoth');
+        heatmapInstance9 = avgMapCreate('#passesboard');
 
         const heatPoints = [{
           x: 19,
@@ -453,6 +598,8 @@ window.onload = function () {
         // heatmapInstance6.setData(defaultData);
         heatmapInstance7.setData(defaultData);
         heatmapInstance8.setData(defaultData);
+        heatmapInstance9.setData(defaultData);
+
         /**===================================================================================================== */
         // const newTactics1 = document.querySelector("#game-info").cloneNode(true);
         // newTactics1.id = "homeTacticsInfo";
@@ -918,12 +1065,12 @@ window.onload = function () {
             hpToINdividualHeatmap.id = hpToINdividualHeatmap.id + "_individual";
             hpToINdividualHeatmap.style.left = homeAvgPoints[n].x - 5 + "px";
             hpToINdividualHeatmap.style.top = homeAvgPoints[n].y - 5 + "px";
-                        document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
+            document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
           }
         }
         setTimeout(
           showMainAvgPositions
-          , 200
+          , 100
         )
         // showMainAvgPositions();
         /**===================================================================================================== */
@@ -931,13 +1078,14 @@ window.onload = function () {
           document.body.removeChild(document.querySelector('.loader-wrapper'));
           // document.querySelector('.loader-wrapper').remove();
         },
-          1000)
+          500)
 
         // console.log("allRep - ", rep);
         // console.log("shots - ", shots);
         // console.log("sum of intervals - ", sumInterval);
         /**===================================================================================================== */
         const _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
+        const _passesboard = document.querySelector('#passesboard .heatmap-canvas');
         // document.querySelector(".shotslegend").style.display = "inline-block";
         /**===================================================================================================== */
         if (_chalkboard.getContext) {
@@ -946,11 +1094,17 @@ window.onload = function () {
           drawTeamShots(shots.away, rep.away.players, "away", context);
           drawTeamShots(shots.home, rep.home.players, "home", context);
         }
+        if (_passesboard.getContext) {
+          const context = _passesboard.getContext('2d');
+          // drawTeamShots(shots.home, context );
+          drawTeamPasses(passes.slice(19), rep.away.players, "away", context);
+          drawTeamPasses(passes.slice(1, 18), rep.home.players, "home", context);
+        }
         /**===================================================================================================== */
       } else {
         alert('Вставьте верно ссылку на матч!');
       }
-      setTimeout(afterLoadEvents, 1000);
+      setTimeout(afterLoadEvents, 500);
 
     }
     // }, 500)

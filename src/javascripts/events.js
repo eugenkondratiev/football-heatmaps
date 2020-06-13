@@ -96,6 +96,6 @@ function afterLoadEvents() {
             filterMapsByTime(0, 125);
             filterRangeMaximize("maps-time-filter");
         })
-    }, 1000);
+    }, 200);
 
 };

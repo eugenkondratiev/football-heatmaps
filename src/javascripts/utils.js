@@ -34,6 +34,12 @@ function getSegmentLength(point1, point2) {
   return Math.sqrt(dX * dX + dY * dY)
 }
 //==============================================================================
+function getLength(coord1, coord2) {
+  const dX = coord2.w - coord1.w;
+  const dY = coord2.h - coord1.h;
+  return Math.sqrt(dX * dX + dY * dY)
+}
+//==============================================================================
 function getSegmentAngle(startPoint, endPoint) {
   const dX = endPoint.x - startPoint.x;
   const dY = endPoint.y - startPoint.y;
@@ -50,7 +56,14 @@ function leaveValuablePoints(pointsArr) {
   return pointsArr.filter(point => !point); // if not null
 }
 //==============================================================================
-
+function getPlayerFromMessage(message, num = 1) {
+  // console.log(typeof message, message);
+  if (!message) return 0;
+  const playerNumbers = message.mes.match(/(?<=\[)\d+(?=\])/g);
+  // console.log("playerNumbers -", playerNumbers);
+  return playerNumbers != null && playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0; 
+}
+//==============================================================================
 function getPointsSet(pointsArr, start, end) {
   return pointsArr.slice(start, end);
 }

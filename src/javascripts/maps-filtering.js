@@ -44,7 +44,7 @@ function filterMapsByTime(_start, end) {
             hpBoth.style.display = hp.style.display;
             hpBoth.style.left = hp.style.left;
             hpBoth.style.top = hp.style.top;
-            hpName =document.getElementById("home-player-list_" + n + '_name');
+            hpName = document.getElementById("home-player-list_" + n + '_name');
             hpName.style.fontWeight = hpRank < 11 ? "bold" : "normal";
 
             const ap = document.getElementById("awayAvgPoints" + n);
@@ -57,8 +57,8 @@ function filterMapsByTime(_start, end) {
             apBoth.style.left = ap.style.left;
             apBoth.style.top = ap.style.top;
 
-                        apName =document.getElementById("away-player-list_" + n + '_name');
-                        apName.style.fontWeight = apRank < 11 ? "bold" : "normal";
+            apName = document.getElementById("away-player-list_" + n + '_name');
+            apName.style.fontWeight = apRank < 11 ? "bold" : "normal";
 
         }
 

@@ -14,6 +14,7 @@ const cssfiles = [
     CSS_PATH + "players.css",
     CSS_PATH + "hmsheet.css",
     CSS_PATH + "shots.css",
+    CSS_PATH + "passes.css",
     CSS_PATH + "style.css",
     CSS_PATH + "sliders.css"
 ]
@@ -24,6 +25,7 @@ const scripts = [
     JS_PATH + "init.js",
     JS_PATH + "utils.js",
     JS_PATH + "shots.js",
+    JS_PATH + "passes.js",
     JS_PATH + "heatmaps.js",
     JS_PATH + "maps-filtering.js",
     JS_PATH + "events.js",
