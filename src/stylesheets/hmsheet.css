@@ -114,6 +114,7 @@
 .heatmap2-containers-wrapper,
 .heatmap3-containers-wrapper,
 .squadAndShots-containers-wrapper,
+.squadAndPass-containers-wrapper,
 .shots-container-wrapper,
 .passes-container-wrapper {
     align-self: center;
@@ -133,7 +134,8 @@
 }
 
 
-.squadAndShots-containers-wrapper {
+.squadAndShots-containers-wrapper,
+.squadAndPass-containers-wrapper { 
     /* width: 850px; */
     display: flex;
     align-items: center;

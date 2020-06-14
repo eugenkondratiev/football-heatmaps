@@ -10,7 +10,8 @@ function afterLoadEvents() {
         let locationString = window.location.href;
         locationString = locationString
             .replace("http://pefl.ru/heatmaps.html?", "http://pefl.ru/tv/#/")
-            .replace("http://localhost:8080//heatmaps.html?", 'http://pefl.ru/tv/#/');
+            .replace("http://localhost:8080//heatmaps.html?", 'http://pefl.ru/tv/#/')
+            .replace("http://localhost:8080/heatmaps.html?", 'http://pefl.ru/tv/#/');
         // console.log(locationString);
 
         return locationString;
@@ -36,7 +37,6 @@ function afterLoadEvents() {
     // }
     document.getElementById("tv-url").href = formTVUrl();
     document.getElementById("json-url").href = formJsonUrl();
-
     document.querySelector('#updateButton').addEventListener('click', e => {
         e.preventDefault();
         if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
@@ -61,11 +61,9 @@ function afterLoadEvents() {
                     const hp = document.querySelector("#homeAvgPoints_" + t + "_" + n);
                     const rank = homeTacticPoints[t].rankByMinutes
                     hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
-
                 }
             }
         }
-
         if (awayTacticPoints.length > 1) {
             for (let t = 1; t < awayTacticPoints.length; t++) {
                 if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
@@ -73,7 +71,6 @@ function afterLoadEvents() {
                     const ap = document.querySelector("#awayAvgPoints_" + t + "_" + n);
                     const rank = awayTacticPoints[t].rankByMinutes
                     ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
-
                 }
             }
         }

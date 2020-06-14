@@ -37,7 +37,34 @@ function calculateAvgPositions(_points) {
   })
   return _avgPoints;
 }
+//--------------------------------------------------------------------
+function calculatePlayerClosestToBall(coords, _secondTime) {
+  const ball = coords.ball;
+  // console.log("calculatePlayerClosestToBall", coords);
+  console.log("calculatePlayerClosestToBall secondtime", _secondTime);
 
+  let player;
+  let minLength = 10000;
+  coords.home.forEach(pl => {
+    const length = getLengthToBall(pl, ball, _secondTime, false);
+    // const length = getLength(pl, ball);
+    if (length < minLength) {
+      player = pl.n;
+      minLength = length
+    }
+  });
+
+  coords.away.forEach(pl => {
+    const length = getLengthToBall(pl, ball, _secondTime, true);
+    // const length = getLength(pl, ball);
+    if (length < minLength) {
+      player = pl.n + MAX_PLAYERS;
+      minLength = length
+    }
+  });
+  return player;
+
+}
 //==============================================================================
 let startTime = Date.now();
 // console.log(new Date(startTime).toLocaleTimeString());
@@ -77,43 +104,52 @@ window.onload = function () {
         }
         setTeamsColors();
 
-        //--------------------------------------------------------------------
-        function calculatePlayerClosestToBall(coords) {
-          const ball = coords.ball;
-          let player;
-          let minLength = 10000;
-          coords.home.forEach(pl => {
-            if (getLength(pl, ball) < minLength) player = pl.n;
-          });
 
-          coords.away.forEach(pl => {
-            if (getLength(pl, ball) < minLength) player = pl.n + MAX_PLAYERS;
-          });
-
-          return player;
-
-        }
         //--------------------------------------------------------------------
         const game = rep.game;
-        game.shift();
-        game.pop();
-        let score = "0:0";
-        let currentPlayer = 0;
+        console.log("rep  - ", rep);
         const flags = {
           corner: false,
           throwIn: false,
           deadBall: false,
           goalKick: false,
+          center: true,
           team: 0
         }
+
+        let currentPlayer = 0;
+        // try {
+        //   if (game[0].N) { // from center
+        //     console.log("N - ", game[0].num, game[0].minute, game[0]);
+        //     currentPlayer = calculatePlayerClosestToBall(game[0].coordinates, secondTime);
+        //     console.log("currentPlayer - ", currentPlayer)
+        //     console.log("pass from center - ",
+        //       currentPlayer,
+        //       currentPlayer > 18 ? rep.away.players[currentPlayer - MAX_PLAYERS - 1].name : rep.home.players[currentPlayer - 1].name
+        //     )
+        //   }
+        // } catch (error) {
+        //   console.log(" N error 0", error, game[0]);
+        // }
+
+        game.shift();
+        game.pop();
+        let score = "0:0";
+
 
         try {
           game.forEach((element, episode, episodes) => {
             let coords;
-            if (element.C) {flags.corner = true; flags.team = element.C;}
-            if (element.A) {flags.throwIn = true; flags.team = element.A;}
-            if (element.F) {flags.deadBall = true; flags.team = element.F;}
-            if (element.T) {flags.goalKick = true; flags.team = element.T;}
+            if (element.C) { flags.corner = true; flags.team = element.C; }
+            if (element.A) { flags.throwIn = true; flags.team = element.A; }
+            if (element.F) { flags.deadBall = true; flags.team = element.F; }
+            if (element.T) {
+              flags.goalKick = true; flags.team = element.T;
+              // console.log("T - ", element)
+            }
+            if (element.N) { flags.center = true; flags.team = element.N; }
+
+
 
             if (element.interval) sumInterval += parseInt(element.interval);
             if (!minutesStarts[element.minute]) minutesStarts[element.minute] = homePoints[1].length;
@@ -133,9 +169,28 @@ window.onload = function () {
 
               try {
                 if (element.coordinates) {
+
+                  try {
+                    if (flags.center && element.messages && element.messages.some(mes => mes.mes.match(/разыг|розыг/gi))) { // from center
+                      flags.center = false;
+
+                      // console.log("N - ", lastEpisode.num, lastEpisode.minute, lastEpisode);
+                      // console.log("..element.messages ", element.num, element.messages);
+
+                      currentPlayer = calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                      // console.log("currentPlayer - ", currentPlayer)
+                      // console.log("pass from center - ",
+                      //   currentPlayer,
+                      //   currentPlayer > 18 ? rep.away.players[currentPlayer - 1 - MAX_PLAYERS].name : rep.home.players[currentPlayer - 1].name
+                      // )
+                    }
+                  } catch (error) {
+                    console.log(" N error", error, element);
+                  };
+
                   const ball = element.coordinates.ball;
                   let lastBall = lastEpisode.coordinates ? lastEpisode.coordinates.ball : undefined;
-                  
+
                   const ballcoords = {
                     x: ball.w,
                     y: ball.h
@@ -148,6 +203,29 @@ window.onload = function () {
                   let passPlayer;
                   let receivePlayer;
 
+                  // if (flags.goalKick) console.log("flags.goalKick   - ", flags.goalKick);
+
+                  if (flags.goalKick) { // handle pass from goal line
+                    // console.log("flags.goalKick   - ", flags.goalKick);
+                    //  const last2Episode = episodes[episode - 2];
+                    pass.type = "goalkick";
+                    const lastBallcoords = {
+                      x: lastBall.w,
+                      y: lastBall.h
+                    };
+
+                    flags.goalKick = false;
+                    console.log("T - Lastelement ", lastEpisode);
+                    console.log("T - element ", element);
+                    currentPlayer = calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                    console.log(" T - currentPlayer -", currentPlayer);
+                    passPlayer = currentPlayer;
+                    pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
+
+
+                    passes[passPlayer].push(pass);
+                    console.log("==============================================================================");
+                  }
                   if (flags.corner && element.messages[1]) { //handle corner kick
                     // console.log(lastEpisode);
                     pass.type = "corner";
@@ -188,20 +266,20 @@ window.onload = function () {
                       x: lastBall.w,
                       y: lastBall.h
                     };
-                    console.log("element", element);
-                    console.log("lastBall - ", lastBall);
+                    // console.log("element", element);
+                    // console.log("lastBall - ", lastBall);
 
-                    console.log("lastEpisode",lastEpisode, lastBallcoords);
+                    // console.log("lastEpisode",lastEpisode, lastBallcoords);
 
                     passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
-                    console.log("passPlayer - ", passPlayer);
+                    // console.log("passPlayer - ", passPlayer);
                     pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
                     receivePlayer = getPlayerFromMessage(element.messages[element.messages.length - 1]);
-                    console.log("receivePlayer - ", receivePlayer);
+                    // console.log("receivePlayer - ", receivePlayer);
                     pass.good = receivePlayer < 19 && passPlayer < 19 || receivePlayer > 18 && passPlayer > 18;
 
-                    console.log("throw pass  ", pass);
-                    console.log("messages  - ", element.messages);
+                    // console.log("throw pass  ", pass);
+                    // console.log("messages  - ", element.messages);
 
                     currentPlayer = receivePlayer;
 
@@ -209,8 +287,17 @@ window.onload = function () {
                     ;
                   } else if (flags.deadBall) { // handle free kick
                     ;
-                  } else if (flags.goalKick) { // handle pass from goal line
-                    ;
+                    // } else if (flags.goalKick) { // handle pass from goal line
+                    //   console.log("flags.goalKick   - ", flags.goalKick);
+                    //   lastEpisode = episodes[episode - 2];
+
+                    //   flags.goalKick = false;
+                    //   console.log("T - Lastelement ", lastEpisode);
+                    //   console.log("T - element ", element);
+                    //   currentPlayer = calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                    //   console.log(" T - currentPlayer -", currentPlayer);
+
+                    //   ;
                   } else { //just pass
                     ;
                   }
@@ -218,7 +305,7 @@ window.onload = function () {
 
                 };
               } catch (error) {
-                console.log("error " , lastEpisode);
+                console.log("error ", lastEpisode);
 
                 console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
 
@@ -525,6 +612,7 @@ window.onload = function () {
         heatmapInstance = avgMapCreate('#heatmap-home');
         heatmapInstance2 = avgMapCreate('#heatmap-away');
         heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
+        updateMainMaps(homePointsFull, awayPointsFull, ballPoints);
 
         // const heatmapInstance2 = h337.create({
         //   container: document.querySelector('#heatmap-away'),
@@ -1121,6 +1209,8 @@ window.onload = function () {
   // afterLoadEvents(showableTacticks);
   // document.querySelector(".button-wrap a:nth-child(1)");
 }
+
+//--------------------------------------------------------------------
 
 function updateMainMaps(_homePoints, _awayPoints, _ballPoints) {
 

@@ -25,20 +25,20 @@ function createPassStart(pass, passinfo, color) {
         ? 'угловой'
         : pass.type == "throw"
             ? 'аут'
-            : pass.type == "freeKick"
+            : pass.type == "freekick"
                 ? 'штрафной'
-                : pass.type == "goalKick"
+                : pass.type == "goalkick"
                     ? 'от ворот'
                     : '';
 
     passStart.addEventListener('mouseenter', function (e) {
         // console.log(pass.minute, pass.episode, pass.player, passinfo.playerName, typeString);
         const passLegend = document.querySelector('#one-pass-legend');
-        const passString = " Минута " + pass.minute + ", " 
-        + (pass.good ? "точно" : "неточно") + 
-         (pass.high ? ", верхом ," : ", низом ,") 
-         + typeString + ",\n\r " 
-         + passinfo.player + "." + passinfo.playerName;
+        const passString = " Минута " + pass.minute + ", "
+            + (pass.good ? "точно" : "неточно") +
+            (pass.high ? ", верхом ," : ", низом ,")
+            + typeString + ",\n\r "
+            + passinfo.player + "." + passinfo.playerName;
 
         passLegend.textContent = passString;
         passLegend.style.display = "inline-block";
@@ -82,7 +82,7 @@ function drawTeamPasses(teamPasses, players, team, ctx) {
         if (!playerPasses[0]) return;
         playerPasses.forEach(pass => {
             // console.log("pass - ", pass)
-            const passInfo = { playerName: players[_player].name, team: team, player: _player };
+            const passInfo = { playerName: players[_player].name, team: team, player: _player + 1 };
             document.querySelector('#passesboard').appendChild(createPass(pass, passInfo));;
         })
 
