@@ -31,6 +31,15 @@ const jsonCoords = { x1: 0, y1: 0, x2: 720, y2: 450 };
 const hmCoords = { x1: 18.98, y1: 19, x2: 346.56, y2: 229.5 };
 
 const FIELD_LONGTITUDE = 105;
+const RE_CENTER_MSG = /разыг|розыг/gi;
+const RE_GOAL_LOW_PASS_MSG = /разыг|розыг/gi;
+
+const RE_PASS_FROM_GOALKICK = /пас|переда/gi;
+
+const RE_LONG_PASS = /авес|аброс|линны/g;
+const RE_SCORE_WITH_PENALTIES = /\d+:\d+/g;
+
+const RE_PLAYER_NUMBERS = /[0-9]+/gi;
 
 const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1);
 // const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;

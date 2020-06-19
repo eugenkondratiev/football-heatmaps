@@ -1,5 +1,25 @@
 ;
 /**===================================================================================================== */
+function getTypeString(pass) {
+    return pass.type == "corner"
+        ? 'угловой'
+        : pass.type == "throw"
+            ? 'аут'
+            : pass.type == "freekick"
+                ? 'штрафной'
+                : pass.type == "goalkick"
+                    ? 'от ворот'
+                    : '';
+}
+/**===================================================================================================== */
+function formPassString(pass, passinfo) {
+    return " Минута " + pass.minute + ", "
+        + (pass.good ? "точно" : "неточно") +
+        (pass.high ? ", верхом ," : ", низом ,")
+        + getTypeString(pass) + ",\n\r "
+        + passinfo.player + "." + passinfo.playerName;
+}
+/**===================================================================================================== */
 ; function createPassLine(pass, passinfo, color) {
     const line = document.createElement('div');
     line.classList.add('pass-line');
@@ -8,6 +28,17 @@
     line.style.width = getSegmentLength(pass.startpoint, pass.endpoint) + "px";
     line.style.transform = "rotate(" + getSegmentAngle(pass.startpoint, pass.endpoint) + "deg)";
     line.style.borderTopColor = color;
+
+    line.addEventListener('mouseenter', function (e) {
+        // console.log(pass.minute, pass.episode, pass.player, passinfo.playerName, typeString);
+        const passLegend = document.querySelector('#one-pass-legend');
+        passLegend.textContent = formPassString(pass, passinfo);
+        passLegend.style.display = "inline-block";
+    })
+
+    line.addEventListener('mouseleave', function (e) {
+        document.querySelector('#one-pass-legend').style.display = "none";
+    })
 
     return line;
 }
@@ -21,26 +52,12 @@ function createPassStart(pass, passinfo, color) {
     passStart.style.left = pass.startpoint.x - 5 + "px";
     // passStart.style.top = pass.startpoint.y - .7 + "%";
     // passStart.style.left = pass.startpoint.x - .7 + "%";
-    const typeString = pass.type == "corner"
-        ? 'угловой'
-        : pass.type == "throw"
-            ? 'аут'
-            : pass.type == "freekick"
-                ? 'штрафной'
-                : pass.type == "goalkick"
-                    ? 'от ворот'
-                    : '';
+    const typeString = getTypeString(pass);
 
     passStart.addEventListener('mouseenter', function (e) {
         // console.log(pass.minute, pass.episode, pass.player, passinfo.playerName, typeString);
         const passLegend = document.querySelector('#one-pass-legend');
-        const passString = " Минута " + pass.minute + ", "
-            + (pass.good ? "точно" : "неточно") +
-            (pass.high ? ", верхом ," : ", низом ,")
-            + typeString + ",\n\r "
-            + passinfo.player + "." + passinfo.playerName;
-
-        passLegend.textContent = passString;
+        passLegend.textContent = formPassString(pass, passinfo);
         passLegend.style.display = "inline-block";
     })
 
