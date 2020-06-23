@@ -89,6 +89,10 @@ function clearPoint(arr) {
   return arr.filter(el => (el != null));
 }
 /**===================================================================================================== */
+function isOneTeam(firstPlayer, secondPlayer) {
+  return firstPlayer < 19 && secondPlayer < 19 || firstPlayer > 18 && secondPlayer > 18;
+}
+/**===================================================================================================== */
 function getSubArrow(_sub) {
   const sub = _sub || SUB_OUT;
   const arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';

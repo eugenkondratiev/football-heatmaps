@@ -87,7 +87,6 @@ function drawTeamShots(teamShots, players, team, ctx) {
 
     document.querySelector('#chalkboard').appendChild(createShot(shot, shotInfo));
 
-
     // ctx.beginPath(); 
     // ctx.fillStyle = _strokeStyle;
     // ctx.arc(shot.startpoint.x, shot.startpoint.y, 4, 0, 2 * Math.PI, false);

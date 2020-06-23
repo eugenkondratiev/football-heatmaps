@@ -145,7 +145,7 @@ window.onload = function () {
             if (element.A) { flags.throwIn = true; flags.team = element.A; }
             if (element.F) { flags.deadBall = true; flags.team = element.F; }
             if (element.T) {
-              flags.goalKick = true; flags.team = element.T;
+              flags.goalKick = true; flags.team = element.T.team;
               // console.log("T - ", element)
             }
             if (element.N) { flags.center = true; flags.team = element.N; }
@@ -175,16 +175,12 @@ window.onload = function () {
 
               try {
                 if (element.coordinates) {
-                  function isOneTeam(firstPlayer, secondPlayer) {
-                    return firstPlayer < 19 && secondPlayer < 19 || firstPlayer > 18 && secondPlayer > 18;
-                  }
                   try {
                     if (flags.center && element.messages && element.messages.some(mes => mes.mes.match(RE_CENTER_MSG))) { // from center
                       flags.center = false;
 
                       // console.log("N - ", lastEpisode.num, lastEpisode.minute, lastEpisode);
                       // console.log("..element.messages ", element.num, element.messages);
-
                       currentPlayer = calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
                       // console.log("currentPlayer - ", currentPlayer)
                       // console.log("pass from center - ",
@@ -244,7 +240,7 @@ window.onload = function () {
                     // console.log("messages  - ", element.messages);
 
                     currentPlayer = receivePlayer;
-
+                    pass.player = passPlayer;
                     passes[passPlayer].push(pass);
 
                   } else if (flags.throwIn && element.messages[0]) { // handle out
@@ -283,7 +279,7 @@ window.onload = function () {
                     // console.log("messages  - ", element.messages);
 
                     currentPlayer = receivePlayer;
-
+                    pass.player = passPlayer;
                     passes[passPlayer].push(pass);
                     ;
                   } else if (flags.deadBall) { // handle free kick
@@ -318,19 +314,35 @@ window.onload = function () {
                       console.log("T - Nextlement3 ", episodes[episode + 3]);
                     }
                     // }
-                    if (element.messages[0] && tryMes(0, RE_PASS_FROM_GOALKICK)) {
-                      ;
+                    if (element.messages[0]) {
+                      if (tryMes(0, RE_PASS_FROM_GOALKICK)) {
+                        if (element.messages[1]) {
+                          receivePlayer = +tryMes(1, RE_PLAYER_NUMBERS)[0];
+                          pass.good = isOneTeam(passPlayer, receivePlayer);
+                          console.log("T short pass - ", element.minute, element.num, pass.good, receivePlayer, passPlayer, pass.player)
+                        } else {
+                          ;// "open" pass
+                          isPassOpened = true;
+
+                        }
+
+
+                      };
                       // if (pass.type === "goalkick" && isPassOpened) {
-                      //   ;
+                      //   const firstPlayer = +tryMes(0, RE_PLAYER_NUMBERS)[0];
+                      //   // if (tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer ) { 
+                      //   //   ;// pass received
+                      //   // } else {
+                      //   //   ;
+                      //   // }
+                      //   pass.good = (tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer);
+                      //   pass.player = passPlayer;
+                      //   passes[passPlayer].push(pass);
+                      //   isPassOpened = false;
                       // }
-                      receivePlayer = element.messages[1] && +tryMes(1, RE_PLAYER_NUMBERS)[0];
-                      pass.good = isOneTeam(passPlayer, receivePlayer);
-                      console.log("T short pass - ", element.minute, element.num, pass.good,pass.receivePlayer, pass.passPlayer)
-
-
 
                     };
-
+                    pass.player = passPlayer;
                     passes[passPlayer].push(pass);
                     console.log("==============================================================================");
                     //   flags.goalKick = false;
@@ -508,7 +520,6 @@ window.onload = function () {
             } catch (error) {
               console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
               console.log(element, episodes[episode - 1], episodes[episode - 2]);
-
             }
 
             if (element.M) { // смена сторон. конец тайма.                         
@@ -605,6 +616,7 @@ window.onload = function () {
         } catch (error) {
           console.log("game.forEach ", error);
         }
+
         homeTacticPoints.push(homeTacticPoints[0]);
         awayTacticPoints.push(awayTacticPoints[0]);
         function getPenalties(s, p) {
@@ -621,6 +633,18 @@ window.onload = function () {
 
         document.querySelector("#game-info").textContent = gameInfoSrting;
         console.log("passes -", passes);
+
+        const gkPasses = passes.reduce((acc, pl, i) => {
+          const goalKicks = pl.filter(pass => (pass.type === "goalkick"));
+          // console.log("goalKicks passes - ", i, goalKicks)
+          return goalKicks[0]
+            ? [...acc, ...goalKicks]
+            // ? [...acc, ...goalKicks.map(pass => Object.assign(pass, { player: i }))]
+            : [...acc]
+        }, []);
+
+        console.log("gkPasses   ", gkPasses);
+
         /**=========================================================================== */
         // passes.slice(1,18).forEach(pass => {
         //   countPass(pass.type, rep.home.players[pass.player - 1]);
@@ -643,7 +667,6 @@ window.onload = function () {
             maxOpacity: max,
             minOpacity: min,
             radius: POINT_RADIUS * radiusKef
-
           });
         }
         // const heatmapInstance = h337.create({
@@ -1060,8 +1083,11 @@ window.onload = function () {
               apName.appendChild(getSubArrow(rep.away.players[n - 1].sub));
             }
             apNameDiv.appendChild(apName);
+
             newPlayer.appendChild(apNumDiv);
             newPlayer.appendChild(apNameDiv);
+            // document.querySelector('#squadAwayPass').appendChild(newPlayer.cloneNode(true));
+
             const apEye = document.createElement('div');
             apEye.className = "player-list-eye";
             apEye.innerText = " ";
@@ -1148,6 +1174,9 @@ window.onload = function () {
 
             hpNameDiv.appendChild(hpName);
             newHomePlayer.appendChild(hpNameDiv);
+
+            // document.querySelector('#squadHomePass').appendChild(newHomePlayer.cloneNode(true));
+
             const hpEye = document.createElement('div');
             hpEye.className = "player-list-eye";
             hpEye.innerText = " ";
@@ -1184,6 +1213,7 @@ window.onload = function () {
             newHomePlayer.appendChild(hpMileage);
 
             document.querySelector('#squadHome').appendChild(newHomePlayer);
+
             hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
             hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
             document.getElementById('heatmap-avgHome').appendChild(hp);

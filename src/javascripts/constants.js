@@ -34,7 +34,7 @@ const FIELD_LONGTITUDE = 105;
 const RE_CENTER_MSG = /разыг|розыг/gi;
 const RE_GOAL_LOW_PASS_MSG = /разыг|розыг/gi;
 
-const RE_PASS_FROM_GOALKICK = /пас|переда/gi;
+const RE_PASS_FROM_GOALKICK = /пас|переда|смотри/gi;
 
 const RE_LONG_PASS = /авес|аброс|линны/g;
 const RE_SCORE_WITH_PENALTIES = /\d+:\d+/g;
