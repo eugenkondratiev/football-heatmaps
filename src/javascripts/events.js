@@ -10,7 +10,7 @@ function afterLoadEvents() {
         let locationString = window.location.href;
         locationString = locationString
             .replace("http://pefl.ru/heatmaps.html?", "http://pefl.ru/tv/#/")
-            .replace("http://localhost:8080//heatmaps.html?", 'http://pefl.ru/tv/#/')
+            .replace(":8080//", ':8080/')
             .replace("http://localhost:8080/heatmaps.html?", 'http://pefl.ru/tv/#/');
         // console.log(locationString);
 

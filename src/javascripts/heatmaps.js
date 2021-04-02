@@ -675,6 +675,7 @@ window.onload = function () {
         //   minOpacity: MIN_OPACITY,
         //   radius: POINT_RADIUS * TEAM_RADIUS_KEFF
         // });
+
         heatmapInstance = avgMapCreate('#heatmap-home');
         heatmapInstance2 = avgMapCreate('#heatmap-away');
         heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
@@ -693,6 +694,8 @@ window.onload = function () {
         //   radius: POINT_RADIUS * BALL_RADIUS_KEFF
         // });
         heatmapInstance4 = avgMapCreate('#heatmap-avgHome');
+
+
         heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
         heatmapInstance7 = avgMapCreate('#chalkboard');
         heatmapInstance8 = avgMapCreate('#heatmap-avgBoth');
@@ -747,12 +750,17 @@ window.onload = function () {
           max: maximumValue * TEAM_MAX_KEFF,
           data: heatPoints
         };
-        heatmapInstance4.setData(defaultData);
-        heatmapInstance5.setData(defaultData);
+
+        // heatmapInstance4.setData(defaultData);
+
+        // heatmapInstance5.setData(defaultData);
+
         // heatmapInstance6.setData(defaultData);
-        heatmapInstance7.setData(defaultData);
-        heatmapInstance8.setData(defaultData);
-        heatmapInstance9.setData(defaultData);
+
+        // heatmapInstance7.setData(defaultData);
+        // heatmapInstance8.setData(defaultData);
+
+        // heatmapInstance9.setData(defaultData);
 
         /**===================================================================================================== */
         // const newTactics1 = document.querySelector("#game-info").cloneNode(true);
@@ -813,7 +821,7 @@ window.onload = function () {
               document.querySelector('#avgPositionsHome' + t).appendChild(hp);
             }
             const heatmapInstanceAvg = avgMapCreate("#avgPositionsHome" + t);
-            heatmapInstanceAvg.setData(defaultData);
+            // heatmapInstanceAvg.setData(defaultData);
 
             const heatmapPlayers = h337.create({
               container: document.querySelector(tacticId),
@@ -1231,7 +1239,7 @@ window.onload = function () {
         }
         setTimeout(
           showMainAvgPositions
-          , 100
+          , 50
         )
         // showMainAvgPositions();
         /**===================================================================================================== */
@@ -1239,7 +1247,7 @@ window.onload = function () {
           document.body.removeChild(document.querySelector('.loader-wrapper'));
           // document.querySelector('.loader-wrapper').remove();
         },
-          500)
+          200)
 
         // console.log("allRep - ", rep);
         // console.log("shots - ", shots);
@@ -1265,7 +1273,7 @@ window.onload = function () {
       } else {
         alert('Вставьте верно ссылку на матч!');
       }
-      setTimeout(afterLoadEvents, 500);
+      setTimeout(afterLoadEvents, 200);
 
     }
     // }, 500)
