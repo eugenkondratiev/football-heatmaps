@@ -53,27 +53,39 @@ function afterLoadEvents() {
         }
         window.open(formHeatmapUrl(urlInput.value), '_blank');
     });
-    function normalizeTacticAvgPositions() {
-        if (homeTacticPoints.length > 1) {
-            for (let t = 1; t < homeTacticPoints.length; t++) {
-                if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+    function normalizeTacticAvgPositions(_team) {
+
+        if (outData[_team].TacticPoints.length > 1) {
+            for (let t = 1; t < outData[_team].TacticPoints.length; t++) {
+                if (outData[_team].TacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
                 for (let n = 1; n <= MAX_PLAYERS; n++) {
-                    const hp = document.querySelector("#homeAvgPoints_" + t + "_" + n);
-                    const rank = homeTacticPoints[t].rankByMinutes
-                    hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+                    const pl = document.querySelector("#" + _team + "AvgPoints_" + t + "_" + n);
+                    const rank = outData[_team].TacticPoints[t].rankByMinutes
+                    pl.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
                 }
             }
         }
-        if (awayTacticPoints.length > 1) {
-            for (let t = 1; t < awayTacticPoints.length; t++) {
-                if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
-                for (let n = 1; n <= MAX_PLAYERS; n++) {
-                    const ap = document.querySelector("#awayAvgPoints_" + t + "_" + n);
-                    const rank = awayTacticPoints[t].rankByMinutes
-                    ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
-                }
-            }
-        }
+
+        // if (homeTacticPoints.length > 1) {
+        //     for (let t = 1; t < homeTacticPoints.length; t++) {
+        //         if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+        //         for (let n = 1; n <= MAX_PLAYERS; n++) {
+        //             const hp = document.querySelector("#homeAvgPoints_" + t + "_" + n);
+        //             const rank = homeTacticPoints[t].rankByMinutes
+        //             hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+        //         }
+        //     }
+        // }
+        // if (awayTacticPoints.length > 1) {
+        //     for (let t = 1; t < awayTacticPoints.length; t++) {
+        //         if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+        //         for (let n = 1; n <= MAX_PLAYERS; n++) {
+        //             const ap = document.querySelector("#awayAvgPoints_" + t + "_" + n);
+        //             const rank = awayTacticPoints[t].rankByMinutes
+        //             ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+        //         }
+        //     }
+        // }
     }
     setTimeout(() => {
         document.querySelector("#shots-chalkboard ~ .bojan__content")
@@ -86,7 +98,8 @@ function afterLoadEvents() {
             )
         document.getElementById("norm-tactic-avg").addEventListener("click", function (e) {
             e.preventDefault();
-            normalizeTacticAvgPositions();
+            normalizeTacticAvgPositions("home");
+            normalizeTacticAvgPositions("away");
         });
         document.getElementById("reset-maps-filtering").addEventListener("click", function (e) {
             e.preventDefault();

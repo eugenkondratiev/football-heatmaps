@@ -89,8 +89,8 @@ function clearPoint(arr) {
   return arr.filter(el => (el != null));
 }
 /**===================================================================================================== */
-function isOneTeam(firstPlayer, secondPlayer) {
-  return firstPlayer < 19 && secondPlayer < 19 || firstPlayer > 18 && secondPlayer > 18;
+function isOneTeam(firstPlayerNumber, secondPlayerNumber) {
+  return firstPlayerNumber < 19 && secondPlayerNumber < 19 || firstPlayerNumber > 18 && secondPlayerNumber > 18;
 }
 /**===================================================================================================== */
 function getSubArrow(_sub) {

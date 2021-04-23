@@ -114,8 +114,12 @@ window.onload = function () {
           deadBall: false,
           goalKick: false,
           center: true,
-          team: 0
+          team: 0,
+          ballOwner: 0
         }
+        const isBallOwnedByHomeTeam = () => flags.ballOwner = 1;
+        const isHomePlayer = (numberInCommonPlayersList) => numberInCommonPlayersList <= MAX_PLAYERS;
+
 
         let currentPlayer = 0;
         // try {
@@ -328,18 +332,18 @@ window.onload = function () {
 
 
                       };
-                      // if (pass.type === "goalkick" && isPassOpened) {
-                      //   const firstPlayer = +tryMes(0, RE_PLAYER_NUMBERS)[0];
-                      //   // if (tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer ) { 
-                      //   //   ;// pass received
-                      //   // } else {
-                      //   //   ;
-                      //   // }
-                      //   pass.good = (tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer);
-                      //   pass.player = passPlayer;
-                      //   passes[passPlayer].push(pass);
-                      //   isPassOpened = false;
-                      // }
+                      if (pass.type === "goalkick" && isPassOpened) {
+                        const firstPlayer = +tryMes(0, RE_PLAYER_NUMBERS)[0];
+                        // if (tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer ) { 
+                        //   ;// pass received
+                        // } else {
+                        //   ;
+                        // }
+                        pass.good = (tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer);
+                        // pass.player = passPlayer;
+                        // passes[passPlayer].push(pass);
+                        isPassOpened = false;
+                      }
 
                     };
                     pass.player = passPlayer;
@@ -401,10 +405,10 @@ window.onload = function () {
                 }
                 homeTacticChanges.push(homePoints[0].length);
               } else {
-                awayTacticPoints[0].end = element.minute;
-                awayTacticPoints[0].period = element.minute - awayTacticPoints[0].start;
-                awayTacticPoints.push(awayTacticPoints[0]);
-                awayTacticPoints[0] = {
+                outData[_team].TacticPoints[0].end = element.minute;
+                outData[_team].TacticPoints[0].period = element.minute - outData[_team].TacticPoints[0].start;
+                outData[_team].TacticPoints.push(outData[_team].TacticPoints[0]);
+                outData[_team].TacticPoints[0] = {
                   start: element.minute,
                   end: 125,
                   period: (125 - element.minute),
@@ -412,9 +416,9 @@ window.onload = function () {
                   ball: [],
                   averages: []
                 };
-                awayTacticChanges.push(awayPoints[0].length);
+                outData[_team].TacticChanges.push(outData[_team].Points[0].length);
                 for (let i = 0; i <= MAX_PLAYERS; i++) {
-                  awayTacticPoints[0].averages.push([{
+                  outData[_team].TacticPoints[0].averages.push([{
                     x: 0,
                     y: 0
                   }]);
@@ -539,86 +543,105 @@ window.onload = function () {
                 y: ball.h,
                 value: 1
               };
-              const hometeam = element.coordinates.home;
-              const awayteam = element.coordinates.away;
-              const currentHomePositions = [];
-              const currentAwayPositions = [];
-              for (let p = 0; p <= MAX_PLAYERS; p++) {
-                currentHomePositions.push(null);
-                currentAwayPositions.push(null);
-              }
 
-              hometeam.forEach(pl => {
-                coords = pl.n == 1 ?
-                  {
-                    x: pl.w,
-                    y: pl.h,
-                    value: GK_VALUE
-                  } :
-                  {
-                    x: pl.w,
-                    y: pl.h,
-                    value: 1
-                  };
-                if (pl.n <= MAX_PLAYERS) {
-                  const playerPoints = limitPoint(coords, secondTime);
-
-                  homePoints[pl.n].push(playerPoints);
-                  homePoints[0].push(playerPoints);
-                  homeTacticPoints[0].team.push(playerPoints);
-                  homeTacticPoints[0].averages[pl.n].push(playerPoints);
-                  if (homePoints[pl.n].length > 1) {
-                    const l = homePoints[pl.n].length - 1;
-                    homeMileage[pl.n] += getMileage(homePoints[pl.n][l], homePoints[pl.n][l - 1]);
-                  }
-                  currentHomePositions[pl.n] = playerPoints;
-                } else {
-                  strangePoints.home.push(pl);
-                }
-              });
-              awayteam.forEach(pl => {
-                coords = pl.n == 1 ?
-                  {
-                    x: pl.w,
-                    y: pl.h,
-                    value: GK_VALUE
-                  } :
-                  {
-                    x: pl.w,
-                    y: pl.h,
-                    value: 1
-                  };
-                if (pl.n <= MAX_PLAYERS) {
-                  const playerPoints = limitPoint(coords, !secondTime);
-
-                  awayPoints[pl.n].push(playerPoints);
-                  awayPoints[0].push(playerPoints);
-                  awayTacticPoints[0].team.push(playerPoints);
-                  awayTacticPoints[0].averages[pl.n].push(playerPoints);
-                  if (awayPoints[pl.n].length > 1) {
-                    const l = awayPoints[pl.n].length - 1;
-                    awayMileage[pl.n] += getMileage(awayPoints[pl.n][l], awayPoints[pl.n][l - 1]);
-                  }
-                  currentAwayPositions[pl.n] = playerPoints;
-
-                } else {
-                  strangePoints.away.push(pl);
-                }
-              });
               const ballHeatMap = limitPoint(ballcoords, secondTime);
               ballPoints.push(ballHeatMap)
-              homeTacticPoints[0].ball.push(ballHeatMap);
-              awayTacticPoints[0].ball.push(ballHeatMap);
-              pushFullPoint(homePointsFull, currentHomePositions);
-              pushFullPoint(awayPointsFull, currentAwayPositions);
+
+
+              const hometeam = element.coordinates.home;
+              const currentHomePositions = [];
+              // for (let p = 0; p <= MAX_PLAYERS; p++) {
+              //   currentHomePositions.push(null);
+              //   currentTeamPositions.push(null);
+              // }
+              {
+                // hometeam.forEach(pl => {
+                  //   coords = pl.n == 1 ?
+                  //     {
+                //       x: pl.w,
+                //       y: pl.h,
+                //       value: GK_VALUE
+                //     } :
+                //     {
+                //       x: pl.w,
+                //       y: pl.h,
+                //       value: 1
+                //     };
+                //   if (pl.n <= MAX_PLAYERS) {
+                //     const playerPoints = limitPoint(coords, secondTime);
+
+                //     homePoints[pl.n].push(playerPoints);
+                //     homePoints[0].push(playerPoints);
+                //     homeTacticPoints[0].team.push(playerPoints);
+                //     homeTacticPoints[0].averages[pl.n].push(playerPoints);
+                //     if (homePoints[pl.n].length > 1) {
+                //       const l = homePoints[pl.n].length - 1;
+                //       homeMileage[pl.n] += getMileage(homePoints[pl.n][l], homePoints[pl.n][l - 1]);
+                //     }
+                //     currentHomePositions[pl.n] = playerPoints;
+                //   } else {
+                //     strangePoints.home.push(pl);
+                //   }
+                // });
+              }
+
+              // homeTacticPoints[0].ball.push(ballHeatMap);
+              // pushFullPoint(homePointsFull, currentHomePositions);
+
+              function calcTeamFullPoints(_team = "home") {
+                const theTeam = element.coordinates[_team];
+                const currentTeamPositions = [];
+
+                for (let p = 0; p <= MAX_PLAYERS; p++) {
+                  currentTeamPositions.push(null);
+                }
+
+                theTeam.forEach(pl => {
+                  coords = pl.n == 1 ?
+                    {
+                      x: pl.w,
+                      y: pl.h,
+                      value: GK_VALUE
+                    } :
+                    {
+                      x: pl.w,
+                      y: pl.h,
+                      value: 1
+                    };
+                  if (pl.n <= MAX_PLAYERS) {
+                    const playerPoints = limitPoint(coords, !secondTime);
+  
+                    outData[_team].Points[pl.n].push(playerPoints);
+                    outData[_team].Points[0].push(playerPoints);
+                    outData[_team].TacticPoints[0].team.push(playerPoints);
+                    outData[_team].TacticPoints[0].averages[pl.n].push(playerPoints);
+                    if (outData[_team].Points[pl.n].length > 1) {
+                      const l = outData[_team].Points[pl.n].length - 1;
+                      outData[_team].Mileage[pl.n] += getMileage(outData[_team].Points[pl.n][l], outData[_team].Points[pl.n][l - 1]);
+                    }
+                    currentTeamPositions[pl.n] = playerPoints;
+  
+                  } else {
+                    strangePoints[_team].push(pl);
+                  }
+                });
+
+                outData[_team].TacticPoints[0].ball.push(ballHeatMap);
+                pushFullPoint(outData[_team].PointsFull, currentTeamPositions);
+              }
+              calcTeamFullPoints("home")
+              calcTeamFullPoints("away")
+
+
             }
           });
         } catch (error) {
           console.log("game.forEach ", error);
         }
 
-        homeTacticPoints.push(homeTacticPoints[0]);
-        awayTacticPoints.push(awayTacticPoints[0]);
+        outData.home.TacticPoints.push(outData.home.TacticPoints[0]);
+        outData.away.TacticPoints.push(outData.away.TacticPoints[0]);
+
         function getPenalties(s, p) {
           const score = s.split(':');
           const withpens = p.split(':');
@@ -679,7 +702,7 @@ window.onload = function () {
         heatmapInstance = avgMapCreate('#heatmap-home');
         heatmapInstance2 = avgMapCreate('#heatmap-away');
         heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
-        updateMainMaps(homePointsFull, awayPointsFull, ballPoints);
+        updateMainMaps(outData.home.PointsFull, outData.away.PointsFull, ballPoints);
 
         // const heatmapInstance2 = h337.create({
         //   container: document.querySelector('#heatmap-away'),
@@ -728,7 +751,7 @@ window.onload = function () {
         ];
 
 
-        // updateMainMaps(homePoints[0], awayPoints[0], ballPoints);
+        // updateMainMaps(homePoints[0], outData[_team].Points[0], ballPoints);
 
 
         // const data = {
@@ -739,7 +762,7 @@ window.onload = function () {
         // heatmapInstance.setData(data);
         // heatmapInstance2.setData({
         //   max: maximumValue * TEAM_MAX_KEFF,
-        //   data: awayPoints[0]
+        //   data: outData[_team].Points[0]
         // });
         // heatmapInstance3.setData({
         //   max: maximumValue * BALL_MAX_KEFF,
@@ -767,175 +790,183 @@ window.onload = function () {
         // newTactics1.id = "homeTacticsInfo";
         // newTactics1.textContent = "Смены тактик " + rep.home.team.name;
         // document.body.appendChild(newTactics1);
-        document.querySelector("#home-tacticks-heatmaps + .bojan__label > .bojan__label__header").textContent = "Смены тактик " + rep.home.team.name;
-        //-----------------------------------------------------------------------------------
-        if (homeTacticPoints.length > 1) {
-          for (let t = 1; t < homeTacticPoints.length; t++) {
-            if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
-            //----------- calc avg for different tactics
-            homeTacticPoints[t].rankByMinutes = [];
-            homeTacticPoints[t].averages.forEach((positions, _n) => {
-              const avg = positions.length;
-              homeTacticPoints[t].rankByMinutes[_n] = [_n, avg];
-              if (_n === 0 || avg < 2) return;
-              positions.forEach((pos, i, _arr) => {
-                positions[0].x += (pos.x / avg);
-                positions[0].y += (pos.y / avg);
-              })
-            });
-            homeTacticPoints[t].rankByMinutes.sort((a, b) => b[1] - a[1]);
+        {
+          // document.querySelector("#home-tacticks-heatmaps + .bojan__label > .bojan__label__header").textContent = "Смены тактик " + rep.home.team.name;
+          // //-----------------------------------------------------------------------------------
+          // if (homeTacticPoints.length > 1) {
+          //   for (let t = 1; t < homeTacticPoints.length; t++) {
+          //     if (homeTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+          //     //----------- calc avg for different tactics
+          //     homeTacticPoints[t].rankByMinutes = [];
+          //     homeTacticPoints[t].averages.forEach((positions, _n) => {
+          //       const avg = positions.length;
+          //       homeTacticPoints[t].rankByMinutes[_n] = [_n, avg];
+          //       if (_n === 0 || avg < 2) return;
+          //       positions.forEach((pos, i, _arr) => {
+          //         positions[0].x += (pos.x / avg);
+          //         positions[0].y += (pos.y / avg);
+          //       })
+          //     });
+          //     homeTacticPoints[t].rankByMinutes.sort((a, b) => b[1] - a[1]);
 
-            // show tactic
-            const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
-            const newDiv = divWrapper.cloneNode(true);
-            const tacticId = "#heatmap-tactichome" + t;
-            const ballId = "#heatmap-ballhome" + t;
-            const tacticLabel = (homeTacticPoints[t].start > 0 ? ("от " + homeTacticPoints[t].start) : "") + " " +
-              (homeTacticPoints[t].end < 125 ? ("до " + homeTacticPoints[t].end) : "") + ".  " + rep.home.team.name;
-            newDiv.querySelector('#heatmap-home').id = "heatmap-tactichome" + t;
-            newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
-            newDiv.querySelector('#heatmap-away').id = "heatmap-ballhome" + t;
-            newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;;
-            document.querySelector("#home-tacticks-heatmaps ~ .bojan__content").appendChild(newDiv);
-            // document.body.appendChild(newDiv);
-            const theWrapper = document.getElementsByClassName('heatmap-container-wrapper')[1];
-            // const theWrapper = document.getElementsByClassName('heatmap-container-wrapper-right')[0];
-            const thirdField = theWrapper.cloneNode(true);
-            // thirdField.className = "thirdHeatmap";
-            thirdField.className = "heatmap-container-wrapper";
-            newDiv.className = "heatmap3-containers-wrapper";
-            thirdField.querySelector(".heatmap-container").id = "avgPositionsHome" + t;
-            thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
-            newDiv.appendChild(thirdField);
+          //     // show tactic
+          //     const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
+          //     const newDiv = divWrapper.cloneNode(true);
+          //     const tacticId = "#heatmap-tactichome" + t;
+          //     const ballId = "#heatmap-ballhome" + t;
+          //     const tacticLabel = (homeTacticPoints[t].start > 0 ? ("от " + homeTacticPoints[t].start) : "") + " " +
+          //       (homeTacticPoints[t].end < 125 ? ("до " + homeTacticPoints[t].end) : "") + ".  " + rep.home.team.name;
+          //     newDiv.querySelector('#heatmap-home').id = "heatmap-tactichome" + t;
+          //     newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
+          //     newDiv.querySelector('#heatmap-away').id = "heatmap-ballhome" + t;
+          //     newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;;
+          //     document.querySelector("#home-tacticks-heatmaps ~ .bojan__content").appendChild(newDiv);
+          //     // document.body.appendChild(newDiv);
+          //     const theWrapper = document.getElementsByClassName('heatmap-container-wrapper')[1];
+          //     // const theWrapper = document.getElementsByClassName('heatmap-container-wrapper-right')[0];
+          //     const thirdField = theWrapper.cloneNode(true);
+          //     // thirdField.className = "thirdHeatmap";
+          //     thirdField.className = "heatmap-container-wrapper";
+          //     newDiv.className = "heatmap3-containers-wrapper";
+          //     thirdField.querySelector(".heatmap-container").id = "avgPositionsHome" + t;
+          //     thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
+          //     newDiv.appendChild(thirdField);
 
-            for (let n = 1; n <= MAX_PLAYERS; n++) {
-              const hp = document.querySelector('#player_default_home').cloneNode(true);
-              hp.id = "homeAvgPoints_" + t + "_" + n;
-              const rank = homeTacticPoints[t].rankByMinutes
-              hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
-              // hp.style.display = n < 12 ? "inherit" : "none";
-              hp.style.left = homeTacticPoints[t].averages[n][0].x - 5 + "px";
-              hp.style.top = homeTacticPoints[t].averages[n][0].y - 5 + "px";
-              hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
-              hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
-              document.querySelector('#avgPositionsHome' + t).appendChild(hp);
-            }
-            const heatmapInstanceAvg = avgMapCreate("#avgPositionsHome" + t);
-            // heatmapInstanceAvg.setData(defaultData);
+          //     for (let n = 1; n <= MAX_PLAYERS; n++) {
+          //       const hp = document.querySelector('#player_default_home').cloneNode(true);
+          //       hp.id = "homeAvgPoints_" + t + "_" + n;
+          //       const rank = homeTacticPoints[t].rankByMinutes
+          //       hp.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+          //       // hp.style.display = n < 12 ? "inherit" : "none";
+          //       hp.style.left = homeTacticPoints[t].averages[n][0].x - 5 + "px";
+          //       hp.style.top = homeTacticPoints[t].averages[n][0].y - 5 + "px";
+          //       hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
+          //       hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
+          //       document.querySelector('#avgPositionsHome' + t).appendChild(hp);
+          //     }
+          //     const heatmapInstanceAvg = avgMapCreate("#avgPositionsHome" + t);
+          //     // heatmapInstanceAvg.setData(defaultData);
 
-            const heatmapPlayers = h337.create({
-              container: document.querySelector(tacticId),
-              maxOpacity: MAX_OPACITY,
-              minOpacity: MIN_OPACITY,
-              radius: POINT_RADIUS
-            });
-            heatmapPlayers.setData({
-              max: maximumValue,
-              data: homeTacticPoints[t].team
-            });
-            const heatmapball = h337.create({
-              container: document.querySelector(ballId),
-              maxOpacity: MAX_OPACITY,
-              minOpacity: MIN_OPACITY,
-              radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
-            });
-            heatmapball.setData({
-              max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
-              data: homeTacticPoints[t].ball
-            });
-          }
+          //     const heatmapPlayers = h337.create({
+          //       container: document.querySelector(tacticId),
+          //       maxOpacity: MAX_OPACITY,
+          //       minOpacity: MIN_OPACITY,
+          //       radius: POINT_RADIUS
+          //     });
+          //     heatmapPlayers.setData({
+          //       max: maximumValue,
+          //       data: homeTacticPoints[t].team
+          //     });
+          //     const heatmapball = h337.create({
+          //       container: document.querySelector(ballId),
+          //       maxOpacity: MAX_OPACITY,
+          //       minOpacity: MIN_OPACITY,
+          //       radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
+          //     });
+          //     heatmapball.setData({
+          //       max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
+          //       data: homeTacticPoints[t].ball
+          //     });
+          //   }
+          // }
+          // //-----------------------------------------------------------------------------------
+          // // const newTactics2 = document.querySelector("#game-info").cloneNode(true);
+          // // newTactics2.id = "awayTacticsInfo";
+          // // newTactics2.textContent = "Смены тактик " + rep.away.team.name;
+          // // document.body.appendChild(newTactics2);
+          // showableTacticks.push(homeTacticPoints.filter((t, n) => (n > 0 && t.period > 3)).map(el => [el.start, el.end]));
+
         }
-        //-----------------------------------------------------------------------------------
-        // const newTactics2 = document.querySelector("#game-info").cloneNode(true);
-        // newTactics2.id = "awayTacticsInfo";
-        // newTactics2.textContent = "Смены тактик " + rep.away.team.name;
-        // document.body.appendChild(newTactics2);
 
-        document.querySelector("#away-tacticks-heatmaps + .bojan__label .bojan__label__header").textContent = "Смены тактик " + rep.away.team.name;
 
-        if (awayTacticPoints.length > 1) {
-          for (let t = 1; t < awayTacticPoints.length; t++) {
-            if (awayTacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
-            awayTacticPoints[t].rankByMinutes = [];
-            awayTacticPoints[t].averages.forEach((positions, _n) => {
-              const avg = positions.length;
-              awayTacticPoints[t].rankByMinutes[_n] = [_n, avg];
-              if (_n === 0 || avg < 2) return;
-              positions.forEach((pos, i, _arr) => {
-                positions[0].x += (pos.x / avg);
-                positions[0].y += (pos.y / avg);
+        function showTeamTacticHeamaps(_team = "home") {
+          document.querySelector("#" + _team + "-tacticks-heatmaps + .bojan__label .bojan__label__header").textContent = "Смены тактик " + rep[_team].team.name;
+          if (outData[_team].TacticPoints.length > 1) {
+            for (let t = 1; t < outData[_team].TacticPoints.length; t++) {
+              if (outData[_team].TacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+              outData[_team].TacticPoints[t].rankByMinutes = [];
+              outData[_team].TacticPoints[t].averages.forEach((positions, _n) => {
+                const avg = positions.length;
+                outData[_team].TacticPoints[t].rankByMinutes[_n] = [_n, avg];
+                if (_n === 0 || avg < 2) return;
+                positions.forEach((pos, i, _arr) => {
+                  positions[0].x += (pos.x / avg);
+                  positions[0].y += (pos.y / avg);
+                })
               })
-            })
-            awayTacticPoints[t].rankByMinutes.sort((a, b) => b[1] - a[1]);
+              outData[_team].TacticPoints[t].rankByMinutes.sort((a, b) => b[1] - a[1]);
 
-            const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
-            const newDiv = divWrapper.cloneNode(true);
-            const tacticId = "#heatmap-tacticaway" + t;
-            const ballId = "#heatmap-ballaway" + t;
-            const tacticLabel = (awayTacticPoints[t].start > 0 ? ("от " + awayTacticPoints[t].start) : "") + " " +
-              (awayTacticPoints[t].end < 125 ? ("до " + awayTacticPoints[t].end) : "") + ".  " + rep.away.team.name;
-            newDiv.querySelector('#heatmap-home').id = "heatmap-tacticaway" + t;
-            newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
-            newDiv.querySelector('#heatmap-away').id = "heatmap-ballaway" + t;
-            newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;;
-            document.querySelector("#away-tacticks-heatmaps ~ .bojan__content").appendChild(newDiv);
-            // document.body.appendChild(newDiv);
-            const theWrapper = document.getElementsByClassName('heatmap-container-wrapper')[1];
-            // const theWrapper = document.getElementsByClassName('heatmap-container-wrapper-right')[0];
+              const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
+              const newDiv = divWrapper.cloneNode(true);
+              const tacticId = "#heatmap-tactic" + _team + t;
+              const ballId = "#heatmap-ball" + _team + t;
+              const tacticLabel = (outData[_team].TacticPoints[t].start > 0 ? ("от " + outData[_team].TacticPoints[t].start) : "") + " " +
+                (outData[_team].TacticPoints[t].end < 125 ? ("до " + outData[_team].TacticPoints[t].end) : "") + ".  " + rep[_team].team.name;
+              newDiv.querySelector('#heatmap-home').id = "heatmap-tactic" + _team + t;
+              newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
+              newDiv.querySelector('#heatmap-away').id = "heatmap-ball" + _team + t;
+              newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;;
+              document.querySelector("#" + _team + "-tacticks-heatmaps ~ .bojan__content").appendChild(newDiv);
+              // document.body.appendChild(newDiv);
+              const theWrapper = document.getElementsByClassName('heatmap-container-wrapper')[1];
+              // const theWrapper = document.getElementsByClassName('heatmap-container-wrapper-right')[0];
 
-            const thirdField = theWrapper.cloneNode(true);
-            thirdField.className = "heatmap-container-wrapper";
-            // thirdField.className = "thirdHeatmap";
-            newDiv.className = "heatmap3-containers-wrapper";
-            thirdField.querySelector(".heatmap-container").id = "avgPositionsAway" + t;
-            thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
-            newDiv.appendChild(thirdField);
+              const thirdField = theWrapper.cloneNode(true);
+              thirdField.className = "heatmap-container-wrapper";
+              // thirdField.className = "thirdHeatmap";
+              newDiv.className = "heatmap3-containers-wrapper";
+              thirdField.querySelector(".heatmap-container").id = "avgPositions" + (_team === "home" ? "Home" : "Away") + t;
+              thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
+              newDiv.appendChild(thirdField);
 
-            for (let n = 1; n <= MAX_PLAYERS; n++) {
-              // for (let n = 1; n < 12; n++) { 
-              const ap = document.querySelector('#player_default_away').cloneNode(true);
-              ap.id = "awayAvgPoints_" + t + "_" + n;
-              const rank = awayTacticPoints[t].rankByMinutes
-              ap.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
-              // ap.style.display = awayTacticPoints[t].rankByMinutes.find(el => el[0] === n)[0] < 11 ? "inherit" : "none";
-              // ap.style.display = n < 12 ? "inherit" : "none";
-              ap.style.left = awayTacticPoints[t].averages[n][0].x - 5 + "px";
-              ap.style.top = awayTacticPoints[t].averages[n][0].y - 5 + "px";
-              ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
-              ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;
-              document.querySelector('#avgPositionsAway' + t).appendChild(ap);
+              for (let n = 1; n <= MAX_PLAYERS; n++) {
+                // for (let n = 1; n < 12; n++) { 
+                const pl = document.querySelector('#player_default_' + _team).cloneNode(true);
+                pl.id = _team + "AvgPoints_" + t + "_" + n;
+                const rank = outData[_team].TacticPoints[t].rankByMinutes
+                pl.style.display = rank.indexOf(rank.find(el => { return el[0] == n })) < 11 ? "inherit" : "none";
+                // ap.style.display = outData[_team].TacticPoints[t].rankByMinutes.find(el => el[0] === n)[0] < 11 ? "inherit" : "none";
+                // ap.style.display = n < 12 ? "inherit" : "none";
+                pl.style.left = outData[_team].TacticPoints[t].averages[n][0].x - 5 + "px";
+                pl.style.top = outData[_team].TacticPoints[t].averages[n][0].y - 5 + "px";
+                pl.querySelector('.player_number').textContent = rep[_team].players[n - 1].number;
+                pl.querySelector('.tooltiptext').textContent = rep[_team].players[n - 1].name + "    " + rep[_team].players[n - 1].number;
+                document.querySelector('#avgPositionsAway' + t).appendChild(pl);
+
+              }
+              //------------------------------------------------------------
+              const heatmapPlayers = h337.create({
+                container: document.querySelector(tacticId),
+                maxOpacity: MAX_OPACITY,
+                minOpacity: MIN_OPACITY,
+                radius: POINT_RADIUS
+
+              });
+              heatmapPlayers.setData({
+                max: maximumValue,
+                data: outData[_team].TacticPoints[t].team
+              });
+
+              const heatmapball = h337.create({
+                container: document.querySelector(ballId),
+                maxOpacity: MAX_OPACITY,
+                minOpacity: MIN_OPACITY,
+                radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
+
+              });
+              heatmapball.setData({
+                max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
+                data: outData[_team].TacticPoints[t].ball
+              });
 
             }
-            //------------------------------------------------------------
-            const heatmapPlayers = h337.create({
-              container: document.querySelector(tacticId),
-              maxOpacity: MAX_OPACITY,
-              minOpacity: MIN_OPACITY,
-              radius: POINT_RADIUS
-
-            });
-            heatmapPlayers.setData({
-              max: maximumValue,
-              data: awayTacticPoints[t].team
-            });
-
-            const heatmapball = h337.create({
-              container: document.querySelector(ballId),
-              maxOpacity: MAX_OPACITY,
-              minOpacity: MIN_OPACITY,
-              radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
-
-            });
-            heatmapball.setData({
-              max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
-              data: awayTacticPoints[t].ball
-            });
-
           }
-        }
-        showableTacticks.push(homeTacticPoints.filter((t, n) => (n > 0 && t.period > 3)).map(el => [el.start, el.end]));
 
-        showableTacticks.push(awayTacticPoints.filter((t, n) => (n > 0 && t.period > 3)).map(el => [el.start, el.end]));
+          showableTacticks.push(outData[_team].TacticPoints.filter((t, n) => (n > 0 && t.period > 3)).map(el => [el.start, el.end]));
+
+        }
+        showTeamTacticHeamaps("home")
+        showTeamTacticHeamaps("away")
 
         function showPlayersHeatmaps() {
           // const newHeatmapsHeader = document.querySelector("#game-info").cloneNode(true);
@@ -948,41 +979,52 @@ window.onload = function () {
 
           for (let i = 1; i <= MAX_PLAYERS; i++) {
             const divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
+
             const newDiv = divWrapper.cloneNode(true);
-            const homePlayerId = "#heatmap-home" + i;
-            const awayPlayerId = "#heatmap-away" + i;
 
-            newDiv.querySelector('#heatmap-home').id = "heatmap-home" + i;
-            newDiv.querySelector(homePlayerId + ' > div').textContent = rep.home.players[i - 1].number + '. ' + rep.home.players[i - 1].name;
-            newDiv.querySelector('#heatmap-away').id = "heatmap-away" + i;
-            newDiv.querySelector(awayPlayerId + ' > div').textContent = rep.away.players[i - 1].number + '. ' + rep.away.players[i - 1].name;
 
-            document.querySelector("#separate-heatmaps ~ .bojan__content").appendChild(newDiv);
+            function showOnePlayerHeatmap(_team = "home") {
+              const playerId = "#heatmap-" + _team + i;
+              newDiv.querySelector("#heatmap-" + _team).id = "heatmap-" + _team + i;
+              newDiv.querySelector(playerId + ' > div').textContent = rep[_team].players[i - 1].number + '. ' + rep[_team].players[i - 1].name;
+              if (_team === "home") document.querySelector("#separate-heatmaps ~ .bojan__content").appendChild(newDiv);
+
+              const _heatmapPlayer = h337.create({
+                container: document.querySelector(playerId),
+                maxOpacity: MAX_OPACITY,
+                minOpacity: MIN_OPACITY,
+                radius: POINT_RADIUS
+
+              });
+              _heatmapPlayer.setData({
+                max: maximumValue,
+                data: outData[_team].Points[i]
+              });
+            }
+
+            showOnePlayerHeatmap("home")
+            showOnePlayerHeatmap("away")
+
+            // const homePlayerId = "#heatmap-home" + i;
+
+            // newDiv.querySelector('#heatmap-home').id = "heatmap-home" + i;
+            // newDiv.querySelector(homePlayerId + ' > div').textContent = rep.home.players[i - 1].number + '. ' + rep.home.players[i - 1].name;
+
+            // document.querySelector("#separate-heatmaps ~ .bojan__content").appendChild(newDiv);
             // document.body.appendChild(newDiv);
 
-            const heatmapPlayer1 = h337.create({
-              container: document.querySelector(homePlayerId),
-              maxOpacity: MAX_OPACITY,
-              minOpacity: MIN_OPACITY,
-              radius: POINT_RADIUS
+            // const heatmapPlayer1 = h337.create({
+            //   container: document.querySelector(homePlayerId),
+            //   maxOpacity: MAX_OPACITY,
+            //   minOpacity: MIN_OPACITY,
+            //   radius: POINT_RADIUS
 
-            });
-            heatmapPlayer1.setData({
-              max: maximumValue * TEAM_MAX_KEFF,
-              data: homePoints[i]
-            });
+            // });
+            // heatmapPlayer1.setData({
+            //   max: maximumValue * TEAM_MAX_KEFF,
+            //   data: homePoints[i]
+            // });
 
-            const heatmapPlayer2 = h337.create({
-              container: document.querySelector(awayPlayerId),
-              maxOpacity: MAX_OPACITY,
-              minOpacity: MIN_OPACITY,
-              radius: POINT_RADIUS
-
-            });
-            heatmapPlayer2.setData({
-              max: maximumValue,
-              data: awayPoints[i]
-            });
 
           }
         }
@@ -1000,12 +1042,12 @@ window.onload = function () {
         // const avgH = homePoints[0].length;
         // //console.log("Точек  - ",avgH);
 
-        homeTacticChanges.push(homePoints[0].length - 1);
-        awayTacticChanges.push(awayPoints[0].length - 1);
+        outData.home.TacticChanges.push(outData.home.Points[0].length - 1);
+        outData.away.TacticChanges.push(outData.away.Points[0].length - 1);
 
 
-        homeAvgPoints = calculateAvgPositions(homePoints).slice();
-        awayAvgPoints = calculateAvgPositions(awayPoints).slice();
+        outData.home.AvgPoints = calculateAvgPositions(outData.home.Points).slice();
+        outData.away.AvgPoints = calculateAvgPositions(outData.away.Points).slice();
 
         // homePoints.forEach((hmap, _n) => {
         //   const avg = hmap.length;
@@ -1016,25 +1058,25 @@ window.onload = function () {
         //     homeAvgPoints[_n].y += point.y / avg;
         //   })
         // })
-        // awayPoints.forEach((hmap, _n) => {
+        // outData[_team].Points.forEach((hmap, _n) => {
         //   const avg = hmap.length;
         //   if (_n === 0 || avg < 1) return;
 
         //   hmap.forEach((point, i) => {
-        //     awayAvgPoints[_n].x += point.x / avg;
-        //     awayAvgPoints[_n].y += point.y / avg;
+        //     outData[_team].AvgPoints[_n].x += point.x / avg;
+        //     outData[_team].AvgPoints[_n].y += point.y / avg;
         //   })
         // })
         //console.log('homeAvgPoints  - ', homeAvgPoints);
-        //console.log('awayAvgPoints  - ', awayAvgPoints);
+        //console.log('outData[_team].AvgPoints  - ', outData[_team].AvgPoints);
         //-------------------------------------------------------------------------
         function showHideAllColoboks(team, n, _tacticPoints, isVisible = SHOW) {
-          const _home = team || "home";
+          const _team = team || "home";
           const _n = n || 1;
-          const tacticPoints = _tacticPoints || homeTacticPoints;
+          const tacticPoints = _tacticPoints || outData.home.TacticPoints;
 
-          const _colobokId = _home + "AvgPoints" + _n;
-          const _colobokId2 = "both" + _home + "AvgPoints" + _n;
+          const _colobokId = _team + "AvgPoints" + _n;
+          const _colobokId2 = "both" + _team + "AvgPoints" + _n;
           //  console.log(_colobokId, _colobokId2);
           const _style = document.getElementById(_colobokId).style;
           const _style2 = document.getElementById(_colobokId2).style;
@@ -1043,7 +1085,7 @@ window.onload = function () {
           if (tacticPoints.length > 1) {
             for (let t = 1; t < tacticPoints.length; t++) {
               if (tacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
-              const _colobokId = _home + "AvgPoints_" + t + "_" + _n;
+              const _colobokId = _team + "AvgPoints_" + t + "_" + _n;
 
               document.getElementById(_colobokId).style.display = isVisible ?
                 // document.getElementById(_colobokId).style.display = document.getElementById(_colobokId).style.display == "none" ?
@@ -1053,195 +1095,204 @@ window.onload = function () {
           }
         };
         //-------------------------------------------------------------------------
-        function showMainAvgPositions() {
+
+        function showTeamAvgPositions(_team) {
           for (let n = 1; n <= MAX_PLAYERS; n++) {
             // for (let n = 1; n < 12; n++) {
-            const hp = document.querySelector('#player_default_home').cloneNode(true);
-            const ap = document.querySelector('#player_default_away').cloneNode(true);
-            ap.id = "awayAvgPoints" + n;
-            ap.plId = "aw" + n;
+            // const hp = document.querySelector('#player_default_home').cloneNode(true);
+
+            const pl = document.querySelector('#player_default_' + _team).cloneNode(true);
+
+            pl.id = _team + "AvgPoints" + n;
+            pl.plId = (_team === "home" ? "hm" : "aw") + n;
             // ap.style.display = n < 12 ? "inherit" : "none";
-            // ap.style.left = awayAvgPoints[n].x - 5 + "px";
-            // ap.style.top = awayAvgPoints[n].y - 5 + "px";
-            const apRow = "away-player-list_" + n;
-            // const newPlayer = document.createElement('div',{id: apRow});
+            // ap.style.left = outData[_team].AvgPoints[n].x - 5 + "px";
+            // ap.style.top = outData[_team].AvgPoints[n].y - 5 + "px";
+            const plRow = "away-player-list_" + n;
+            // const newPlayer = document.createElement('div',{id: plRow});
             let newPlayer = document.createElement('div');
             newPlayer.className = "playerRow";
-            newPlayer.id = apRow;
-            const apNumDiv = document.createElement('div');
-            apNumDiv.innerText = rep.away.players[n - 1].number + ". ";
-            apNumDiv.className = "player-list-num";
-            const apNameDiv = document.createElement('div');
-            apNameDiv.className = "player-list-name";
-            const apName = document.createElement('a');
-            // apName.style.fontWeight = n < 12 ? "bold" : "normal";
-            apName.id = apRow + '_name';
-            apName.innerText = rep.away.players[n - 1].name;
-            apName.href = '#';
+            newPlayer.id = plRow;
+            const plNumDiv = document.createElement('div');
+            plNumDiv.innerText = rep[_team].players[n - 1].number + ". ";
+            plNumDiv.className = "player-list-num";
+            const plNameDiv = document.createElement('div');
+            plNameDiv.className = "player-list-name";
+            const plName = document.createElement('a');
+            // plName.style.fontWeight = n < 12 ? "bold" : "normal";
+            plName.id = plRow + '_name';
+            plName.innerText = rep[_team].players[n - 1].name;
+            plName.href = '#';
 
-            apName.addEventListener('click', function (e) {
+            plName.addEventListener('click', function (e) {
               e.preventDefault();
               this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
-              showHideAllColoboks("away", this.id.replace("away-player-list_", '').replace("_name", '')
-                , awayTacticPoints
+              showHideAllColoboks(_team, this.id.replace(_team + "-player-list_", '').replace("_name", '')
+                , outData[_team].TacticPoints
                 , this.style.fontWeight == "bold" ? SHOW : HIDE
               );
             });
-            if (rep.away.players[n - 1].sub) {
-              apName.appendChild(getSubArrow(rep.away.players[n - 1].sub));
+            if (rep[_team].players[n - 1].sub) {
+              plName.appendChild(getSubArrow(rep[_team].players[n - 1].sub));
             }
-            apNameDiv.appendChild(apName);
+            plNameDiv.appendChild(plName);
 
-            newPlayer.appendChild(apNumDiv);
-            newPlayer.appendChild(apNameDiv);
+            newPlayer.appendChild(plNumDiv);
+            newPlayer.appendChild(plNameDiv);
             // document.querySelector('#squadAwayPass').appendChild(newPlayer.cloneNode(true));
 
-            const apEye = document.createElement('div');
-            apEye.className = "player-list-eye";
-            apEye.innerText = " ";
+            const plEye = document.createElement('div');
+            plEye.className = "player-list-eye";
+            plEye.innerText = " ";
             //<img src="http://pefl.ru/images/eye.png" alt="" border="0">
             // apEye.appendChild(createEye(`Тут планируются 
             // скилы игрока`));
             // apEye.appendChild(createEye(`Тут планируется 
             // статистика игрока`));
-            newPlayer.appendChild(apEye);
-            const apShots = document.createElement('div');
-            apShots.className = "player-list-shots";
-            const apShotsString = formShotsString(rep.away.players[n - 1]);
-            apShots.innerText = apShotsString;
-            const apShotsCheckbox = document.createElement('div');
-            apShotsCheckbox.className = "playerShotCheckbox";
-            if (apShotsString == " ") {
-              apShotsCheckbox.innerText = " ";
+            newPlayer.appendChild(plEye);
+            const plShots = document.createElement('div');
+            plShots.className = "player-list-shots";
+            const plShotsString = formShotsString(rep[_team].players[n - 1]);
+            plShots.innerText = plShotsString;
+            const plShotsCheckbox = document.createElement('div');
+            plShotsCheckbox.className = "playerShotCheckbox";
+            if (plShotsString == " ") {
+              plShotsCheckbox.innerText = " ";
             } else {
-              apShotsCheckbox.appendChild(createShotCheckbox({
+              plShotsCheckbox.appendChild(createShotCheckbox({
                 player: n,
-                team: "away"
+                team: _team
               }))
-              const apShotsTooltip = document.createElement('div');
-              apShotsTooltip.className = "tooltiptext";
-              apShotsTooltip.innerText = SHOT_TOOLTIP;
-              apShots.appendChild(apShotsTooltip);
+              const plShotsTooltip = document.createElement('div');
+              plShotsTooltip.className = "tooltiptext";
+              plShotsTooltip.innerText = SHOT_TOOLTIP;
+              plShots.appendChild(plShotsTooltip);
             }
-            newPlayer.appendChild(apShotsCheckbox);
-            newPlayer.appendChild(apShots);
-            const apMileage = document.createElement('div');
-            apMileage.className = "player-list-mileage";
-            apMileage.innerText = Number(awayMileage[n] / 1000.0).toFixed(2) + " км";
-            newPlayer.appendChild(apMileage);
+            newPlayer.appendChild(plShotsCheckbox);
+            newPlayer.appendChild(plShots);
+            const plMileage = document.createElement('div');
+            plMileage.className = "player-list-mileage";
+            plMileage.innerText = Number(outData[_team].Mileage[n] / 1000.0).toFixed(2) + "км";
+            newPlayer.appendChild(plMileage);
 
             document.querySelector('#squadAway').appendChild(newPlayer);
 
-            ap.querySelector('.player_number').textContent = rep.away.players[n - 1].number;
-            ap.querySelector('.tooltiptext').textContent = rep.away.players[n - 1].name + "    " + rep.away.players[n - 1].number;;
-            document.getElementById('heatmap-avgAway').appendChild(ap);
-            const apBoth = ap.cloneNode(true);
-            apBoth.id = "both" + apBoth.id;
-            document.getElementById('heatmap-avgBoth').appendChild(apBoth);
-            const apToINdividualHeatmap = ap.cloneNode(true);
-            apToINdividualHeatmap.style.display = (awayAvgPoints[n].x > 8 && awayAvgPoints[n].y > 8) ? "inherit" : "none";
-            apToINdividualHeatmap.id = apToINdividualHeatmap.id + "_individual";
-            apToINdividualHeatmap.style.left = awayAvgPoints[n].x - 5 + "px";
-            apToINdividualHeatmap.style.top = awayAvgPoints[n].y - 5 + "px";
-            document.querySelector('#heatmap-away' + n).appendChild(apToINdividualHeatmap);
+            pl.querySelector('.player_number').textContent = rep[_team].players[n - 1].number;
+            pl.querySelector('.tooltiptext').textContent = rep[_team].players[n - 1].name + "    " + rep[_team].players[n - 1].number;;
+            document.getElementById('heatmap-avg' + (_team === "home" ? "Home" : "Away")).appendChild(pl);
+            const plBoth = pl.cloneNode(true);
+            plBoth.id = "both" + apBoth.id;
+            document.getElementById('heatmap-avgBoth').appendChild(plBoth);
+            const plToINdividualHeatmap = pl.cloneNode(true);
+            plToINdividualHeatmap.style.display = (outData[_team].AvgPoints[n].x > 8 && outData[_team].AvgPoints[n].y > 8) ? "inherit" : "none";
+            plToINdividualHeatmap.id = plToINdividualHeatmap.id + "_individual";
+            plToINdividualHeatmap.style.left = outData[_team].AvgPoints[n].x - 5 + "px";
+            plToINdividualHeatmap.style.top = outData[_team].AvgPoints[n].y - 5 + "px";
+            document.querySelector('#heatmap-' + _team + n).appendChild(plToINdividualHeatmap);
 
-            hp.id = "homeAvgPoints" + n;
-            hp.plId = "hm" + n;
-            // hp.style.display = n < 12 ? "inherit" : "none";
-            // hp.style.left = homeAvgPoints[n].x - 5 + "px";
-            // hp.style.top = homeAvgPoints[n].y - 5 + "px";
-            const hpRow = "home-player-list_" + n;
-            const newHomePlayer = document.createElement('div');
-            newHomePlayer.id = hpRow;
-            newHomePlayer.className = "playerRow";
+            {
+              // hp.id = "homeAvgPoints" + n;
+              // hp.plId = "hm" + n;
+              // // hp.style.display = n < 12 ? "inherit" : "none";
+              // // hp.style.left = homeAvgPoints[n].x - 5 + "px";
+              // // hp.style.top = homeAvgPoints[n].y - 5 + "px";
+              // const hpRow = "home-player-list_" + n;
+              // const newHomePlayer = document.createElement('div');
+              // newHomePlayer.id = hpRow;
+              // newHomePlayer.className = "playerRow";
 
-            const hpNumDiv = document.createElement('div');
-            hpNumDiv.innerText = rep.home.players[n - 1].number + ". ";
-            hpNumDiv.className = "player-list-num";
-            newHomePlayer.appendChild(hpNumDiv);
+              // const hpNumDiv = document.createElement('div');
+              // hpNumDiv.innerText = rep.home.players[n - 1].number + ". ";
+              // hpNumDiv.className = "player-list-num";
+              // newHomePlayer.appendChild(hpNumDiv);
 
-            const hpNameDiv = document.createElement('div');
-            hpNameDiv.className = "player-list-name";
-            const hpName = document.createElement('a');
-            hpName.style.fontWeight = n < 12 ? "bold" : "normal";
-            hpName.id = hpRow + '_name';
-            hpName.innerText = rep.home.players[n - 1].name;
-            hpName.href = '#';
-            hpName.addEventListener('click', function (e) {
-              e.preventDefault();
-              this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
-              showHideAllColoboks("home"
-                , this.id.replace("home-player-list_", '').replace("_name", '')
-                , homeTacticPoints
-                , this.style.fontWeight == "bold" ? SHOW : HIDE
-              );
-            });
-            if (rep.home.players[n - 1].sub) {
-              hpName.appendChild(getSubArrow(rep.home.players[n - 1].sub));
+              // const hpNameDiv = document.createElement('div');
+              // hpNameDiv.className = "player-list-name";
+              // const hpName = document.createElement('a');
+              // hpName.style.fontWeight = n < 12 ? "bold" : "normal";
+              // hpName.id = hpRow + '_name';
+              // hpName.innerText = rep.home.players[n - 1].name;
+              // hpName.href = '#';
+              // hpName.addEventListener('click', function (e) {
+              //   e.preventDefault();
+              //   this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
+              //   showHideAllColoboks("home"
+              //     , this.id.replace("home-player-list_", '').replace("_name", '')
+              //     , homeTacticPoints
+              //     , this.style.fontWeight == "bold" ? SHOW : HIDE
+              //   );
+              // });
+              // if (rep.home.players[n - 1].sub) {
+              //   hpName.appendChild(getSubArrow(rep.home.players[n - 1].sub));
+              // }
+
+              // hpNameDiv.appendChild(hpName);
+              // newHomePlayer.appendChild(hpNameDiv);
+
+              // // document.querySelector('#squadHomePass').appendChild(newHomePlayer.cloneNode(true));
+
+              // const hpEye = document.createElement('div');
+              // hpEye.className = "player-list-eye";
+              // hpEye.innerText = " ";
+              // // hpEye.appendChild(createEye(`Тут планируются 
+              // // скилы игрока`));
+              // // hpEye.appendChild(createEye(`Тут планируется 
+              // // статистика игрока`));
+              // newHomePlayer.appendChild(hpEye);
+              // const hpShots = document.createElement('div');
+              // hpShots.className = "player-list-shots";
+              // const hpShotsString = formShotsString(rep.home.players[n - 1]);
+              // hpShots.innerText = hpShotsString;
+
+              // const hpShotsCheckbox = document.createElement('div');
+              // hpShotsCheckbox.className = "playerShotCheckbox";
+
+              // if (hpShotsString == " ") {
+              //   hpShotsCheckbox.innerText = " ";
+              // } else {
+              //   hpShotsCheckbox.appendChild(createShotCheckbox({
+              //     player: n,
+              //     team: "home"
+              //   }))
+              //   const hpShotsTooltip = document.createElement('div');
+              //   hpShotsTooltip.className = "tooltiptext";
+              //   hpShotsTooltip.innerText = SHOT_TOOLTIP;
+              //   hpShots.appendChild(hpShotsTooltip);
+              // }
+              // newHomePlayer.appendChild(hpShotsCheckbox);
+              // newHomePlayer.appendChild(hpShots);
+              // const hpMileage = document.createElement('div');
+              // hpMileage.className = "player-list-mileage";
+              // hpMileage.innerText = Number(homeMileage[n] / 1000.0).toFixed(2) + " км";
+              // newHomePlayer.appendChild(hpMileage);
+
+              // document.querySelector('#squadHome').appendChild(newHomePlayer);
+
+              // hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
+              // hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
+              // document.getElementById('heatmap-avgHome').appendChild(hp);
+              // const hpBoth = hp.cloneNode(true);
+              // hpBoth.id = "both" + hpBoth.id;
+              // document.getElementById('heatmap-avgBoth').appendChild(hpBoth);
+              // const hpToINdividualHeatmap = hp.cloneNode(true);
+              // hpToINdividualHeatmap.style.display = (homeAvgPoints[n].x > 8 && homeAvgPoints[n].y > 8) ? "inherit" : "none";
+
+              // hpToINdividualHeatmap.id = hpToINdividualHeatmap.id + "_individual";
+              // hpToINdividualHeatmap.style.left = homeAvgPoints[n].x - 5 + "px";
+              // hpToINdividualHeatmap.style.top = homeAvgPoints[n].y - 5 + "px";
+              // document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
             }
-
-            hpNameDiv.appendChild(hpName);
-            newHomePlayer.appendChild(hpNameDiv);
-
-            // document.querySelector('#squadHomePass').appendChild(newHomePlayer.cloneNode(true));
-
-            const hpEye = document.createElement('div');
-            hpEye.className = "player-list-eye";
-            hpEye.innerText = " ";
-            // hpEye.appendChild(createEye(`Тут планируются 
-            // скилы игрока`));
-            // hpEye.appendChild(createEye(`Тут планируется 
-            // статистика игрока`));
-            newHomePlayer.appendChild(hpEye);
-            const hpShots = document.createElement('div');
-            hpShots.className = "player-list-shots";
-            const hpShotsString = formShotsString(rep.home.players[n - 1]);
-            hpShots.innerText = hpShotsString;
-
-            const hpShotsCheckbox = document.createElement('div');
-            hpShotsCheckbox.className = "playerShotCheckbox";
-
-            if (hpShotsString == " ") {
-              hpShotsCheckbox.innerText = " ";
-            } else {
-              hpShotsCheckbox.appendChild(createShotCheckbox({
-                player: n,
-                team: "home"
-              }))
-              const hpShotsTooltip = document.createElement('div');
-              hpShotsTooltip.className = "tooltiptext";
-              hpShotsTooltip.innerText = SHOT_TOOLTIP;
-              hpShots.appendChild(hpShotsTooltip);
-            }
-            newHomePlayer.appendChild(hpShotsCheckbox);
-            newHomePlayer.appendChild(hpShots);
-            const hpMileage = document.createElement('div');
-            hpMileage.className = "player-list-mileage";
-            hpMileage.innerText = Number(homeMileage[n] / 1000.0).toFixed(2) + " км";
-            newHomePlayer.appendChild(hpMileage);
-
-            document.querySelector('#squadHome').appendChild(newHomePlayer);
-
-            hp.querySelector('.player_number').textContent = rep.home.players[n - 1].number;
-            hp.querySelector('.tooltiptext').textContent = rep.home.players[n - 1].name + "    " + rep.home.players[n - 1].number;
-            document.getElementById('heatmap-avgHome').appendChild(hp);
-            const hpBoth = hp.cloneNode(true);
-            hpBoth.id = "both" + hpBoth.id;
-            document.getElementById('heatmap-avgBoth').appendChild(hpBoth);
-            const hpToINdividualHeatmap = hp.cloneNode(true);
-            hpToINdividualHeatmap.style.display = (homeAvgPoints[n].x > 8 && homeAvgPoints[n].y > 8) ? "inherit" : "none";
-
-            hpToINdividualHeatmap.id = hpToINdividualHeatmap.id + "_individual";
-            hpToINdividualHeatmap.style.left = homeAvgPoints[n].x - 5 + "px";
-            hpToINdividualHeatmap.style.top = homeAvgPoints[n].y - 5 + "px";
-            document.querySelector('#heatmap-home' + n).appendChild(hpToINdividualHeatmap);
           }
         }
+        function showMainAvgPositions() {
+          showTeamAvgPositions("home")
+          showTeamAvgPositions("away")
+        }
+
         setTimeout(
           showMainAvgPositions
           , 50
         )
-        // showMainAvgPositions();
         /**===================================================================================================== */
         setTimeout(function () {
           document.body.removeChild(document.querySelector('.loader-wrapper'));
