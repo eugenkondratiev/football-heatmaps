@@ -8,11 +8,8 @@ function formJsonUrl(tvurl) {
   const jIndex = urlString.indexOf('j=');
 
   return JSON_URL_START + `?j=${urlString.substring(2 + jIndex, zIndex)}&z=${urlString.substring(3 + zIndex)}`;
-
 }
-
 //==============================================================================
-
 function limitPoint(point, secondTime = false, coords1 = hmCoords, coords2 = jsonCoords) {
   const x = point.x;
   const y = point.y;
@@ -30,8 +27,7 @@ function limitPoint(point, secondTime = false, coords1 = hmCoords, coords2 = jso
 //==============================================================================
 function normalizePoint(point, secondTime = false, away = false, coords2 = jsonCoords) {
   if (away) {
-    // if (secondTime && away || !secondTime && away) {
-    return {h: (coords2.y2 - point.h), w: (coords2.x2 - point.w), value: 1 };
+    return { h: (coords2.y2 - point.h), w: (coords2.x2 - point.w), value: 1 };
   }
   return { h: point.h, w: point.w, value: 1 }
 }
@@ -52,9 +48,7 @@ function getLength(coord1, coord2) {
 function getLengthToBall(coord, ball, _secondTime = false, _away = false) {
   const point = normalizePoint(coord, _secondTime, _away);
   const length = getLength(point, ball);
-  // console.log(_secondTime, _away, coord, point, ball, length );
   return length;
-  // return getLength(point, ball);
 }
 //==============================================================================
 function getSegmentAngle(startPoint, endPoint) {
@@ -74,10 +68,8 @@ function leaveValuablePoints(pointsArr) {
 }
 //==============================================================================
 function getPlayerFromMessage(message, num = 1) {
-  // console.log(typeof message, message);
   if (!message) return 0;
   const playerNumbers = message.mes.match(/(?<=\[)\d+(?=\])/g);
-  // console.log("playerNumbers -", playerNumbers);
   return playerNumbers != null && playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0;
 }
 //==============================================================================
@@ -107,7 +99,6 @@ function createEye(toolTip) {
   eye.alt = "";
   const tp = document.createElement('div');
   tp.className = "tooltiptext";
-  // tp.display = "none";
   tp.innerText = toolTip;
   eye.appendChild(tp);
   return eye;

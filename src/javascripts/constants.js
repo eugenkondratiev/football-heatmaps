@@ -1,6 +1,5 @@
 ;const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
 
-
 const MAX_VALUE = 60;
 const MAX_OPACITY = .7;
 const MIN_OPACITY = .05;
@@ -42,6 +41,5 @@ const RE_SCORE_WITH_PENALTIES = /\d+:\d+/g;
 const RE_PLAYER_NUMBERS = /[0-9]+/gi;
 
 const MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1);
-// const MILEAGE_KEFF = FIELD_LONGTITUDE / (rightBottomX - leftTopX) ;
 
 const SHOT_TOOLTIP = "Удары|В створ|Голы-автоголы   |Блокированные|Каркас"

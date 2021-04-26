@@ -18,8 +18,6 @@ function createShotStart(shot, shotinfo, color) {
   shotStart.style.backgroundColor = color;
   shotStart.style.top = shot.startpoint.y - 5 + "px";
   shotStart.style.left = shot.startpoint.x - 5 + "px";
-  // shotStart.style.top = shot.startpoint.y - .7 + "%";
-  // shotStart.style.left = shot.startpoint.x - .7 + "%";
   const typeString = shot.type == "G"
     ? 'Гол'
     : shot.type == "V"
@@ -31,9 +29,8 @@ function createShotStart(shot, shotinfo, color) {
           : shot.type == "B" ? 'Каркас ворот' : 'Мимо';
 
   shotStart.addEventListener('mouseenter', function (e) {
-    // console.log(shot.minute, shot.episode, shot.player, shotinfo.playerName, typeString);
     const shotLegend = document.querySelector('#one-shot-legend');
-    const shotString = " Минута " + shot.minute + ", " + typeString + ",\n\r " + shot.player + "." + shotinfo.playerName;
+    const shotString = " Минута " + shot.minute + ", " + typeString+ ", " + shot.xG + ",\n\r " + shot.player + "." + shotinfo.playerName;
     shotLegend.textContent = shotString;
     shotLegend.style.display = "inline-block";
   })
@@ -82,22 +79,8 @@ function createShot(shot, shotinfo) {
 /**===================================================================================================== */
 function drawTeamShots(teamShots, players, team, ctx) {
   teamShots.forEach((shot, shotNum) => {
-
     const shotInfo = { playerName: players[shot.player - 1].name, team: team };
-
     document.querySelector('#chalkboard').appendChild(createShot(shot, shotInfo));
-
-    // ctx.beginPath(); 
-    // ctx.fillStyle = _strokeStyle;
-    // ctx.arc(shot.startpoint.x, shot.startpoint.y, 4, 0, 2 * Math.PI, false);
-    // ctx.fill();              
-    // ctx.moveTo(shot.startpoint.x, shot.startpoint.y);
-    // ctx.lineWidth = 2;
-    // ctx.lineTo(shot.endpoint.x, shot.endpoint.y);
-    // ctx.arc(shot.endpoint.x, shot.endpoint.y, 2, 0, 2 * Math.PI, false);
-    // ctx.strokeStyle = _strokeStyle;
-    // ctx.stroke();
-
   });
 }
 /**===================================================================================================== */
@@ -159,8 +142,6 @@ function formShotsString(player) {
 }
 /**===================================================================================================== */
 function displayAllShots(display, team, hard = true, allHide = false) {
-  // console.log("display - ", display, "allHide - ", allHide);
-
   const shotsSelector = "." + team + "Shot";
   document.querySelectorAll(shotsSelector).forEach(shot => {
     if (allHide) {
@@ -175,11 +156,9 @@ function displayAllShots(display, team, hard = true, allHide = false) {
   })
 }
 function filterShotsByTime(start, end) {
-  // console.log(start, end, start < end);
   document.querySelectorAll("[class$=Shot]").forEach(shot => {
     const minute = +shot.getAttribute("minute");
     const matchPeriod = (minute >= +start && minute <= +end);
-    // console.log(matchPeriod, +shot.getAttribute("minute"), shot);
     shot.style.display = (matchPeriod)
       ? "block"
       : "none";
@@ -224,8 +203,6 @@ function changeVisibilityByType(e) {
   const type = this.getAttribute("data-type");
   const shotsSelector = ".shot[shottype=" + type + "]";
   const checked = this.style.fontWeight == "bold";
-  // const checked = Boolean(this.getAttribute("data-checked"));
-  // console.log(checked, typeof checked, e);
   document.querySelectorAll(shotsSelector).forEach(shot => {
     shot.style.display = !checked ? "block" : "none";
   });
@@ -234,9 +211,6 @@ function changeVisibilityByType(e) {
       shot.style.display = !checked ? "block" : "none";
     });
   }
-  // this.setAttribute("data-checked", !checked)
-  // console.log(this.getAttribute("data-checked"), typeof this.getAttribute("data-checked")); 
-
   this.style.fontWeight = checked ? "normal" : "bold";
 }
 //=================================================
@@ -271,11 +245,6 @@ function showAllShots(_show = true) {
   document.querySelectorAll("a[id^=filter]:nth-of-type(-n+5)").forEach(aButton => {
     aButton.style.fontWeight = _show ? "bold" : "normal";
   });
-  // const timeFilter = document.getElementById("shots-time-filter");
-  // console.log();
-  // timeFilter.setAttribute("start", 0);
-  // timeFilter.setAttribute("end", 125);
-  // timeFilter.dispatchEvent(new Event('change', { bubbles: true }));
 }
 document.getElementsByClassName("shots-container")[0].addEventListener('click', function (e) {
   showAllShots();

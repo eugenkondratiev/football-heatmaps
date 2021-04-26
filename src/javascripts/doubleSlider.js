@@ -1,10 +1,6 @@
 ;
 function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb) {
 
-
-    // console.log(tacticksArray[0]);
-    // console.log(tacticksArray[1]);
-
     const filterWrapper = document.createElement("div");
     filterWrapper.classList.add("time-slider");
     filterWrapper.id = prefix + "-time-filter";
@@ -30,17 +26,11 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
                 setLimits(el[0], el[1]);
                 updateValues();
             })
-
             _ul.appendChild(_li);
         })
         t.appendChild(_ul);
-
         return t;
-
     }
-
-
-
     const inputs = document.createElement("div");
     inputs.classList.add("time-slider__inputs");
     const sinput = document.createElement("input");
@@ -68,7 +58,6 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
 
     const inputsLabel = document.createElement("span");
     inputsLabel.innerText = "Границы периода";
-
     inputs.appendChild(sinput);
     inputs.appendChild(inputsLabel);
     inputs.appendChild(einput);
@@ -87,23 +76,16 @@ function createSlider(prefix = "", tacticksArray = [[[0, 125]], [[0, 125]]], cb)
     function updateValues() {
         const _start = +filterWrapper.getAttribute("start");
         const _end = +filterWrapper.getAttribute("end");
-
         sinput.value = _start;
         einput.value = _end;
 
-
         cb(_start, _end);
-
     }
 
     if (tacticksArray[0].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[0]));
-
     if (tacticksArray[1].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[1], "away"));
-
     filterWrapper.appendChild(inputs);
-
     updateValues();
-
     // cb(filterWrapper.getAttribute("start"), filterWrapper.getAttribute("end"));
 
     return filterWrapper;

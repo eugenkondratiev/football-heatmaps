@@ -2,7 +2,7 @@
 .overlay>.shotslegend,
 .overlay>#one-shot-legend {
     width: 120px;
-    height: 100px;
+    height:fit-content;
 
     color: lightgrey;
     font-size: smaller;
@@ -33,7 +33,7 @@
     width: 320px;
     border: 1px solid lightgrey;
     font-size: small;
-    height: 2em;
+    height: 2.1rem;
     background-color: #A3DE8F;
     border-radius: 5px;
     border: 2px solid rgb(37, 97, 35);

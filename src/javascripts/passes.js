@@ -30,16 +30,13 @@ function formPassString(pass, passinfo) {
     line.style.borderTopColor = color;
 
     line.addEventListener('mouseenter', function (e) {
-        // console.log(pass.minute, pass.episode, pass.player, passinfo.playerName, typeString);
         const passLegend = document.querySelector('#one-pass-legend');
         passLegend.textContent = formPassString(pass, passinfo);
         passLegend.style.display = "inline-block";
     })
-
     line.addEventListener('mouseleave', function (e) {
         document.querySelector('#one-pass-legend').style.display = "none";
     })
-
     return line;
 }
 /**===================================================================================================== */
@@ -50,12 +47,9 @@ function createPassStart(pass, passinfo, color) {
     passStart.style.backgroundColor = color;
     passStart.style.top = pass.startpoint.y - 5 + "px";
     passStart.style.left = pass.startpoint.x - 5 + "px";
-    // passStart.style.top = pass.startpoint.y - .7 + "%";
-    // passStart.style.left = pass.startpoint.x - .7 + "%";
     const typeString = getTypeString(pass);
 
     passStart.addEventListener('mouseenter', function (e) {
-        // console.log(pass.minute, pass.episode, pass.player, passinfo.playerName, typeString);
         const passLegend = document.querySelector('#one-pass-legend');
         passLegend.textContent = formPassString(pass, passinfo);
         passLegend.style.display = "inline-block";
@@ -66,14 +60,11 @@ function createPassStart(pass, passinfo, color) {
     })
     return passStart;
 }
-
-
 /**===================================================================================================== */
 function createPass(pass, passinfo) {
     const _strokeStyle = !pass.good
         ? 'red'
         : 'blue';
-
     const passPict = document.createElement('div');
     passPict.classList.add('pass');
     const teamClass = passinfo.team + "Pass";
@@ -86,25 +77,18 @@ function createPass(pass, passinfo) {
     passPict.setAttribute("good", pass.good);
 
     passPict.appendChild(createPassLine(pass, passinfo, _strokeStyle));
-    // passPict.appendChild(createShotEnd(pass, passinfo, _strokeStyle));
     passPict.appendChild(createPassStart(pass, passinfo, _strokeStyle));
 
     return passPict;
 }
 /**===================================================================================================== */
 function drawTeamPasses(teamPasses, players, team, ctx) {
-    // console.log("players  - ", players)
     teamPasses.forEach((playerPasses, _player) => {
-        // console.log("passes - ", playerPasses, _player);
         if (!playerPasses[0]) return;
         playerPasses.forEach(pass => {
-            // console.log("pass - ", pass)
             const passInfo = { playerName: players[_player].name, team: team, player: _player + 1 };
             document.querySelector('#passesboard').appendChild(createPass(pass, passInfo));;
         })
-
-
-
         // ctx.beginPath(); 
         // ctx.fillStyle = _strokeStyle;
         // ctx.arc(pass.startpoint.x, pass.startpoint.y, 4, 0, 2 * Math.PI, false);
