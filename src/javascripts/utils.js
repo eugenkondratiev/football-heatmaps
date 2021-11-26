@@ -25,11 +25,11 @@ function limitPoint(point, secondTime = false, coords1 = hmCoords, coords2 = jso
   return { x: newX, y: newY, value: point.value }
 }
 //==============================================================================
-function normalizePoint(point, secondTime = false, away = false, coords2 = jsonCoords) {
+function normalizePoint(point, away = false, coords2 = jsonCoords) {
   if (away) {
-    return { h: (coords2.y2 - point.h), w: (coords2.x2 - point.w), value: 1 };
+    return { n: point.n, h: (coords2.y2 - point.h), w: (coords2.x2 - point.w), value: 1 };
   }
-  return { h: point.h, w: point.w, value: 1 }
+  return { n: point.n, h: point.h, w: point.w, value: 1 }
 }
 
 //==============================================================================
@@ -45,9 +45,10 @@ function getLength(coord1, coord2) {
   return Math.sqrt(dX * dX + dY * dY)
 }
 //==================================================
-function getLengthToBall(coord, ball, _secondTime = false, _away = false) {
-  const point = normalizePoint(coord, _secondTime, _away);
+function getLengthToBall(coord, ball, _away = false) {
+  const point = normalizePoint(coord, _away);
   const length = getLength(point, ball);
+  // console.log("ball, point, _away, length ", ball, point, _away, length);
   return length;
 }
 //==============================================================================
@@ -67,10 +68,27 @@ function leaveValuablePoints(pointsArr) {
   return pointsArr.filter(point => !point); // if not null
 }
 //==============================================================================
-function getPlayerFromMessage(message, num = 1) {
-  if (!message) return 0;
-  const playerNumbers = message.mes.match(/(?<=\[)\d+(?=\])/g);
-  return playerNumbers != null && playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0;
+function getPlayerFromMessage(_message, num = 1) {
+  if (!_message || !_message.mes) return 0;
+  // const playerNumbersOld = String(_message.mes).match(/(?<=\[)\d+(?=\])/g);
+  // return playerNumbers != null && playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0;
+  // replace nice regexp by some kind of polifill for IE
+  const message = String(_message.mes)
+  const messageLength = message.length
+  let openingSquareIndex = 0
+  const playerNumbers = []
+  for (let i = 0; i < messageLength; i++) {
+    if (message[i] === '[') {
+      openingSquareIndex = i + 1
+    } else if (message[i] === ']' && openingSquareIndex < i && openingSquareIndex > 0) {
+      // console.log("openingSquareIndex - ", openingSquareIndex, i, message.substr(openingSquareIndex, i - openingSquareIndex));
+      playerNumbers.push(+message.substr(openingSquareIndex, i - openingSquareIndex))
+    }
+  }
+  // console.log("playerNumbers - ", playerNumbers, "playerNumbersOld - ", playerNumbersOld, message);
+  return openingSquareIndex
+    ? playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0
+    : null
 }
 //==============================================================================
 function getPointsSet(pointsArr, start, end) {
@@ -102,4 +120,37 @@ function createEye(toolTip) {
   tp.innerText = toolTip;
   eye.appendChild(tp);
   return eye;
+}
+//**========================================================================================================= */
+if (!Array.prototype.find) {
+  Array.prototype.find = function (predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return value;
+      }
+    }
+    return undefined;
+  };
+}
+//**========================================================================================================= */
+
+if (window.NodeList && !NodeList.prototype.forEach) {
+  NodeList.prototype.forEach = function (callback, thisArg) {
+    thisArg = thisArg || window;
+    for (var i = 0; i < this.length; i++) {
+      callback.call(thisArg, this[i], i, this);
+    }
+  };
 }

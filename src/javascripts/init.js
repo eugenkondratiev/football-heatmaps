@@ -29,9 +29,11 @@ outData["away"].TacticPoints.push({ start: 0, end: 1, period: 0, startPoint: 0, 
 
 const showableTacticks = [];
 const passes = [[]];
+const newpasses = [[]];
 
 for (let i = 0; i <= MAX_PLAYERS; i++) {
-  function createInitTeamsData(_team = "home") {
+  function createInitTeamsData(team) {
+    const _team = team || "home";
     outData[_team].Points.push([]);
     outData[_team].Mileage.push(0);
     outData[_team].AvgPoints.push({ x: 0, y: 0 });
@@ -43,6 +45,7 @@ for (let i = 0; i <= MAX_PLAYERS; i++) {
 }
 for (let i = 1; i <= MAX_PLAYERS * 2; i++) {
   passes.push([]);
+  newpasses.push([]);
 
 }
 let secondTime = false;

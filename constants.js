@@ -5,7 +5,7 @@ const DEST_FILES_PATH = DEST_PATH + '*';
 const CSS_PATH = SRC_PATH + 'stylesheets/';
 const JS_PATH = SRC_PATH + 'javascripts/';
 const CSS_DEST_PATH = DEST_PATH + 'css/';
-const JS_DEST_PATH =  DEST_PATH +'js/hm/';
+const JS_DEST_PATH = DEST_PATH + 'js/hm/';
 
 const cssfiles = [
     CSS_PATH + "loader.css",
@@ -20,7 +20,8 @@ const cssfiles = [
 ]
 
 const scripts = [
-    JS_PATH + "heatmap.min.js",
+    // JS_PATH + "heatmap.js",
+    // JS_PATH + "heatmap.min.js",
     JS_PATH + "constants.js",
     JS_PATH + "init.js",
     JS_PATH + "utils.js",
@@ -31,12 +32,16 @@ const scripts = [
     JS_PATH + "events.js",
     JS_PATH + "doubleSlider.js"
 ]
+const HEATMAP_PATH = JS_PATH + "heatmap.js"
+
 const CLEAN_FILES_ARRAY = [
     CSS_DEST_PATH + "hmsheet.min.css",
-    JS_DEST_PATH + "hm.js"
+    JS_DEST_PATH + "hm.js",
+    JS_DEST_PATH + "hm2.js",
 ];
 
 module.exports = {
+    HEATMAP_PATH,
     DEST_PATH,
     DEST_FILES_PATH,
     CSS_DEST_PATH,

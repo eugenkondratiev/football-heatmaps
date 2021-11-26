@@ -5,6 +5,7 @@ let heatmapInstance2;
 let heatmapInstance3;
 let heatmapInstance4;
 let heatmapInstance5;
+let heatmapInstance7;
 let heatmapInstance8;
 let heatmapInstance9;
 //-------------------------------------------------
@@ -38,24 +39,45 @@ function calculatePlayerClosestToBall(coords, _secondTime) {
   const ball = coords.ball;
   // console.log("calculatePlayerClosestToBall secondtime", _secondTime);
 
-  let player;
-  let minLength = 10000;
+  const players = [];
+  const closestPlayer = { n: 0, length: 10000 };
+  const prevPlayer = { n: 0, length: 10000 };
+
+  // let minLength = 10000;
+
   coords.home.forEach(pl => {
-    const length = getLengthToBall(pl, ball, _secondTime, false);
-    if (length < minLength) {
-      player = pl.n;
-      minLength = length
+    const length = getLengthToBall(pl, ball, false);
+    // console.log("pl, ball, length  home", pl, ball, length, minLength);
+
+    if (length < closestPlayer.length) {
+      // players.push({ n: pl.n, length: length });
+      prevPlayer.n = closestPlayer.n
+      prevPlayer.length = closestPlayer.length
+      closestPlayer.n = pl.n
+      closestPlayer.length = length
+    } else if (length < prevPlayer.length) {
+      prevPlayer.n = pl.n
+      prevPlayer.length = length
     }
+
   });
 
   coords.away.forEach(pl => {
-    const length = getLengthToBall(pl, ball, _secondTime, true);
-    if (length < minLength) {
-      player = pl.n + MAX_PLAYERS;
-      minLength = length
+    const length = getLengthToBall(pl, ball, true);
+    // console.log("pl, ball, length away", pl, ball, length, minLength);
+
+    if (length < closestPlayer.length) {
+      // players.push({ n: pl.n, length: length });
+      prevPlayer.n = closestPlayer.n
+      prevPlayer.length = closestPlayer.length
+      closestPlayer.n = pl.n + MAX_PLAYERS
+      closestPlayer.length = length
+    } else if (length < prevPlayer.length) {
+      prevPlayer.n = pl.n + MAX_PLAYERS
+      prevPlayer.length = length
     }
   });
-  return player;
+  return [closestPlayer, prevPlayer];
 }
 //==============================================================================
 let startTime = Date.now();
@@ -103,14 +125,48 @@ window.onload = function () {
 
         let currentPlayer = 0;
 
-        game.slice(1,-1);
+        game.slice(1, -1);
         let score = "0:0";
 
 
         try {
           game.forEach((element, episode, episodes) => {
-            let coords;
+            let lastEpisode = episodes[episode - 1];
 
+            let coords;
+            let playersCloseToBall = []
+            let prevplayersCloseToBall = []
+            let closestPlayer
+            let prevClosestPlayer
+            let prevClosestPlayer2
+            let closestPlayer2
+
+            //** ---- */
+            // if (!element.coordinates) console.log("NO COORDINATES", element);
+            if (element.coordinates && episode > 0) {
+
+              try {
+                prevplayersCloseToBall = lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
+                //** ---- */
+                // console.log(" playersCloseToBall - ", playersCloseToBall, element);
+                closestPlayer = playersCloseToBall[0]
+                closestPlayer2 = playersCloseToBall[1]
+                prevClosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
+                prevClosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
+
+                // if (closestPlayer2 && closestPlayer.length === closestPlayer2.length) {
+                //   console.log((closestPlayer.n === prevClosestPlayer.n || closestPlayer2.n === prevClosestPlayer.n)
+                //     ? "DRIBBLE "
+                //     : "FIGHT ",
+                //     closestPlayer, closestPlayer2, element, prevClosestPlayer);
+
+                // }
+              } catch (error) {
+                console.log("closest players error", error, element);
+              }
+            }
+            //===================================================================
             if (element.C) { flags.corner = true; flags.team = element.C; }
             if (element.A) { flags.throwIn = true; flags.team = element.A; }
             if (element.F) { flags.deadBall = true; flags.team = element.F; }
@@ -139,14 +195,28 @@ window.onload = function () {
               let passPlayer;
               let receivePlayer;
               let isPassOpened = false;
-              let lastEpisode = episodes[episode - 1];
 
               try {
                 if (element.coordinates) {
+                  // prevplayersCloseToBall = lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                  // playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
+                  // // console.log(" playersCloseToBall - ", playersCloseToBall, element);
+                  // closestPlayer = playersCloseToBall[0]
+                  // closestPlayer2 = playersCloseToBall[1]
+                  // prevClosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
+                  // prevClosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
+
+                  // if (closestPlayer2 && closestPlayer.length === closestPlayer2.length) {
+                  //   console.log((closestPlayer.n === prevClosestPlayer.n || closestPlayer2.n === prevClosestPlayer.n)
+                  //     ? "DRIBBLE "
+                  //     : "FIGHT ",
+                  //     closestPlayer, closestPlayer2, element, prevClosestPlayer);
+
+                  // }
                   try {
                     if (flags.center && element.messages && element.messages.some(mes => mes.mes.match(RE_CENTER_MSG))) { // from center
                       flags.center = false;
-                      currentPlayer = calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                      currentPlayer = prevClosestPlayer.n;
                     }
                   } catch (error) {
                     console.log(" N error", error, element);
@@ -188,7 +258,8 @@ window.onload = function () {
                     pass.player = passPlayer;
                     passes[passPlayer].push(pass);
 
-                  } else if (flags.throwIn && element.messages[0]) { // handle out
+                  }
+                  else if (flags.throwIn && element.messages[0]) { // handle out
 
                     pass.endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
                     pass.high = (ball.z === 1);
@@ -233,14 +304,14 @@ window.onload = function () {
                     flags.goalKick = false;
                     // console.log("T - Lastelement ", lastEpisode);
                     // console.log("T - element ", element);
-                    currentPlayer = calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                    currentPlayer = prevClosestPlayer.n;
                     // console.log(" T - currentPlayer -", currentPlayer);
                     passPlayer = currentPlayer;
                     pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
                     // console.log("T - Nextlement ", episodes[episode + 1]);
                     // console.log("T - Nextlement2 ", episodes[episode + 2]);
                     // if (!episodes[episode + 2].messages[0]) {
-                      // console.log("T - Nextlement3 ", episodes[episode + 3]);
+                    // console.log("T - Nextlement3 ", episodes[episode + 3]);
                     // }
                     // }
                     if (element.messages[0]) {
@@ -479,14 +550,14 @@ window.onload = function () {
         document.querySelector("#game-info").textContent = gameInfoSrting;
         console.log("passes -", passes);
 
-        const gkPasses = passes.reduce((acc, pl, i) => {
-          const goalKicks = pl.filter(pass => (pass.type === "goalkick"));
-          return goalKicks[0]
-            ? [...acc, ...goalKicks]
-            : [...acc]
-        }, []);
+        // const gkPasses = passes.reduce((acc, pl, i) => {
+        //   const goalKicks = pl.filter(pass => (pass.type === "goalkick"));
+        //   return goalKicks[0]
+        //     ? [...acc, ...goalKicks]
+        //     : [...acc]
+        // }, []);
 
-        console.log("gkPasses   ", gkPasses);
+        // console.log("gkPasses   ", gkPasses);
 
         /**=========================================================================== */
         // passes.slice(1,18).forEach(pass => {
