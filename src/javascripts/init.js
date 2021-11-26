@@ -28,8 +28,8 @@ outData["home"].TacticPoints.push({ start: 0, end: 1, period: 0, startPoint: 0, 
 outData["away"].TacticPoints.push({ start: 0, end: 1, period: 0, startPoint: 0, endPoint: 1, team: [], ball: [], averages: [] });
 
 const showableTacticks = [];
+const oldpasses = [[]];
 const passes = [[]];
-const newpasses = [[]];
 
 for (let i = 0; i <= MAX_PLAYERS; i++) {
   function createInitTeamsData(team) {
@@ -44,8 +44,8 @@ for (let i = 0; i <= MAX_PLAYERS; i++) {
   createInitTeamsData("away")
 }
 for (let i = 1; i <= MAX_PLAYERS * 2; i++) {
+  oldpasses.push([]);
   passes.push([]);
-  newpasses.push([]);
 
 }
 let secondTime = false;

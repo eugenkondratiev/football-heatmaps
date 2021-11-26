@@ -100,7 +100,7 @@ function clearPoint(arr) {
 }
 /**===================================================================================================== */
 function isOneTeam(firstPlayerNumber, secondPlayerNumber) {
-  return firstPlayerNumber < 19 && secondPlayerNumber < 19 || firstPlayerNumber > 18 && secondPlayerNumber > 18;
+  return firstPlayerNumber < MAX_PLAYERS + 1 && secondPlayerNumber < MAX_PLAYERS + 1 || firstPlayerNumber > MAX_PLAYERS && secondPlayerNumber > MAX_PLAYERS;
 }
 /**===================================================================================================== */
 function getSubArrow(_sub) {

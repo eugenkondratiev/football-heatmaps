@@ -8,6 +8,8 @@ let heatmapInstance5;
 let heatmapInstance7;
 let heatmapInstance8;
 let heatmapInstance9;
+
+let rep;
 //-------------------------------------------------
 function calculateAvgPositions(_points) {
   const _avgPoints = [];
@@ -80,6 +82,9 @@ function calculatePlayerClosestToBall(coords, _secondTime) {
   return [closestPlayer, prevPlayer];
 }
 //==============================================================================
+//==============================================================================
+
+//==============================================================================
 let startTime = Date.now();
 window.onload = function () {
   //--------------------------------------------------------------------
@@ -94,7 +99,7 @@ window.onload = function () {
       if (this.status == 200) {
         const scoreWithPensFound = this.responseText.match(RE_SCORE_WITH_PENALTIES);
         const scoreWithPens = scoreWithPensFound ? scoreWithPensFound.pop() : ["0:0"];
-        const rep = JSON.parse(this.responseText);
+        rep = JSON.parse(this.responseText);
         //--------------------------------------------------------------------
         function setTeamsColors() {
           const away = document.querySelector("#player_default_away .player_shape").style;
@@ -127,45 +132,11 @@ window.onload = function () {
 
         game.slice(1, -1);
         let score = "0:0";
-
+        let passObject = null
 
         try {
           game.forEach((element, episode, episodes) => {
             let lastEpisode = episodes[episode - 1];
-
-            let coords;
-            let playersCloseToBall = []
-            let prevplayersCloseToBall = []
-            let closestPlayer
-            let prevClosestPlayer
-            let prevClosestPlayer2
-            let closestPlayer2
-
-            //** ---- */
-            // if (!element.coordinates) console.log("NO COORDINATES", element);
-            if (element.coordinates && episode > 0) {
-
-              try {
-                prevplayersCloseToBall = lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
-                playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
-                //** ---- */
-                // console.log(" playersCloseToBall - ", playersCloseToBall, element);
-                closestPlayer = playersCloseToBall[0]
-                closestPlayer2 = playersCloseToBall[1]
-                prevClosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
-                prevClosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
-
-                // if (closestPlayer2 && closestPlayer.length === closestPlayer2.length) {
-                //   console.log((closestPlayer.n === prevClosestPlayer.n || closestPlayer2.n === prevClosestPlayer.n)
-                //     ? "DRIBBLE "
-                //     : "FIGHT ",
-                //     closestPlayer, closestPlayer2, element, prevClosestPlayer);
-
-                // }
-              } catch (error) {
-                console.log("closest players error", error, element);
-              }
-            }
             //===================================================================
             if (element.C) { flags.corner = true; flags.team = element.C; }
             if (element.A) { flags.throwIn = true; flags.team = element.A; }
@@ -174,6 +145,149 @@ window.onload = function () {
               flags.goalKick = true; flags.team = element.T.team;
             }
             if (element.N) { flags.center = true; flags.team = element.N; }
+            //===================================================================
+
+            let coords;
+            let playersCloseToBall = []
+            let prevplayersCloseToBall = []
+            let closestPlayer
+            let prevclosestPlayer
+            let prevclosestPlayer2
+            let closestPlayer2
+
+            //** ---- */
+            // if (!element.coordinates) console.log("NO COORDINATES", element);
+            if (element.coordinates && episode > 0) {
+              function isPlayerOwnsBall() {
+                return closestPlayer && closestPlayer.length === 0
+              }
+              //==============================================================================
+              function isBallMovedFromPlayer() {
+                if (!prevclosestPlayer || !closestPlayer) return false
+                return prevclosestPlayer.length === 0
+                  && (
+                    prevclosestPlayer.n === closestPlayer.n && closestPlayer.length > 0
+                    || prevclosestPlayer.n !== closestPlayer.n
+                  )
+              }
+              //==============================================================================
+              function isClosestPlayerChanged() {
+                return prevclosestPlayer.n !== closestPlayer.n
+              }
+              //==============================================================================
+              function isPlayerMovedBall() {
+                if (!prevclosestPlayer || !closestPlayer) return false
+                return closestPlayer.length === 0 && prevclosestPlayer.length === 0
+                  &&
+                  prevclosestPlayer.n === closestPlayer.n
+                  && closestPlayer2.length > 0
+                  && prevclosestPlayer2.length > 0
+
+              }
+              //==============================================================================
+              function isItClearPass() {
+                return prevclosestPlayer.length === 0 && prevclosestPlayer2.length > 0
+                  && closestPlayer.length === 0 && closestPlayer2.length > 0
+              }
+              //==============================================================================
+              //==============================================================================
+              function isPrevAndClosestFromSameTeam() {
+                return isOneTeam(prevclosestPlayer.n, closestPlayer.n)
+              }
+              //==============================================================================
+              function isPassOpened() {
+                if (!passObject) return false
+                return !!passObject.start
+              }
+              //==============================================================================
+              function resetPass() {
+                passObject.start = null
+              }
+              //==============================================================================
+              function savePass() {
+                ;
+              }
+              //==============================================================================
+              function isShotElement() {
+                return element.G 
+                // return element.G || element.W || element.B || element.U || element.V
+              }
+              //==============================================================================
+              function startPass(player) {
+                passObject = {
+                  start: {
+                    ball: { ...element.coordinates.ball },
+                    player: player.n
+                  }
+                }
+              }
+
+              //==============================================================================
+              function isItFight() {
+                return closestPlayer2 && closestPlayer
+                  && closestPlayer.length === closestPlayer2.length
+                  && closestPlayer.length === 0
+              }
+              //==============================================================================
+              function checkAfterPassFight() {
+                if (!isItFight()) return false
+                return !(closestPlayer.n === prevclosestPlayer.n || closestPlayer2.n === prevclosestPlayer.n)
+              }
+              //==============================================================================
+              //==============================================================================
+              //==============================================================================
+              //==============================================================================
+
+              try {
+                prevplayersCloseToBall = lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
+                //** ---- */
+                // console.log(" playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
+                closestPlayer = playersCloseToBall[0]
+                closestPlayer2 = playersCloseToBall[1]
+                prevclosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
+                prevclosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
+
+                // if (isItFight()) {
+                //   console.log(checkAfterPassFight()
+                //     ? "FIGHT "
+                //     : "DRIBBLE ",
+                //     closestPlayer, closestPlayer2, element, prevclosestPlayer);
+
+                // }
+                function processBallMoving() {
+                  if (penalties) {
+                    resetPass()
+                    return
+                  }
+
+                  if (!isPassOpened()) {
+                    if (isPlayerOwnsBall()) {
+                      startPass(closestPlayer)
+                      return
+                    }
+                  }
+
+                  if (isShotElement()) {
+                    resetPass();
+                    //process shot
+                    console.log(" ShotElement  playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
+
+                    return
+                  }
+                  if (isPlayerMovedBall()) {
+                    startPass(closestPlayer);
+                    ;// proceedrun with ball
+                  }
+
+                }
+
+                const ballMovingResponce = processBallMoving();
+
+              } catch (error) {
+                console.log("closest players error", error, element);
+              }
+            }
 
             function tryMes(messageNumber, regExp) {
               return element.messages[messageNumber].mes.match(regExp);
@@ -203,20 +317,20 @@ window.onload = function () {
                   // // console.log(" playersCloseToBall - ", playersCloseToBall, element);
                   // closestPlayer = playersCloseToBall[0]
                   // closestPlayer2 = playersCloseToBall[1]
-                  // prevClosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
-                  // prevClosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
+                  // prevclosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
+                  // prevclosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
 
                   // if (closestPlayer2 && closestPlayer.length === closestPlayer2.length) {
-                  //   console.log((closestPlayer.n === prevClosestPlayer.n || closestPlayer2.n === prevClosestPlayer.n)
+                  //   console.log((closestPlayer.n === prevclosestPlayer.n || closestPlayer2.n === prevclosestPlayer.n)
                   //     ? "DRIBBLE "
                   //     : "FIGHT ",
-                  //     closestPlayer, closestPlayer2, element, prevClosestPlayer);
+                  //     closestPlayer, closestPlayer2, element, prevclosestPlayer);
 
                   // }
                   try {
                     if (flags.center && element.messages && element.messages.some(mes => mes.mes.match(RE_CENTER_MSG))) { // from center
                       flags.center = false;
-                      currentPlayer = prevClosestPlayer.n;
+                      currentPlayer = prevclosestPlayer.n;
                     }
                   } catch (error) {
                     console.log(" N error", error, element);
@@ -256,7 +370,7 @@ window.onload = function () {
                     }
                     currentPlayer = receivePlayer;
                     pass.player = passPlayer;
-                    passes[passPlayer].push(pass);
+                    oldpasses[passPlayer].push(pass);
 
                   }
                   else if (flags.throwIn && element.messages[0]) { // handle out
@@ -283,7 +397,7 @@ window.onload = function () {
                     pass.good = isOneTeam(receivePlayer, passPlayer);
                     currentPlayer = receivePlayer;
                     pass.player = passPlayer;
-                    passes[passPlayer].push(pass);
+                    oldpasses[passPlayer].push(pass);
                     ;
                   } else if (flags.deadBall) { // handle free kick
                     ; flags.deadBall = false;
@@ -304,7 +418,7 @@ window.onload = function () {
                     flags.goalKick = false;
                     // console.log("T - Lastelement ", lastEpisode);
                     // console.log("T - element ", element);
-                    currentPlayer = prevClosestPlayer.n;
+                    currentPlayer = prevclosestPlayer.n;
                     // console.log(" T - currentPlayer -", currentPlayer);
                     passPlayer = currentPlayer;
                     pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
@@ -332,7 +446,7 @@ window.onload = function () {
                       }
                     };
                     pass.player = passPlayer;
-                    passes[passPlayer].push(pass);
+                    oldpasses[passPlayer].push(pass);
                   } else { //just pass
                     ;
                   }
@@ -548,19 +662,20 @@ window.onload = function () {
           ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
 
         document.querySelector("#game-info").textContent = gameInfoSrting;
+        console.log("oldpasses -", oldpasses);
         console.log("passes -", passes);
 
-        // const gkPasses = passes.reduce((acc, pl, i) => {
-        //   const goalKicks = pl.filter(pass => (pass.type === "goalkick"));
-        //   return goalKicks[0]
-        //     ? [...acc, ...goalKicks]
-        //     : [...acc]
-        // }, []);
+        const gkPasses = oldpasses.reduce((acc, pl, i) => {
+          const goalKicks = pl.filter(pass => (pass.type === "goalkick"));
+          return goalKicks[0]
+            ? [...acc, ...goalKicks]
+            : [...acc]
+        }, []);
 
-        // console.log("gkPasses   ", gkPasses);
+        console.log("gkPasses   ", gkPasses);
 
         /**=========================================================================== */
-        // passes.slice(1,18).forEach(pass => {
+        // oldpasses.slice(1,18).forEach(pass => {
         //   countPass(pass.type, rep.home.players[pass.player - 1]);
         // });
         // passes.slice(19).forEach(pass => {
@@ -896,8 +1011,8 @@ window.onload = function () {
         }
         if (_passesboard.getContext) {
           const context = _passesboard.getContext('2d');
-          drawTeamPasses(passes.slice(19), rep.away.players, "away", context);
-          drawTeamPasses(passes.slice(1, 18), rep.home.players, "home", context);
+          drawTeamPasses(oldpasses.slice(19), rep.away.players, "away", context);
+          drawTeamPasses(oldpasses.slice(1, 18), rep.home.players, "home", context);
         }
         /**===================================================================================================== */
       } else {
