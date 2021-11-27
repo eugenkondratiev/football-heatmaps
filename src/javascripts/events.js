@@ -56,6 +56,10 @@ function afterLoadEvents() {
             .appendChild(
                 createSlider("maps", showableTacticks, filterMapsByTime)
             )
+        document.querySelector("#pass-chalkboard ~ .bojan__content")
+            .appendChild(
+                createSlider("pass", showableTacticks, filterPassesByTime)
+            );
         document.getElementById("norm-tactic-avg").addEventListener("click", function (e) {
             e.preventDefault();
             normalizeTacticAvgPositions("home");

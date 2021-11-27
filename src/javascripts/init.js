@@ -21,6 +21,7 @@ const ballPoints = [];
 const minutesStarts = [0];
 
 const strangePoints = { home: [], away: [] };
+const oldshots = { home: [], away: [] };
 const shots = { home: [], away: [] };
 let sumInterval = 0;
 

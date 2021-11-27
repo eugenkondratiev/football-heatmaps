@@ -81,6 +81,18 @@ function createPass(pass, passinfo) {
 
     return passPict;
 }
+
+
+/**===================================================================================================== */
+function filterPassesByTime(start, end) {
+    document.querySelectorAll("[class$=Pass]").forEach(pass => {
+        const minute = +pass.getAttribute("minute");
+        const matchPeriod = (minute >= +start && minute <= +end);
+        pass.style.display = (matchPeriod)
+            ? "block"
+            : "none";
+    });
+}
 /**===================================================================================================== */
 function drawTeamPasses(teamPasses, players, team, ctx) {
     teamPasses.forEach((playerPasses, _player) => {
