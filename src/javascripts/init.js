@@ -31,6 +31,20 @@ outData["away"].TacticPoints.push({ start: 0, end: 1, period: 0, startPoint: 0, 
 const showableTacticks = [];
 const oldpasses = [[]];
 const passes = [[]];
+const passFilter = {
+  playersCheckboxes: [],
+  start: 0,
+  end: 125,
+  zoneTo: 0,
+  zoneFrom: 0,
+  homePlayers: 18,
+  awayPlayers: 18,
+  high: true,
+  head: true,
+  ok: true,
+  failed: true,
+  fighted: true
+}
 
 for (let i = 0; i <= MAX_PLAYERS; i++) {
   function createInitTeamsData(team) {
@@ -47,6 +61,7 @@ for (let i = 0; i <= MAX_PLAYERS; i++) {
 for (let i = 1; i <= MAX_PLAYERS * 2; i++) {
   oldpasses.push([]);
   passes.push([]);
+  passFilter.playersCheckboxes.push(true)
 
 }
 let secondTime = false;

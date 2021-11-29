@@ -95,12 +95,36 @@ function filterPassesByTime(start, end) {
 }
 /**===================================================================================================== */
 function drawTeamPasses(teamPasses, players, team, ctx) {
+    const passboard = document.querySelector('#passesboard');
+    passboard.querySelectorAll('.pass').forEach(function (el, key, parent) {
+        // passboard.removeChild(el)
+        // console.log("el - ", el, parent);
+    })
+ 
+
+    // ZONES_COORDS.forEach((z, i) => {
+    //     const zone = document.createElement('div');
+    //     zone.classList.add('zone-border');
+    //     zone.style.top = z.y - 1 + "px";
+    //     zone.textContent = i + 1;
+
+    //     zone.style.left = z.x - 1 + "px";
+    //     zone.style.width = ZONE_WIDTH + "px";
+    //     zone.style.height = ZONE_HEIGHT + "px";
+    //     // line.style.transform = "rotate(" + getSegmentAngle(pass.startpoint, pass.endpoint) + "deg)";
+    //     passboard.appendChild(zone);;
+
+    // })
+
     teamPasses.forEach((playerPasses, _player) => {
         if (!playerPasses[0]) return;
         playerPasses.forEach(pass => {
             const passInfo = { playerName: players[_player].name, team: team, player: _player + 1 };
-            document.querySelector('#passesboard').appendChild(createPass(pass, passInfo));;
+            passboard.appendChild(createPass(pass, passInfo));;
         })
+
+        //===================================================
+
         // ctx.beginPath(); 
         // ctx.fillStyle = _strokeStyle;
         // ctx.arc(pass.startpoint.x, pass.startpoint.y, 4, 0, 2 * Math.PI, false);

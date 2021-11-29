@@ -204,7 +204,8 @@ window.onload = function () {
               //==============================================================================
               function isItPassFromCenter() {
                 if (!passObject) return
-                console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
+                if (passObject.N && closestPlayer
+                  && isPassOpened() && closestPlayer.length === 0) console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
                 return passObject.N && closestPlayer
                   && isPassOpened() && closestPlayer.length === 0
               }
@@ -233,6 +234,7 @@ window.onload = function () {
                   endpoint: null,
                   startpoint: null,
                   type: null,
+                  outfield: passObject.outfield,
                   player: passObject.start.player
                 }
 
@@ -248,7 +250,7 @@ window.onload = function () {
                   y: passObject.start.ball.h
                 };
                 pass.startpoint = limitPoint(startballcoords, secondTime, shotsCoords, jsonCoords);
-                console.log(" save pass - ", passObject, pass);
+                if (pass.outfield) console.log(" save pass - ", passObject, pass);
                 passes[pass.player].push({ ...pass });
 
               }
@@ -265,6 +267,9 @@ window.onload = function () {
                     player: player.n
                   }
                 }
+
+                // console.log('START PASS', player);
+
               }
               //==============================================================================
               function endThisPass(player) {
@@ -275,7 +280,11 @@ window.onload = function () {
 
               }
               //==============================================================================
-
+              function isBallOutfield() {
+                if (ball.w <= jsonCoords.x1 || ball.w >= jsonCoords.x2) return true
+                if (ball.h <= jsonCoords.y1 || ball.h >= jsonCoords.y2) return true
+                return false
+              }
               //==============================================================================
               function isItFight() {
                 return closestPlayer2 && closestPlayer
@@ -332,6 +341,7 @@ window.onload = function () {
                       console.log('PLAYER OWNS BALL');
                       return
                     }
+                    return
                   }
 
                   if (isShotElement()) {
@@ -345,9 +355,18 @@ window.onload = function () {
                   if (isPlayerMovedBall()) {
                     startPass(closestPlayer);
                     ;// proceedrun with ball
-                    console.log('START PASS');
                     return
                   }
+                  if (isBallOutfield()) {
+                    passObject.good = 0
+                    passObject.outfield = true;
+                    console.log("Ball outfield", ball, element);
+                    endThisPass(closestPlayer)
+                    savePass()
+                    resetPass()
+                    return
+                  }
+
                   if (isItPassFromCenter()) {
                     passObject.good = 1
                     // but may be check for bad ball handling

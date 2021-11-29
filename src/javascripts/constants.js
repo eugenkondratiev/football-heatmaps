@@ -28,6 +28,12 @@ const MIN_MINUTES_FOR_SHOW_TACTIC = 3;
 const shotsCoords = { x1: 39, y1: 38, x2: 712, y2: 458 };
 const jsonCoords = { x1: 0, y1: 0, x2: 720, y2: 450 };
 const hmCoords = { x1: 18.98, y1: 19, x2: 346.56, y2: 229.5 };
+const ZONE_WIDTH = (shotsCoords.x2 - shotsCoords.x1) / 6.0;
+const ZONE_HEIGHT = (shotsCoords.y2 - shotsCoords.y1) / 3.0;
+const ZONES = [...Array(18)].map((_, i) => { return { x: ((i) / 3 >> 0), y: ((i) % 3) } })
+const ZONES_COORDS = ZONES.map(z => { return { x: shotsCoords.x1 + z.x * ZONE_WIDTH, y: shotsCoords.y1 + z.y * ZONE_HEIGHT } })
+const ZONES_FIND_ORDER = [8,11,5,14,7,10,9,12,2,17,4,6,13,15,1,3,16,18]
+
 
 const FIELD_LONGTITUDE = 105;
 const RE_CENTER_MSG = /разыг|розыг/gi;

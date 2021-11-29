@@ -1,4 +1,3 @@
-
 .overlay>.pass-legend,
 .overlay>#one-pass-legend {
     width: 120px;
@@ -23,10 +22,12 @@
 .pass-filters>a {
     font-weight: bold;
 }
+
 .pass-filters {
     max-width: 80%;
     margin: .4em auto;
 }
+
 .overlay>#one-pass-legend {
     top: 44px;
     left: 380px;
@@ -52,6 +53,13 @@
     transform-origin: 1px 1px;
 }
 
+.zone-border {
+    position: absolute;
+    border: 1px solid darkgoldenrod;
+    box-shadow: inset 2px 2px 7px darkgrey;
+
+}
+
 .pass-start,
 .pass-end {
     position: absolute;
@@ -74,6 +82,7 @@
 a[data-checked="false"] {
     font-weight: bold;
 }
+
 a[data-checked="true"] {
     font-weight: normal;
 }
