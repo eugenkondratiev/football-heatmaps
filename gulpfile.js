@@ -113,8 +113,14 @@ task('es5', function () {
             .pipe(gulpif(!production, sourcemaps.init({ loadMaps: true })))
             // .pipe(concat('all.js'))
             // .pipe(gulpif(production, uglify()))
-            .pipe(uglify())
-            .pipe(src(c.JS_PATH + 'heatmap.min.js'))
+
+
+            // .pipe(uglify())
+
+
+
+            .pipe(src(c.JS_PATH + 'heatmap.js'))
+            // .pipe(src(c.JS_PATH + 'heatmap.min.js'))
             .pipe(concat('hm.js'))
             .pipe(gulpif(!production, sourcemaps.write('./')))
             .pipe(dest(c.JS_DEST_PATH))

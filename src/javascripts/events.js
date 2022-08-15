@@ -17,7 +17,7 @@ function afterLoadEvents() {
     /**===================================================================================================== */
     const urlInput = document.querySelector("#tv-url-input");
     document.getElementById("tv-url").href = formTVUrl();
-    document.getElementById("json-url").href = formJsonUrl();
+    document.getElementById("json-url").href = formJsonUrl({ test: false });
     document.querySelector('#updateButton').addEventListener('click', e => {
         e.preventDefault();
         if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {

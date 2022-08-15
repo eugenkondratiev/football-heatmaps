@@ -1,4 +1,2492 @@
-!function e(t,n,a){function o(i,l){if(!n[i]){if(!t[i]){var s="function"==typeof require&&require;if(!l&&s)return s(i,!0);if(r)return r(i,!0);var c=new Error("Cannot find module '"+i+"'");throw c.code="MODULE_NOT_FOUND",c}var u=n[i]={exports:{}};t[i][0].call(u.exports,(function(e){return o(t[i][1][e]||e)}),u,u.exports,e,t,n,a)}return n[i].exports}for(var r="function"==typeof require&&require,i=0;i<a.length;i++)o(a[i]);return o}({1:[function(e,t,n){"use strict";function a(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(e);t&&(a=a.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),n.push.apply(n,a)}return n}function o(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?a(Object(n),!0).forEach((function(t){r(e,t,n[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):a(Object(n)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))}))}return e}function r(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function i(e){return function(e){if(Array.isArray(e))return l(e)}(e)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(e)||function(e,t){if(!e)return;if("string"==typeof e)return l(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);"Object"===n&&e.constructor&&(n=e.constructor.name);if("Map"===n||"Set"===n)return Array.from(e);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return l(e,t)}(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function l(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,a=new Array(t);n<t;n++)a[n]=e[n];return a}var s=.7,c=.05,u=35,d=18,p=.33,m=1.1,h=1,y=!1,f=3,v={x1:39,y1:38,x2:712,y2:458},g={x1:0,y1:0,x2:720,y2:450},b={x1:18.98,y1:19,x2:346.56,y2:229.5},x=(v.x2-v.x1)/6,w=(v.y2-v.y1)/3,E=(i(Array(18)).map((function(e,t){return{x:t/3>>0,y:t%3}})).map((function(e){return{x:v.x1+e.x*x,y:v.y1+e.y*w}})),/разыг|розыг/gi),P=/пас|переда|смотри/gi,C=/авес|аброс|линны/g,k=/\d+:\d+/g,S=/[0-9]+/gi,T=105/(b.x2-b.x1),A={home:{TacticChanges:[0],TacticPoints:[],Points:[],AvgPoints:[],Mileage:[],PointsFull:[]},away:{TacticChanges:[0],TacticPoints:[],Points:[],AvgPoints:[],Mileage:[],PointsFull:[]}},q=[],B=[0],_={home:[],away:[]},L={home:[],away:[]};A.home.TacticPoints.push({start:0,end:1,period:0,startPoint:0,endPoint:1,team:[],ball:[],averages:[]}),A.away.TacticPoints.push({start:0,end:1,period:0,startPoint:0,endPoint:1,team:[],ball:[],averages:[]});for(var O=[],N=[[]],I=[[]],j={playersCheckboxes:[],start:0,end:125,zoneTo:0,zoneFrom:0,homePlayers:18,awayPlayers:18,high:!0,head:!0,ok:!0,failed:!0,fighted:!0},D=0;D<=d;D++){var G=function(e){var t=e||"home";A[t].Points.push([]),A[t].Mileage.push(0),A[t].AvgPoints.push({x:0,y:0}),A[t].TacticPoints[0].averages.push([{x:0,y:0}]),A[t].PointsFull.push([])};G("home"),G("away")}for(var W=1;W<=2*d;W++)N.push([]),I.push([]),j.playersCheckboxes.push(!0);var M=!1,U=!1,V="http://pefl.ru/jsonreport.php";function F(e){var t=window.location.href.match(/j\=\d+\&z\=.+/i)?window.location.href:e,n=t.indexOf("&z="),a=t.indexOf("j=");return V+"?j=".concat(t.substring(2+a,n),"&z=").concat(t.substring(3+n))}function z(e){var t,n,a=arguments.length>1&&void 0!==arguments[1]&&arguments[1],o=arguments.length>2&&void 0!==arguments[2]?arguments[2]:b,r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:g,i=e.x,l=e.y;return a?(t=Math.round(o.x2-(i-r.x1)*(o.x2-o.x1)/(r.x2-r.x1)),n=Math.round(o.y2-(l-r.y1)*(o.y2-o.y1)/(r.y2-r.y1))):(t=Math.round(o.x1+(i-r.x1)*(o.x2-o.x1)/(r.x2-r.x1)),n=Math.round(o.y1+(l-r.y1)*(o.y2-o.y1)/(r.y2-r.y1))),{x:t,y:n,value:e.value}}function R(e,t){var n=t.x-e.x,a=t.y-e.y;return Math.sqrt(n*n+a*a)}function H(e,t){var n,a,o,r,i=function(e){var t=arguments.length>1&&void 0!==arguments[1]&&arguments[1],n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:g;return t?{n:e.n,h:n.y2-e.h,w:n.x2-e.w,value:1}:{n:e.n,h:e.h,w:e.w,value:1}}(e,arguments.length>2&&void 0!==arguments[2]&&arguments[2]);return n=i,o=(a=t).w-n.w,r=a.h-n.h,Math.sqrt(o*o+r*r)}function K(e,t){var n=t.x-e.x,a=t.y-e.y;return(n<0?a<0?-180:180:0)+180*Math.atan(a/n)/Math.PI}function $(e,t){return T*R(e,t)}function Z(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:1;if(!e||!e.mes)return 0;for(var n=String(e.mes),a=n.length,o=0,r=[],i=0;i<a;i++)"["===n[i]?o=i+1:"]"===n[i]&&o<i&&o>0&&r.push(+n.substr(o,i-o));return o?r[t-1]?+r[t-1]:0:null}function J(e,t){return e<d+1&&t<d+1||e>d&&t>d}function X(e,t){var n="G"==e.type?"red":"V"==e.type?"yellow":"Block"==e.type?"black":"B"==e.type?"black":"W"==e.type?"#FFA500":"blue",a=document.createElement("div");a.classList.add("shot");var o=t.team+"Shot";return a.classList.add(o),a.setAttribute("player",e.player),a.setAttribute("shotType",e.type),a.setAttribute("minute",e.minute),a.appendChild(function(e,t,n){var a=document.createElement("div");return a.classList.add("shotline"),a.style.top=e.startpoint.y-1+"px",a.style.left=e.startpoint.x-1+"px",a.style.width=R(e.startpoint,e.endpoint)+"px",a.style.transform="rotate("+K(e.startpoint,e.endpoint)+"deg)",a.style.borderTopColor=n,a}(e,0,n)),a.appendChild(function(e,t,n){var a=document.createElement("div");return a.classList.add("shotend"),a.style.borderColor=n,a.style.backgroundColor=n,a.style.top=e.endpoint.y-2+"px",a.style.left=e.endpoint.x-1+"px",a}(e,0,n)),a.appendChild(function(e,t,n){var a=document.createElement("div");a.classList.add("shotstart"),a.style.borderColor=n,a.style.backgroundColor=n,a.style.top=e.startpoint.y-5+"px",a.style.left=e.startpoint.x-5+"px";var o="G"==e.type?"Гол":"V"==e.type?"Удар в створ":"W"==e.type?"Автогол":"Block"==e.type?"Блок":"B"==e.type?"Каркас ворот":"Мимо";return a.addEventListener("mouseenter",(function(n){var a=document.querySelector("#one-shot-legend"),r=" Минута "+e.minute+", "+o+", "+e.xG+",\n\r "+e.player+"."+t.playerName;a.textContent=r,a.style.display="inline-block"})),a.addEventListener("mouseleave",(function(e){document.querySelector("#one-shot-legend").style.display="none"})),a}(e,t,n)),a}function Y(e,t,n,a){e.forEach((function(e,a){var o={playerName:t[e.player-1].name,team:n};document.querySelector("#chalkboard").appendChild(X(e,o))}))}function Q(e,t){if("U"==e){if(!t.miss)return void(t.miss=1);t.miss++}if("G"==e){if(!t.goals)return void(t.goals=1);t.goals++}if("B"==e){if(!t.bar)return void(t.bar=1);t.bar++}if("Block"==e){if(!t.block)return void(t.block=1);t.block++}if("V"==e){if(!t.stvor)return void(t.stvor=1);t.stvor++}if("W"==e){if(!t.autogoals)return void(t.autogoals=1);t.autogoals++}}function ee(e,t){var n=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],a=arguments.length>3&&void 0!==arguments[3]&&arguments[3],o="."+t+"Shot";document.querySelectorAll(o).forEach((function(o){if(a)o.style.display="none";else{var r=document.querySelector("#"+t+"-player-list_"+o.getAttribute("player")+" input"),i=!!r&&r.checked;o.style.display=e?"block":i&&!n?"block":"none"}}))}function te(e,t){document.querySelectorAll("[class$=Shot]").forEach((function(n){var a=+n.getAttribute("minute"),o=a>=+e&&a<=+t;n.style.display=o?"block":"none"}))}function ne(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:-1,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"home",n=document.querySelectorAll(".shots-container-wrapper")[0],a=parseInt("home"==t?n.getAttribute("data-homes"):n.getAttribute("data-aways"));return-1==e?a--:a++,a<0&&(a=0),"home"==t?n.setAttribute("data-homes",a):n.setAttribute("data-aways",a),a}function ae(e){var t=document.createElement("input");return t.type="checkbox",t.checked=!1,t.style.cursor="pointer",t.addEventListener("click",(function(t){this.checked?(ne(1,e.team),ee(!1,e.team,!1)):0==ne(-1,e.team)?ee(!0,e.team):ee(!1,e.team,!1)})),t}function oe(e){e.preventDefault();var t=this.getAttribute("data-type"),n=".shot[shottype="+t+"]",a="bold"==this.style.fontWeight;document.querySelectorAll(n).forEach((function(e){e.style.display=a?"none":"block"})),"G"==t&&document.querySelectorAll(".shot[shottype=W]").forEach((function(e){e.style.display=a?"none":"block"})),this.style.fontWeight=a?"normal":"bold"}Array.prototype.find||(Array.prototype.find=function(e){if(null==this)throw new TypeError("Array.prototype.find called on null or undefined");if("function"!=typeof e)throw new TypeError("predicate must be a function");for(var t,n=Object(this),a=n.length>>>0,o=arguments[1],r=0;r<a;r++)if(t=n[r],e.call(o,t,r,n))return t}),window.NodeList&&!NodeList.prototype.forEach&&(NodeList.prototype.forEach=function(e,t){t=t||window;for(var n=0;n<this.length;n++)e.call(t,this[n],n,this)});var re=document.getElementById("filterGoals");re.addEventListener("click",oe.bind(re));var ie=document.getElementById("filterStvor");ie.addEventListener("click",oe.bind(ie));var le=document.getElementById("filterMiss");le.addEventListener("click",oe.bind(le));var se=document.getElementById("filterBars");se.addEventListener("click",oe.bind(se));var ce=document.getElementById("filterBlocks");function ue(e){var t=document.getElementById(e);t.setAttribute("start",0),t.setAttribute("end",125),t.dispatchEvent(new Event("change",{bubbles:!0}))}function de(){var e=!(arguments.length>0&&void 0!==arguments[0])||arguments[0];ee(e,"home",!0,!e),ee(e,"away",!0,!e),e&&(document.querySelectorAll(".squadAndShots-containers-wrapper input[type=checkbox]").forEach((function(e){e.checked=y})),ue("shots-time-filter")),document.querySelectorAll("a[id^=filter]:nth-of-type(-n+5)").forEach((function(t){t.style.fontWeight=e?"bold":"normal"}))}function pe(e){return"corner"==e.type?"угловой":"throw"==e.type?"аут":"freekick"==e.type?"штрафной":"goalkick"==e.type?"от ворот":""}function me(e,t){return" Минута "+e.minute+", "+(e.good?"точно":"неточно")+(e.high?", верхом ,":", низом ,")+pe(e)+",\n\r "+t.player+"."+t.playerName}function he(e,t){var n=e.good?"blue":"red",a=document.createElement("div");a.classList.add("pass");var o=t.team+"Pass";return a.classList.add(o),a.setAttribute("player",e.player),a.setAttribute("passType",e.type),a.setAttribute("minute",e.minute),a.setAttribute("high",e.high),a.setAttribute("good",e.good),a.appendChild(function(e,t,n){var a=document.createElement("div");return a.classList.add("pass-line"),a.style.top=e.startpoint.y-1+"px",a.style.left=e.startpoint.x-1+"px",a.style.width=R(e.startpoint,e.endpoint)+"px",a.style.transform="rotate("+K(e.startpoint,e.endpoint)+"deg)",a.style.borderTopColor=n,a.addEventListener("mouseenter",(function(n){var a=document.querySelector("#one-pass-legend");a.textContent=me(e,t),a.style.display="inline-block"})),a.addEventListener("mouseleave",(function(e){document.querySelector("#one-pass-legend").style.display="none"})),a}(e,t,n)),a.appendChild(function(e,t,n){var a=document.createElement("div");return a.classList.add("pass-start"),a.style.borderColor=n,a.style.backgroundColor=n,a.style.top=e.startpoint.y-5+"px",a.style.left=e.startpoint.x-5+"px",pe(e),a.addEventListener("mouseenter",(function(n){var a=document.querySelector("#one-pass-legend");a.textContent=me(e,t),a.style.display="inline-block"})),a.addEventListener("mouseleave",(function(e){document.querySelector("#one-pass-legend").style.display="none"})),a}(e,t,n)),a}function ye(e,t){document.querySelectorAll("[class$=Pass]").forEach((function(n){var a=+n.getAttribute("minute"),o=a>=+e&&a<=+t;n.style.display=o?"block":"none"}))}function fe(e,t,n,a){var o=document.querySelector("#passesboard");o.querySelectorAll(".pass").forEach((function(e,t,n){})),e.forEach((function(e,a){e[0]&&e.forEach((function(e){var r={playerName:t[a].name,team:n,player:a+1};o.appendChild(he(e,r))}))}))}ce.addEventListener("click",oe.bind(ce)),document.getElementsByClassName("shots-container")[0].addEventListener("click",(function(e){de()})),document.getElementById("filter-show-all").addEventListener("click",(function(e){e.preventDefault(),de()})),document.getElementById("filter-hide-all").addEventListener("click",(function(e){e.preventDefault(),de(y)}));var ve,ge,be,xe,we=60;function Ee(e){for(var t=[],n=0;n<=d;n++)t.push({x:0,y:0,points:0});return e.forEach((function(e,n){var a=e.filter((function(e){return null!=e})),o=a.length;if(!(0===n||o<1)){a.forEach((function(e,a){t[n].x+=e.x/o,t[n].y+=e.y/o,t[n].points++}));var r=t.map((function(e,t){return{playerRank:t,points:e.points}})).slice(1).sort((function(e,t){return+t.points-+e.points}));t[0].order=r}})),t}function Pe(e,t){var n=e.ball,a={n:0,length:1e4},o={n:0,length:1e4};return e.home.forEach((function(e){var t=H(e,n,!1);t<a.length?(o.n=a.n,o.length=a.length,a.n=e.n,a.length=t):t<o.length&&(o.n=e.n,o.length=t)})),e.away.forEach((function(e){var t=H(e,n,!0);t<a.length?(o.n=a.n,o.length=a.length,a.n=e.n+d,a.length=t):t<o.length&&(o.n=e.n+d,o.length=t)})),[a,o]}Date.now();function Ce(e,t,n){ve.setData({max:we*m,data:e}),ge.setData({max:we*m,data:t}),be.setData({max:we*p,data:n})}function ke(e,t){try{var n=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"home";s[e]=A[e].PointsFull.map((function(e){return e.slice(r,i)})),s[e].forEach((function(t,n){0!==n&&t.filter((function(e){return null!=e})).forEach((function(t){return l[e].push(t)}))}))},a=function(){for(var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"home",t=Ee(s[e]).slice(),n=t[0].order,a=function(a){var o=document.getElementById(e+"AvgPoints"+a),r=n.indexOf(n.find((function(e){return e.playerRank==a})));o.style.display=r<11?"inherit":"none",o.style.left=t[a].x-5+"px",o.style.top=t[a].y-5+"px";var i=document.getElementById("both"+e+"AvgPoints"+a);i.style.display=o.style.display,i.style.left=o.style.left,i.style.top=o.style.top,document.getElementById(e+"-player-list_"+a+"_name").style.fontWeight=r<11?"bold":"normal"},o=1;o<=d;o++)a(o)},o=0==e?1:e;if(o>t||+t-+o<=f)return;var r=B[o],i=B[t],l={home:[],away:[],ball:[]},s={home:[],away:[]};l.ball=q.slice(r,i),n("home"),n("away"),Ce(l.home,l.away,l.ball),a("home"),a("away")}catch(e){console.log(e)}}function Se(){function e(e){return window.location.origin+window.location.pathname+"?"+e.replace("http://pefl.ru/tv/#/","")}var t=document.querySelector("#tv-url-input");function n(e){if(A[e].TacticPoints.length>1)for(var t=1;t<A[e].TacticPoints.length;t++)if(!(A[e].TacticPoints[t].period<f))for(var n=function(n){var a=document.querySelector("#"+e+"AvgPoints_"+t+"_"+n),o=A[e].TacticPoints[t].rankByMinutes;a.style.display=o.indexOf(o.find((function(e){return e[0]==n})))<11?"inherit":"none"},a=1;a<=d;a++)n(a)}document.getElementById("tv-url").href=window.location.href.replace("http://pefl.ru/heatmaps.html?","http://pefl.ru/tv/#/").replace(":8080//",":8080/").replace("http://localhost:8080/heatmaps.html?","http://pefl.ru/tv/#/"),document.getElementById("json-url").href=F(),document.querySelector("#updateButton").addEventListener("click",(function(n){n.preventDefault(),t.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)?window.location.assign(e(t.value)):alert("Вставьте корректную ссылку на ТВ матча в поле ввода!")})),document.querySelector("#newWindow").addEventListener("click",(function(n){n.preventDefault(),t.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)?window.open(e(t.value),"_blank"):alert("Вставьте корректную ссылку на ТВ матча в поле ввода!")})),setTimeout((function(){document.querySelector("#shots-chalkboard ~ .bojan__content").appendChild(Te("shots",O,te)),document.querySelector("#maps-filtered ~ .bojan__content").appendChild(Te("maps",O,ke)),document.querySelector("#pass-chalkboard ~ .bojan__content").appendChild(Te("pass",O,ye)),document.getElementById("norm-tactic-avg").addEventListener("click",(function(e){e.preventDefault(),n("home"),n("away")})),document.getElementById("reset-maps-filtering").addEventListener("click",(function(e){e.preventDefault(),ke(0,125),ue("maps-time-filter")}))}),200)}function Te(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"",t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:[[[0,125]],[[0,125]]],n=arguments.length>2?arguments[2]:void 0,a=document.createElement("div");function o(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:[0,125],t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"home",n=document.createElement("div");n.classList.add("time-slider__tacticks");var a=document.createElement("span");a.innerText="home"===t?"Тактики хозяев":"Тактики гостей",n.appendChild(a);var o=document.createElement("ul");return e.forEach((function(e){var t=document.createElement("li");t.innerText=e[0]+" - "+e[1],t.classList.add("time-slider__tacticks__ref"),t.addEventListener("click",(function(t){t.preventDefault(),c(e[0],e[1]),u()})),o.appendChild(t)})),n.appendChild(o),n}a.classList.add("time-slider"),a.id=e+"-time-filter",a.addEventListener("change",(function(e){e.preventDefault(),u()})),c(0,125);var r=document.createElement("div");r.classList.add("time-slider__inputs");var i=document.createElement("input");i.type="number",i.min=0,i.max=125,i.value=0,i.id=e+"-start-input";var l=i.cloneNode(!0);l.id=e+"-end-input",i.addEventListener("change",(function(e){var t;e.preventDefault(),+this.value>+a.getAttribute("end")-3&&(this.value=+a.getAttribute("end")-3),t=this.value,a.setAttribute("start",t),u()})),l.addEventListener("change",(function(e){var t;e.preventDefault(),+this.value<+a.getAttribute("start")+3&&(this.value=+a.getAttribute("start")+3),t=this.value,a.setAttribute("end",t),u()}));var s=document.createElement("span");function c(e,t){a.setAttribute("start",e),a.setAttribute("end",t)}function u(){var e=+a.getAttribute("start"),t=+a.getAttribute("end");i.value=e,l.value=t,n(e,t)}return s.innerText="Границы периода",r.appendChild(i),r.appendChild(s),r.appendChild(l),t[0].length>0&&a.appendChild(o(t[0])),t[1].length>0&&a.appendChild(o(t[1],"away")),a.appendChild(r),u(),a}window.onload=function(){var e=new XMLHttpRequest;e.overrideMimeType("application/json"),e.onreadystatechange=function(){if(this.readyState==this.OPENED&&e.setRequestHeader("Accept","application/json, text/javascript, */*; q=0.01"),4==this.readyState){if(200==this.status){var t=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:.65,n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:c,a=arguments.length>3&&void 0!==arguments[3]?arguments[3]:s;return h337.create({container:document.querySelector(e),maxOpacity:a,minOpacity:n,radius:u*t})},n=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"home";if(document.querySelector("#"+e+"-tacticks-heatmaps + .bojan__label .bojan__label__header").textContent="Смены тактик "+xe[e].team.name,A[e].TacticPoints.length>1)for(var t=function(t){if(A[e].TacticPoints[t].period<f)return"continue";A[e].TacticPoints[t].rankByMinutes=[],A[e].TacticPoints[t].averages.forEach((function(n,a){var o=n.length;A[e].TacticPoints[t].rankByMinutes[a]=[a,o],0===a||o<2||n.forEach((function(e,t,a){n[0].x+=e.x/o,n[0].y+=e.y/o}))})),A[e].TacticPoints[t].rankByMinutes.sort((function(e,t){return t[1]-e[1]}));var n=document.getElementsByClassName("heatmap2-containers-wrapper")[0].cloneNode(!0),a="#heatmap-tactic"+e+t,o="#heatmap-ball"+e+t,r=(A[e].TacticPoints[t].start>0?"от "+A[e].TacticPoints[t].start:"")+" "+(A[e].TacticPoints[t].end<125?"до "+A[e].TacticPoints[t].end:"")+".  "+xe[e].team.name;n.querySelector("#heatmap-home").id="heatmap-tactic"+e+t,n.querySelector(a+" > div").textContent="Игроки "+r,n.querySelector("#heatmap-away").id="heatmap-ball"+e+t,n.querySelector(o+" > div").textContent="Мяч "+r,document.querySelector("#"+e+"-tacticks-heatmaps ~ .bojan__content").appendChild(n);var i=document.getElementsByClassName("heatmap-container-wrapper")[1].cloneNode(!0);i.className="heatmap-container-wrapper",n.className="heatmap3-containers-wrapper",i.querySelector(".heatmap-container").id="avgPositions"+w(e)+t,i.querySelector(".heatmap-container > div").textContent="Ср.поз."+r,n.appendChild(i);for(var l=function(n){var a=document.querySelector("#player_default_"+e).cloneNode(!0);a.id=e+"AvgPoints_"+t+"_"+n;var o=A[e].TacticPoints[t].rankByMinutes;a.style.display=o.indexOf(o.find((function(e){return e[0]==n})))<11?"inherit":"none",a.style.left=A[e].TacticPoints[t].averages[n][0].x-5+"px",a.style.top=A[e].TacticPoints[t].averages[n][0].y-5+"px",a.querySelector(".player_number").textContent=xe[e].players[n-1].number,a.querySelector(".tooltiptext").textContent=xe[e].players[n-1].name+"    "+xe[e].players[n-1].number,document.querySelector("#avgPositions"+w(e)+t).appendChild(a)},m=1;m<=d;m++)l(m);h337.create({container:document.querySelector(a),maxOpacity:s,minOpacity:c,radius:u}).setData({max:we,data:A[e].TacticPoints[t].team}),h337.create({container:document.querySelector(o),maxOpacity:s,minOpacity:c,radius:.67*u*1.1}).setData({max:we*p*.35,data:A[e].TacticPoints[t].ball})},n=1;n<A[e].TacticPoints.length;n++)t(n);O.push(A[e].TacticPoints.filter((function(e,t){return t>0&&e.period>3})).map((function(e){return[e.start,e.end]})))},a=function(e,t,n){var a=!(arguments.length>3&&void 0!==arguments[3])||arguments[3],o=e||"home",r=t||1,i=n||A.home.TacticPoints,l=o+"AvgPoints"+r,s="both"+o+"AvgPoints"+r,c=document.getElementById(l).style,u=document.getElementById(s).style;if(c.display=a?"inherit":"none",u.display=a?"inherit":"none",i.length>1)for(var d=1;d<i.length;d++)if(!(i[d].period<f)){var p=o+"AvgPoints_"+d+"_"+r;document.getElementById(p).style.display=a?"inherit":"none"}},r=function(e){for(var t=1;t<=d;t++){var n=document.querySelector("#player_default_"+e).cloneNode(!0);n.id=e+"AvgPoints"+t,n.plId=("home"===e?"hm":"aw")+t;var o=e+"-player-list_"+t,r=document.createElement("div");r.className="playerRow",r.id=o;var i=document.createElement("div");i.innerText=xe[e].players[t-1].number+". ",i.className="player-list-num";var l=document.createElement("div");l.className="player-list-name";var s=document.createElement("a");s.id=o+"_name",s.innerText=xe[e].players[t-1].name,s.href="#",s.addEventListener("click",(function(t){t.preventDefault(),this.style.fontWeight="bold"==this.style.fontWeight?"normal":"bold",a(e,this.id.replace(e+"-player-list_","").replace("_name",""),A[e].TacticPoints,"bold"==this.style.fontWeight||y)})),xe[e].players[t-1].sub&&s.appendChild((B=xe[e].players[t-1].sub,_=void 0,L=void 0,_=(B||h)==h?"http://pefl.ru/system/img/gm/out.gif":"http://pefl.ru/system/img/gm/in.gif",(L=document.createElement("img")).src=_,L)),l.appendChild(s),r.appendChild(i),r.appendChild(l);var c=document.createElement("div");c.className="player-list-eye",c.innerText=" ",r.appendChild(c);var u=document.createElement("div");u.className="player-list-shots";var p=(x=xe[e].players[t-1],E=void 0,P=void 0,C=void 0,k=void 0,S=void 0,T=void 0,q=void 0,E=x.autogoals?""+-parseInt(x.autogoals):"",P=x.goals?parseInt(x.goals):0,C=P+(x.stvor?parseInt(x.stvor):0),k=C+(x.miss?parseInt(x.miss):0),S="|"+P+E,T=x.bar?"|"+parseInt(x.bar):" ",q=x.block?"|"+parseInt(x.block):" ",k+T+q==0&&""==E?" ":0==k?"        "+E+q+T:(k>9?k:" "+k)+"|"+C+S+" "+q+T);u.innerText=p;var m=document.createElement("div");if(m.className="playerShotCheckbox"," "==p)m.innerText=" ";else{m.appendChild(ae({player:t,team:e}));var f=document.createElement("div");f.className="tooltiptext",f.innerText="Удары|В створ|Голы-автоголы   |Блокированные|Каркас",u.appendChild(f)}r.appendChild(m),r.appendChild(u);var v=document.createElement("div");v.className="player-list-mileage",v.innerText=Number(A[e].Mileage[t]/1e3).toFixed(2)+"км",r.appendChild(v),document.querySelector("#squad"+w(e)).appendChild(r),n.querySelector(".player_number").textContent=xe[e].players[t-1].number,n.querySelector(".tooltiptext").textContent=xe[e].players[t-1].name+"    "+xe[e].players[t-1].number,document.getElementById("heatmap-avg"+w(e)).appendChild(n);var g=n.cloneNode(!0);g.id="both"+g.id,document.getElementById("heatmap-avgBoth").appendChild(g);var b=n.cloneNode(!0);b.style.display=A[e].AvgPoints[t].x>8&&A[e].AvgPoints[t].y>8?"inherit":"none",b.id=b.id+"_individual",b.style.left=A[e].AvgPoints[t].x-5+"px",b.style.top=A[e].AvgPoints[t].y-5+"px",document.querySelector("#heatmap-"+e+t).appendChild(b)}var x,E,P,C,k,S,T,q,B,_,L},l=this.responseText.match(k),m=l?l.pop():["0:0"];xe=JSON.parse(this.responseText),R=document.querySelector("#player_default_away .player_shape").style,H=document.querySelector("#player_default_home .player_shape").style,R.backgroundColor="#"+xe.away.team.back,R.borderColor="#"+xe.away.team.color,R.color="#"+xe.away.team.color,H.color="#"+xe.home.team.color,H.borderColor="#"+xe.home.team.color,H.backgroundColor="#"+xe.home.team.back;var b=xe.game;console.log("rep  - ",xe);var x={corner:!1,throwIn:!1,deadBall:!1,goalKick:!1,center:!0,team:0,ballOwner:0},w=function(e){return"home"===e?"Home":"Away"};b.slice(1,-1);var T="0:0",j=null;try{b.forEach((function(e,t,n){var a,r=t>0?n[t-1]:null;e.C&&(x.corner=!0,x.team=e.C),e.A&&(x.throwIn=!0,x.team=e.A),e.F&&(x.deadBall=!0,x.team=e.F),e.T&&(x.goalKick=!0,x.team=e.T.team),e.N&&(x.center=!0,x.team=e.N);var i,l,s,c,u=[],p=[];if(e.coordinates){var m=function(){return!!j&&!!j.start},y=function(){j.start=null},f=function(){var t={high:1===k.z,minute:e.minute,episode:e.num,good:j.good,endpoint:null,startpoint:null,type:null,outfield:j.outfield,player:j.start.player},n={x:j.end.ball.w,y:j.end.ball.h};t.endpoint=z(n,M,v,g);var a={x:j.start.ball.w,y:j.start.ball.h};t.startpoint=z(a,M,v,g),t.outfield&&console.log(" save pass - ",j,t),I[t.player].push(o({},t))},b=function(e){j={start:{ball:o({},k),player:e.n}}},w=function(e){j.end={ball:o({},k),player:e.n}},k=e.coordinates.ball;try{p=r&&r.coordinates&&Pe(r.coordinates),u=Pe(e.coordinates),console.log(" playersCloseToBall - ",u,p,e),i=u[0],c=u[1],l=p&&p[0],s=p&&p[1],e.N&&(j&&(console.log("closestPlayer- ",i),b(i)),j||b(i),j.N=!0,console.log("STARTED N ",j)),0===t&&console.log("Start element - ",e);(function(){if(U)y();else{if(!m())return i&&0===i.length?(b(i),void console.log("PLAYER OWNS BALL")):void 0;if(e.G||e.W||e.B||e.U||e.V)y();else if(!(!l||!i)&&0===i.length&&0===l.length&&l.n===i.n&&c.length>0&&s.length>0)b(i);else{if(k.w<=g.x1||k.w>=g.x2||k.h<=g.y1||k.h>=g.y2)return j.good=0,j.outfield=!0,console.log("Ball outfield",k,e),w(i),f(),void y();(function(){if(j)return j.N&&i&&m()&&0===i.length&&console.log(" passObject  closestPlayer isPassOpened()",j,i,m()),j.N&&i&&m()&&0===i.length})()&&(j.good=1,w(i),f(),b(i)),l&&s&&i&&c&&0===l.length&&s.length>0&&0===i.length&&c.length>0&&(l&&i&&J(l.n,i.n)?(j.good=1,w(i),f(),b(i)):(j.good=0,w(i),f(),b(i)))}}})()}catch(t){console.log("closest players error",t,e)}}function O(t,n){return e.messages[t].mes.match(n)}if(e.interval&&parseInt(e.interval),B[e.minute]||(B[e.minute]=A.home.Points[1].length),e.S&&(1==e.S.team?(xe.home.players[e.S.in-1].sub=2,xe.home.players[e.S.out-1].sub=h):(xe.away.players[e.S.in-1].sub=2,xe.away.players[e.S.out-1].sub=h)),e.messages[0]){var D,G,W={},V=!1;try{if(e.coordinates){try{x.center&&e.messages&&e.messages.some((function(e){return e.mes.match(E)}))&&(x.center=!1,l.n)}catch(t){console.log(" N error",t,e)}var F=e.coordinates.ball,R=r.coordinates?r.coordinates.ball:void 0,H={x:F.w,y:F.h};if(x.corner&&e.messages[1]){W.endpoint=z(H,M,v,g),W.high=1===F.z,W.minute=e.minute,W.episode=e.num,W.type="corner",x.corner=!1;var K={x:R.w,y:R.h};D=Z(e.messages[0]),W.startpoint=z(K,M,v,g),e.messages[2]?(G=Z(e.messages[2]),W.good=J(G,D)):(W.good=!0,G=Z(e.messages[1])),G,W.player=D,N[D].push(W)}else if(x.throwIn&&e.messages[0]){W.endpoint=z(H,M,v,g),W.high=1===F.z,W.minute=e.minute,W.episode=e.num,W.type="throw",x.throwIn=!1,(D=Z(r.messages[r.messages.length-1]))||(r=n[t-2]),(D=Z(r.messages[r.messages.length-1]))||(r=n[t-3]);var X={x:(R=r.coordinates.ball).w,y:R.h};D=Z(r.messages[r.messages.length-1]),W.startpoint=z(X,M,v,g),G=Z(e.messages[e.messages.length-1]),W.good=J(G,D),G,W.player=D,N[D].push(W)}else if(x.deadBall)x.deadBall=!1;else if(x.goalKick){W.endpoint=z(H,M,v,g),W.high=1===F.z,W.minute=e.minute,W.episode=e.num,V=!0,W.type="goalkick";var Y={x:R.w,y:R.h};if(x.goalKick=!1,D=l.n,W.startpoint=z(Y,M,v,g),e.messages[0]&&(O(0,P)&&(e.messages[1]?(G=+O(1,S)[0],W.good=J(D,G)):V=!0),"goalkick"===W.type&&V)){var Q=+O(0,S)[0];W.good=O(0,P)||Q,V=!1}W.player=D,N[D].push(W)}}}catch(t){console.log("error ",r),console.log("Что то не так с обсчетом паса",e.minute,e.n,t)}if(e.messages.forEach((function(e){e.mes.indexOf(" СЧЕТ ")>-1&&(T=e.mes.replace(" СЧЕТ ",""))})),"Серия пенальти!..."==e.messages[0].mes||"Матч переходит к послематчевым одиннадцатиметровым!..."==e.messages[0].mes||"Назначаются послематчевые пенальти!..."==e.messages[0].mes)throw U=!0,"Серия пенальти!..."}if(e.ZT){var ee=function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"home";A[t].TacticPoints[0].end=e.minute,A[t].TacticPoints[0].period=e.minute-A[t].TacticPoints[0].start,A[t].TacticPoints.push(A[t].TacticPoints[0]),A[t].TacticPoints[0]={start:e.minute,end:125,period:125-e.minute,team:[],ball:[],averages:[]},A[t].TacticChanges.push(A[t].Points[0].length);for(var n=0;n<=d;n++)A[t].TacticPoints[0].averages.push([{x:0,y:0}])};1==e.ZT.team?(ee("home"),A.home.TacticChanges.push(A.home.Points[0].length)):ee("away")}try{if((e.U||e.W)&&!U){var te=e.coordinates.ball,ne={x:te.w,y:te.h,value:1},ae=e.G?"G":e.V?"V":e.W?"W":e.B?"B":e.U.team>2?"Block":"U",oe=n[t-1].coordinates?n[t-1].coordinates.ball:n[t-2].coordinates?n[t-2].coordinates.ball:n[t-3].coordinates?n[t-3].coordinates.ball:n[t-4].coordinates.ball,re={x:oe.w,y:oe.h,value:1},ie={endpoint:z(ne,M,v,g),startpoint:z(re,M,v,g),episode:t,type:ae,minute:e.minute,player:e.U?e.U.player:e.W.player,xG:e.U?e.U.xG?e.U.xG:"ждем xG":e.W.xG?e.W.xG:"ждем xG"};e.U&&(1==e.U.team||3==e.U.team)||e.W&&(2==e.W.team||4==e.W.team)?L.home.push(ie):L.away.push(ie)}if((e.G||e.V||e.B)&&!e.U){var le=e.coordinates.ball;console.log("goal event in next episode -  min=",e.minute," U=",e.U," W=",e.W," V=",e.V," G=",e.G," B=",e.B,le);var se,ce=z({x:le.w,y:le.h,value:1},M,v,g);se=e.G&&(1==e.G.team||3==e.G.team)||e.V&&(1==e.V.team||3==e.V.team)||e.B&&(1==e.B.team||3==e.B.team)?L.home[L.home.length-1]:L.away[L.away.length-1],n[t-1].messages.length>0&&n[t-1].messages.some((function(e){return e.mes.match(C)}))&&(se.startpoint=se.endpoint),se.type=e.G?"G":e.V?"V":"B",se.endpoint=ce,se.player=e.G?e.G.player:e.V?e.V.player:e.B.player}}catch(a){console.log("Что то не так с обсчетом удара",e.minute,e.n,a),console.log(e,n[t-1],n[t-2])}function ue(e,t){for(var n=1;n<=d;n++)e[n].push(t[n])}if(e.M&&(M=!M),e.coordinates){var de=function(){for(var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"home",n=e.coordinates[t],o=[],r=0;r<=d;r++)o.push(null);n.forEach((function(e){if(a=1==e.n?{x:e.w,y:e.h,value:.2}:{x:e.w,y:e.h,value:1},e.n<=d){var n=z(a,"home"===t?M:!M);if(A[t].Points[e.n].push(n),A[t].Points[0].push(n),A[t].TacticPoints[0].team.push(n),A[t].TacticPoints[0].averages[e.n].push(n),A[t].Points[e.n].length>1){var r=A[t].Points[e.n].length-1;A[t].Mileage[e.n]+=$(A[t].Points[e.n][r],A[t].Points[e.n][r-1])}o[e.n]=n}else _[t].push(e)})),A[t].TacticPoints[0].ball.push(me),ue(A[t].PointsFull,o)},pe=e.coordinates.ball,me=z({x:pe.w,y:pe.h,value:1},M);q.push(me),de("home"),de("away")}}))}catch(e){console.log("game.forEach ",e)}A.home.TacticPoints.push(A.home.TacticPoints[0]),A.away.TacticPoints.push(A.away.TacticPoints[0]);var D=T+(m==T?"":"(".concat(function(e,t){var n=e.split(":"),a=t.split(":");return"".concat(a[0]-n[0],":").concat(a[1]-n[1])}(T,m),")")),G=xe.date+". "+(xe.stadium.city?xe.stadium.city+". ":"")+xe.stadium.name+". "+xe.home.team.name+" - "+xe.away.team.name+" "+D;document.querySelector("#game-info").textContent=G,console.log("oldpasses -",N),console.log("passes -",I);var W=N.reduce((function(e,t,n){var a=t.filter((function(e){return"goalkick"===e.type}));return a[0]?[].concat(i(e),i(a)):i(e)}),[]);console.log("gkPasses   ",W),L.home.forEach((function(e){Q(e.type,xe.home.players[e.player-1])})),L.away.forEach((function(e){Q(e.type,xe.away.players[e.player-1])})),ve=t("#heatmap-home"),ge=t("#heatmap-away"),be=t("#heatmap-ball",.67),Ce(A.home.PointsFull,A.away.PointsFull,q),t("#heatmap-avgHome"),t("#heatmap-avgAway"),t("#chalkboard"),t("#heatmap-avgBoth"),t("#passesboard");n("home"),n("away"),setTimeout((function(){for(var e=function(e){var t=document.getElementsByClassName("heatmap2-containers-wrapper")[0].cloneNode(!0);function n(){var n=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"home",a="#heatmap-"+n+e;t.querySelector("#heatmap-"+n).id="heatmap-"+n+e,t.querySelector(a+" > div").textContent=xe[n].players[e-1].number+". "+xe[n].players[e-1].name,"home"===n&&document.querySelector("#separate-heatmaps ~ .bojan__content").appendChild(t),h337.create({container:document.querySelector(a),maxOpacity:s,minOpacity:c,radius:u}).setData({max:we,data:A[n].Points[e]})}n("home"),n("away")},t=1;t<=d;t++)e(t)}),10),document.querySelector("#heatmap-home .overlay").textContent=xe.home.team.name,document.querySelector("#heatmap-away .overlay").textContent=xe.away.team.name,document.querySelector("#heatmap-avgHome .overlay").textContent="Средние позиции "+xe.home.team.name,document.querySelector("#heatmap-avgAway .overlay").textContent="Средние позиции "+xe.away.team.name,A.home.TacticChanges.push(A.home.Points[0].length-1),A.away.TacticChanges.push(A.away.Points[0].length-1),A.home.AvgPoints=Ee(A.home.Points).slice(),A.away.AvgPoints=Ee(A.away.Points).slice(),setTimeout((function(){r("home"),r("away")}),50),setTimeout((function(){document.body.removeChild(document.querySelector(".loader-wrapper"))}),200);var V=document.querySelector("#chalkboard .heatmap-canvas"),F=document.querySelector("#passesboard .heatmap-canvas");if(V.getContext){V.getContext("2d");Y(L.away,xe.away.players,"away"),Y(L.home,xe.home.players,"home")}if(F.getContext){F.getContext("2d");fe(I.slice(19),xe.away.players,"away"),fe(I.slice(1,18),xe.home.players,"home")}}else alert("Вставьте верно ссылку на матч!");setTimeout(Se,200)}var R,H},e.open("GET",F("http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c"),!0),e.send()}},{}]},{},[1]);
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+"use strict";
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+;
+var DEFAULT_TV_URL = window.location.origin + "/tv/#/j=1&z=c12345"; // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
+
+var MAX_VALUE = 60;
+var MAX_OPACITY = .7;
+var MIN_OPACITY = .05;
+var POINT_RADIUS = 35;
+var MAX_PLAYERS = 18;
+var GK_VALUE = .2;
+var BALL_RADIUS_KEFF = .67;
+var BALL_MAX_KEFF = 0.33;
+var BALL_TACTICS_RADIUS_KEFF = 1.1;
+var BALL_TACTICS_MAX_KEFF = 0.35;
+var TEAM_RADIUS_KEFF = .65;
+var TEAM_MAX_KEFF = 1.1;
+var HOME = 1;
+var AWAY = 2;
+var SUB_OUT = 1;
+var SUB_IN = 2;
+var SHOW = true;
+var HIDE = false;
+var MIN_MINUTES_FOR_SHOW_TACTIC = 3;
+var shotsCoords = {
+  x1: 39,
+  y1: 38,
+  x2: 712,
+  y2: 458
+};
+var jsonCoords = {
+  x1: 0,
+  y1: 0,
+  x2: 720,
+  y2: 450
+};
+var hmCoords = {
+  x1: 18.98,
+  y1: 19,
+  x2: 346.56,
+  y2: 229.5
+};
+var ZONE_WIDTH = (shotsCoords.x2 - shotsCoords.x1) / 6.0;
+var ZONE_HEIGHT = (shotsCoords.y2 - shotsCoords.y1) / 3.0;
+
+var ZONES = _toConsumableArray(Array(18)).map(function (_, i) {
+  return {
+    x: i / 3 >> 0,
+    y: i % 3
+  };
+});
+
+var ZONES_COORDS = ZONES.map(function (z) {
+  return {
+    x: shotsCoords.x1 + z.x * ZONE_WIDTH,
+    y: shotsCoords.y1 + z.y * ZONE_HEIGHT
+  };
+});
+var ZONES_FIND_ORDER = [8, 11, 5, 14, 7, 10, 9, 12, 2, 17, 4, 6, 13, 15, 1, 3, 16, 18];
+var FIELD_LONGTITUDE = 105;
+var RE_CENTER_MSG = /разыг|розыг/gi;
+var RE_GOAL_LOW_PASS_MSG = /разыг|розыг/gi;
+var RE_PASS_FROM_GOALKICK = /пас|переда|смотри/gi;
+var RE_LONG_PASS = /авес|аброс|линны/g;
+var RE_SCORE_WITH_PENALTIES = /\d+:\d+/g;
+var RE_PLAYER_NUMBERS = /[0-9]+/gi;
+var MILEAGE_KEFF = FIELD_LONGTITUDE / (hmCoords.x2 - hmCoords.x1);
+var SHOT_TOOLTIP = "Удары|В створ|Голы-автоголы   |Блокированные|Каркас";
+var outData = {
+  home: {
+    TacticChanges: [0],
+    TacticPoints: [],
+    Points: [],
+    AvgPoints: [],
+    Mileage: [],
+    PointsFull: []
+  },
+  away: {
+    TacticChanges: [0],
+    TacticPoints: [],
+    Points: [],
+    AvgPoints: [],
+    Mileage: [],
+    PointsFull: []
+  }
+};
+var ballPoints = [];
+var minutesStarts = [0];
+var strangePoints = {
+  home: [],
+  away: []
+};
+var oldshots = {
+  home: [],
+  away: []
+};
+var shots = {
+  home: [],
+  away: []
+};
+var sumInterval = 0;
+outData["home"].TacticPoints.push({
+  start: 0,
+  end: 1,
+  period: 0,
+  startPoint: 0,
+  endPoint: 1,
+  team: [],
+  ball: [],
+  averages: []
+});
+outData["away"].TacticPoints.push({
+  start: 0,
+  end: 1,
+  period: 0,
+  startPoint: 0,
+  endPoint: 1,
+  team: [],
+  ball: [],
+  averages: []
+});
+var showableTacticks = [];
+var oldpasses = [[]];
+var passes = [[]];
+var passFilter = {
+  playersCheckboxes: [],
+  start: 0,
+  end: 125,
+  zoneTo: 0,
+  zoneFrom: 0,
+  homePlayers: 18,
+  awayPlayers: 18,
+  high: true,
+  head: true,
+  good: true,
+  failed: true,
+  throw: true,
+  freekick: true,
+  goalkick: true,
+  fromout: true,
+  fighted: true
+};
+
+for (var i = 0; i <= MAX_PLAYERS; i++) {
+  var createInitTeamsData = function createInitTeamsData(team) {
+    var _team = team || "home";
+
+    outData[_team].Points.push([]);
+
+    outData[_team].Mileage.push(0);
+
+    outData[_team].AvgPoints.push({
+      x: 0,
+      y: 0
+    });
+
+    outData[_team].TacticPoints[0].averages.push([{
+      x: 0,
+      y: 0
+    }]);
+
+    outData[_team].PointsFull.push([]);
+  };
+
+  createInitTeamsData("home");
+  createInitTeamsData("away");
+}
+
+for (var _i = 1; _i <= MAX_PLAYERS * 2; _i++) {
+  oldpasses.push([]);
+  passes.push([]);
+  passFilter.playersCheckboxes.push(true);
+}
+
+var secondTime = false;
+var penalties = false; // ; const JSON_URL_START = 'http://pefl.ru/jsonreport.php';
+
+;
+var JSON_URL_START = window.location.origin + '/public/data/'; //==============================================================================
+
+function formJsonUrl(_ref) {
+  var tvurl = _ref.tvurl,
+      _ref$test = _ref.test,
+      test = _ref$test === void 0 ? false : _ref$test;
+  console.log("###window.location.origin + tvurl - ", window.location.origin + tvurl, test);
+  if (test) return window.location.origin + tvurl;
+
+  var _tvurl = tvurl || DEFAULT_TV_URL;
+
+  var urlString = window.location.href.match(/j\=\d+\&z\=.+/i) ? window.location.href : _tvurl;
+  var zIndex = urlString.indexOf('&z=');
+  var jIndex = urlString.indexOf('j=');
+  console.log(window.location.href.match(/j\=\d+\&z\=.+/i), urlString, zIndex, jIndex);
+  console.log("__".concat(urlString.substring(2 + jIndex, zIndex), ".json"));
+  return JSON_URL_START + "__".concat(urlString.substring(2 + jIndex, zIndex), ".json"); // return JSON_URL_START + `?j=${urlString.substring(2 + jIndex, zIndex)}&z=${urlString.substring(3 + zIndex)}`;
+} //==============================================================================
+
+
+function limitPoint(point) {
+  var secondTime = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var coords1 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : hmCoords;
+  var coords2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : jsonCoords;
+  var x = point.x;
+  var y = point.y;
+  var newX;
+  var newY;
+
+  if (secondTime) {
+    newX = Math.round(coords1.x2 - (x - coords2.x1) * (coords1.x2 - coords1.x1) / (coords2.x2 - coords2.x1));
+    newY = Math.round(coords1.y2 - (y - coords2.y1) * (coords1.y2 - coords1.y1) / (coords2.y2 - coords2.y1));
+  } else {
+    newX = Math.round(coords1.x1 + (x - coords2.x1) * (coords1.x2 - coords1.x1) / (coords2.x2 - coords2.x1));
+    newY = Math.round(coords1.y1 + (y - coords2.y1) * (coords1.y2 - coords1.y1) / (coords2.y2 - coords2.y1));
+  }
+
+  return {
+    x: newX,
+    y: newY,
+    value: point.value
+  };
+} //==============================================================================
+
+
+function normalizePoint(point) {
+  var away = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var coords2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : jsonCoords;
+
+  if (away) {
+    return {
+      n: point.n,
+      h: coords2.y2 - point.h,
+      w: coords2.x2 - point.w,
+      value: 1
+    };
+  }
+
+  return {
+    n: point.n,
+    h: point.h,
+    w: point.w,
+    value: 1
+  };
+} //==============================================================================
+
+
+function getSegmentLength(point1, point2) {
+  var dX = point2.x - point1.x;
+  var dY = point2.y - point1.y;
+  return Math.sqrt(dX * dX + dY * dY);
+} //==============================================================================
+
+
+function isPointMatchZone() {
+  var pointX = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+  var pointY = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var zoneNumber = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 14;
+  if (!zoneNumber) return false;
+  if (!ZONES_COORDS[zoneNumber]) return false;
+  var _zone = ZONES_COORDS[zoneNumber];
+  if (pointX < _zone.x || pointY < _zone.y) return false;
+  if (pointX > _zone.x + ZONE_WIDTH || pointY > _zone.y + ZONE_HEIGHT) return false;
+  return true;
+} //==============================================================================
+
+
+function getLength(coord1, coord2) {
+  var dX = coord2.w - coord1.w;
+  var dY = coord2.h - coord1.h;
+  return Math.sqrt(dX * dX + dY * dY);
+} //==================================================
+
+
+function getLengthToBall(coord, ball) {
+  var _away = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+  var point = normalizePoint(coord, _away);
+  var length = getLength(point, ball); // console.log("ball, point, _away, length ", ball, point, _away, length);
+
+  return length;
+} //==============================================================================
+
+
+function getSegmentAngle(startPoint, endPoint) {
+  var dX = endPoint.x - startPoint.x;
+  var dY = endPoint.y - startPoint.y;
+  var keff = dX < 0 ? dY < 0 ? -180 : 180 : 0;
+  return keff + Math.atan(dY / dX) * 180 / Math.PI;
+  ;
+} //==============================================================================
+
+
+function getMileage(point1, point2) {
+  return MILEAGE_KEFF * getSegmentLength(point1, point2);
+} //==============================================================================
+
+
+function leaveValuablePoints(pointsArr) {
+  return pointsArr.filter(function (point) {
+    return !point;
+  }); // if not null
+} //==============================================================================
+
+
+function getOwnerFromMessages(_messages) {
+  if (!_messages) return null;
+  if (!_messages[0]) return null;
+  return _messages[0].owner;
+} //==============================================================================
+
+
+function getPlayerFromMessage(_message) {
+  var num = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  if (!_message || !_message.mes) return 0; // const playerNumbersOld = String(_message.mes).match(/(?<=\[)\d+(?=\])/g);
+  // return playerNumbers != null && playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0;
+  // replace nice regexp by some kind of polifill for IE
+
+  var message = String(_message.mes);
+  var messageLength = message.length;
+  var openingSquareIndex = 0;
+  var playerNumbers = [];
+
+  for (var _i2 = 0; _i2 < messageLength; _i2++) {
+    if (message[_i2] === '[') {
+      openingSquareIndex = _i2 + 1;
+    } else if (message[_i2] === ']' && openingSquareIndex < _i2 && openingSquareIndex > 0) {
+      // console.log("openingSquareIndex - ", openingSquareIndex, i, message.substr(openingSquareIndex, i - openingSquareIndex));
+      playerNumbers.push(+message.substr(openingSquareIndex, _i2 - openingSquareIndex));
+    }
+  } // console.log("playerNumbers - ", playerNumbers, "playerNumbersOld - ", playerNumbersOld, message);
+
+
+  return openingSquareIndex ? playerNumbers[num - 1] ? +playerNumbers[num - 1] : 0 : null;
+} //==============================================================================
+
+
+function getPointsSet(pointsArr, start, end) {
+  return pointsArr.slice(start, end);
+}
+/**===================================================================================================== */
+
+
+function clearPoint(arr) {
+  return arr.filter(function (el) {
+    return el != null;
+  });
+}
+/**===================================================================================================== */
+
+
+function isOneTeam(firstPlayerNumber, secondPlayerNumber) {
+  return firstPlayerNumber < MAX_PLAYERS + 1 && secondPlayerNumber < MAX_PLAYERS + 1 || firstPlayerNumber > MAX_PLAYERS && secondPlayerNumber > MAX_PLAYERS;
+}
+/**===================================================================================================== */
+
+
+function getSubArrow(_sub) {
+  var sub = _sub || SUB_OUT;
+  var arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
+  var arrow = document.createElement("img");
+  arrow.src = arrRef;
+  return arrow;
+}
+/**===================================================================================================== */
+
+
+function createEye(toolTip) {
+  var eye = document.createElement('img');
+  eye.src = "http://pefl.ru/images/eye.png";
+  eye.alt = "";
+  var tp = document.createElement('div');
+  tp.className = "tooltiptext";
+  tp.innerText = toolTip;
+  eye.appendChild(tp);
+  return eye;
+} //**========================================================================================================= */
+
+
+if (!Array.prototype.find) {
+  Array.prototype.find = function (predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+
+      if (predicate.call(thisArg, value, i, list)) {
+        return value;
+      }
+    }
+
+    return undefined;
+  };
+} //**========================================================================================================= */
+
+
+if (window.NodeList && !NodeList.prototype.forEach) {
+  NodeList.prototype.forEach = function (callback, thisArg) {
+    thisArg = thisArg || window;
+
+    for (var i = 0; i < this.length; i++) {
+      callback.call(thisArg, this[i], i, this);
+    }
+  };
+}
+/**===================================================================================================== */
+
+
+;
+
+function createShotLine(shot, shotinfo, color) {
+  var line = document.createElement('div');
+  line.classList.add('shotline');
+  line.style.top = shot.startpoint.y - 1 + "px";
+  line.style.left = shot.startpoint.x - 1 + "px";
+  line.style.width = getSegmentLength(shot.startpoint, shot.endpoint) + "px";
+  line.style.transform = "rotate(" + getSegmentAngle(shot.startpoint, shot.endpoint) + "deg)";
+  line.style.borderTopColor = color;
+  return line;
+}
+/**===================================================================================================== */
+
+
+function createShotStart(shot, shotinfo, color) {
+  var shotStart = document.createElement('div');
+  shotStart.classList.add('shotstart');
+  shotStart.style.borderColor = color;
+  shotStart.style.backgroundColor = color;
+  shotStart.style.top = shot.startpoint.y - 5 + "px";
+  shotStart.style.left = shot.startpoint.x - 5 + "px";
+  var typeString = shot.type == "G" ? 'Гол' : shot.type == "V" ? 'Удар в створ' : shot.type == "W" ? 'Автогол' : shot.type == "Block" ? 'Блок' : shot.type == "B" ? 'Каркас ворот' : 'Мимо';
+  shotStart.addEventListener('mouseenter', function (e) {
+    var shotLegend = document.querySelector('#one-shot-legend');
+    var shotString = " Минута " + shot.minute + ", " + typeString + ", " + shot.xG + ",\n\r " + shot.player + "." + shotinfo.playerName;
+    shotLegend.textContent = shotString;
+    shotLegend.style.display = "inline-block";
+  });
+  shotStart.addEventListener('mouseleave', function (e) {
+    document.querySelector('#one-shot-legend').style.display = "none";
+  });
+  return shotStart;
+}
+/**===================================================================================================== */
+
+
+function createShotEnd(shot, shotinfo, color) {
+  var shotEnd = document.createElement('div');
+  shotEnd.classList.add('shotend');
+  shotEnd.style.borderColor = color;
+  shotEnd.style.backgroundColor = color;
+  shotEnd.style.top = shot.endpoint.y - 2 + "px";
+  shotEnd.style.left = shot.endpoint.x - 1 + "px";
+  return shotEnd;
+}
+/**===================================================================================================== */
+
+
+function createShot(shot, shotinfo) {
+  var _strokeStyle = shot.type == "G" ? 'red' : shot.type == "V" ? 'yellow' : shot.type == "Block" ? 'black' : shot.type == "B" ? 'black' : shot.type == "W" ? "#FFA500" : 'blue';
+
+  var shotPict = document.createElement('div');
+  shotPict.classList.add('shot');
+  var teamClass = shotinfo.team + "Shot";
+  shotPict.classList.add(teamClass);
+  shotPict.setAttribute("player", shot.player);
+  shotPict.setAttribute("shotType", shot.type);
+  shotPict.setAttribute("minute", shot.minute);
+  shotPict.appendChild(createShotLine(shot, shotinfo, _strokeStyle));
+  shotPict.appendChild(createShotEnd(shot, shotinfo, _strokeStyle));
+  shotPict.appendChild(createShotStart(shot, shotinfo, _strokeStyle));
+  return shotPict;
+}
+/**===================================================================================================== */
+
+
+function drawTeamShots(teamShots, players, team, ctx) {
+  teamShots.forEach(function (shot, shotNum) {
+    var shotInfo = {
+      playerName: players[shot.player - 1].name,
+      team: team
+    };
+    document.querySelector('#chalkboard').appendChild(createShot(shot, shotInfo));
+  });
+}
+/**===================================================================================================== */
+
+
+function countShot(newShotType, player) {
+  if (newShotType == "U") {
+    if (!player.miss) {
+      player.miss = 1;
+      return;
+    }
+
+    player.miss++;
+  }
+
+  if (newShotType == "G") {
+    if (!player.goals) {
+      player.goals = 1;
+      return;
+    }
+
+    player.goals++;
+  }
+
+  if (newShotType == "B") {
+    if (!player.bar) {
+      player.bar = 1;
+      return;
+    }
+
+    player.bar++;
+  }
+
+  if (newShotType == "Block") {
+    if (!player.block) {
+      player.block = 1;
+      return;
+    }
+
+    player.block++;
+  }
+
+  if (newShotType == "V") {
+    if (!player.stvor) {
+      player.stvor = 1;
+      return;
+    }
+
+    player.stvor++;
+  }
+
+  if (newShotType == "W") {
+    if (!player.autogoals) {
+      player.autogoals = 1;
+      return;
+    }
+
+    player.autogoals++;
+  }
+}
+/**===================================================================================================== */
+
+
+function formShotsString(player) {
+  var autogoals = player.autogoals ? "" + -parseInt(player.autogoals) : "";
+  var goals = player.goals ? parseInt(player.goals) : 0;
+  var stvor = goals + (player.stvor ? parseInt(player.stvor) : 0);
+  var sum = stvor + (player.miss ? parseInt(player.miss) : 0);
+  var goalsString = "|" + goals + autogoals;
+  var bars = player.bar ? "|" + parseInt(player.bar) : " ";
+  var blocks = player.block ? "|" + parseInt(player.block) : " ";
+  return sum + bars + blocks == 0 && autogoals == "" ? " " : sum == 0 ? "        " + autogoals + blocks + bars : (sum > 9 ? sum : " " + sum) + "|" + stvor + goalsString + " " + blocks + bars;
+}
+/**===================================================================================================== */
+
+
+function displayAllShots(display, team) {
+  var hard = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var allHide = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var shotsSelector = "." + team + "Shot";
+  document.querySelectorAll(shotsSelector).forEach(function (shot) {
+    if (allHide) {
+      shot.style.display = "none";
+      return;
+    }
+
+    var checkbox = document.querySelector("#" + team + "-player-list_" + shot.getAttribute("player") + " input");
+    var checked = checkbox ? checkbox.checked : false;
+    shot.style.display = display ? "block" : checked && !hard ? "block" : "none";
+  });
+}
+
+function filterShotsByTime(start, end) {
+  document.querySelectorAll("[class$=Shot]").forEach(function (shot) {
+    var minute = +shot.getAttribute("minute");
+    var matchPeriod = minute >= +start && minute <= +end;
+    shot.style.display = matchPeriod ? "block" : "none";
+  });
+}
+
+function changeCheckboxCount() {
+  var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
+  var team = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "home";
+  var shotsContainer = document.querySelectorAll('.shots-container-wrapper')[0];
+  var chboxCount = parseInt(team == "home" ? shotsContainer.getAttribute("data-homes") : shotsContainer.getAttribute("data-aways"));
+
+  if (action == -1) {
+    chboxCount--;
+  } else {
+    chboxCount++;
+  }
+
+  ;
+  if (chboxCount < 0) chboxCount = 0;
+
+  if (team == "home") {
+    shotsContainer.setAttribute("data-homes", chboxCount);
+  } else {
+    shotsContainer.setAttribute("data-aways", chboxCount);
+  }
+
+  return chboxCount;
+}
+/**===================================================================================================== */
+
+
+function createShotCheckbox(params) {
+  var chbox = document.createElement('input');
+  chbox.type = "checkbox";
+  chbox.checked = false;
+  chbox.style.cursor = "pointer";
+  chbox.addEventListener('click', function (e) {
+    if (this.checked) {
+      changeCheckboxCount(1, params.team);
+      displayAllShots(false, params.team, false);
+    } else {
+      if (changeCheckboxCount(-1, params.team) == 0) {
+        displayAllShots(true, params.team);
+      } else {
+        displayAllShots(false, params.team, false);
+      }
+    }
+  });
+  return chbox;
+} //=================================================
+
+
+function changeVisibilityByType(e) {
+  e.preventDefault();
+  var type = this.getAttribute("data-type");
+  var shotsSelector = ".shot[shottype=" + type + "]";
+  var checked = this.style.fontWeight == "bold";
+  document.querySelectorAll(shotsSelector).forEach(function (shot) {
+    shot.style.display = !checked ? "block" : "none";
+  });
+
+  if (type == "G") {
+    // цепляем и автоголы
+    document.querySelectorAll(".shot[shottype=W]").forEach(function (shot) {
+      shot.style.display = !checked ? "block" : "none";
+    });
+  }
+
+  this.style.fontWeight = checked ? "normal" : "bold";
+} //=================================================
+
+
+var fGoals = document.getElementById("filterGoals");
+fGoals.addEventListener('click', changeVisibilityByType.bind(fGoals));
+var fStvor = document.getElementById("filterStvor");
+fStvor.addEventListener('click', changeVisibilityByType.bind(fStvor));
+var fMiss = document.getElementById("filterMiss");
+fMiss.addEventListener('click', changeVisibilityByType.bind(fMiss));
+var fBars = document.getElementById("filterBars");
+fBars.addEventListener('click', changeVisibilityByType.bind(fBars));
+var fBlocks = document.getElementById("filterBlocks");
+fBlocks.addEventListener('click', changeVisibilityByType.bind(fBlocks));
+
+function filterRangeMaximize(_timeFilterId) {
+  var timeFilter = document.getElementById(_timeFilterId);
+  timeFilter.setAttribute("start", 0);
+  timeFilter.setAttribute("end", 125);
+  timeFilter.dispatchEvent(new Event('change', {
+    bubbles: true
+  }));
+}
+
+function showAllShots() {
+  var _show = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+  displayAllShots(_show, "home", true, !_show);
+  displayAllShots(_show, "away", true, !_show);
+
+  if (_show) {
+    document.querySelectorAll(".squadAndShots-containers-wrapper input[type=checkbox]").forEach(function (chbox) {
+      chbox.checked = HIDE;
+    });
+    filterRangeMaximize("shots-time-filter");
+  }
+
+  document.querySelectorAll("a[id^=filter]:nth-of-type(-n+5)").forEach(function (aButton) {
+    aButton.style.fontWeight = _show ? "bold" : "normal";
+  });
+}
+
+document.getElementsByClassName("shots-container")[0].addEventListener('click', function (e) {
+  showAllShots();
+});
+document.getElementById("filter-show-all").addEventListener('click', function (e) {
+  e.preventDefault();
+  showAllShots();
+});
+document.getElementById("filter-hide-all").addEventListener('click', function (e) {
+  e.preventDefault();
+  showAllShots(HIDE);
+});
+;
+/**===================================================================================================== */
+
+function getTypeString(pass) {
+  return pass.type == "corner" ? 'угловой' : pass.type == "throw" ? 'аут' : pass.type == "freekick" ? 'штрафной' : pass.type == "goalkick" ? 'от ворот' : '';
+}
+/**===================================================================================================== */
+
+
+function formPassString(pass, passinfo) {
+  return " Минута " + pass.minute + ", " + (pass.good ? "точно" : "неточно") + (pass.high ? ", верхом ," : ", низом ,") + getTypeString(pass) + ",\n\r " + passinfo.player + "." + passinfo.playerName;
+}
+/**===================================================================================================== */
+
+
+;
+
+function createPassLine(pass, passinfo, color) {
+  var line = document.createElement('div');
+  line.classList.add('pass-line');
+  line.style.top = pass.startpoint.y - 1 + "px";
+  line.style.left = pass.startpoint.x - 1 + "px";
+  line.style.width = getSegmentLength(pass.startpoint, pass.endpoint) + "px";
+  line.style.transform = "rotate(" + getSegmentAngle(pass.startpoint, pass.endpoint) + "deg)";
+  line.style.borderTopColor = color;
+  line.addEventListener('mouseenter', function (e) {
+    var passLegend = document.querySelector('#one-pass-legend');
+    passLegend.textContent = formPassString(pass, passinfo);
+    passLegend.style.display = "inline-block";
+  });
+  line.addEventListener('mouseleave', function (e) {
+    document.querySelector('#one-pass-legend').style.display = "none";
+  });
+  return line;
+}
+/**===================================================================================================== */
+
+
+function createPassStart(pass, passinfo, color) {
+  var passStart = document.createElement('div');
+  passStart.classList.add('pass-start');
+  passStart.style.borderColor = color;
+  passStart.style.backgroundColor = color;
+  passStart.style.top = pass.startpoint.y - 5 + "px";
+  passStart.style.left = pass.startpoint.x - 5 + "px";
+  var typeString = getTypeString(pass);
+  passStart.addEventListener('mouseenter', function (e) {
+    var passLegend = document.querySelector('#one-pass-legend');
+    passLegend.textContent = formPassString(pass, passinfo);
+    passLegend.style.display = "inline-block";
+  });
+  passStart.addEventListener('mouseleave', function (e) {
+    document.querySelector('#one-pass-legend').style.display = "none";
+  });
+  return passStart;
+}
+/**===================================================================================================== */
+
+
+function createPass(pass, passinfo) {
+  var _strokeStyle = !pass.good ? 'red' : 'blue';
+
+  var passPict = document.createElement('div');
+  passPict.classList.add('pass');
+  var teamClass = passinfo.team + "Pass";
+  passPict.classList.add(teamClass);
+  passPict.setAttribute("startpoint-x", pass.startpoint.x);
+  passPict.setAttribute("endpoint-x", pass.endpoint.x);
+  passPict.setAttribute("startpoint-y", pass.startpoint.y);
+  passPict.setAttribute("endpoint-y", pass.endpoint.y);
+  passPict.setAttribute("player", pass.player);
+  passPict.setAttribute("passType", pass.type);
+  passPict.setAttribute("minute", pass.minute);
+  passPict.setAttribute("high", pass.high);
+  passPict.setAttribute("good", pass.good);
+  passPict.setAttribute("failed", pass.failed);
+  passPict.setAttribute("fighted", pass.fighted);
+  passPict.appendChild(createPassLine(pass, passinfo, _strokeStyle));
+  passPict.appendChild(createPassStart(pass, passinfo, _strokeStyle));
+  return passPict;
+}
+/**===================================================================================================== */
+
+
+function filterPassesByTime(start, end) {
+  passFilter.start = start;
+  passFilter.end = end;
+  document.querySelectorAll("[class$=Pass]").forEach(function (pass) {
+    var minute = +pass.getAttribute("minute");
+    var matchPeriod = minute >= +start && minute <= +end;
+    pass.style.display = matchPeriod ? "block" : "none";
+  });
+}
+/**===================================================================================================== */
+
+
+function filterPass(pass, passFilter) {
+  /**
+   * 
+  const passFilter = {
+  playersCheckboxes: [],
+  start: 0,
+  end: 125,
+  zoneTo: 0,
+  zoneFrom: 0,
+  homePlayers: 18,
+  awayPlayers: 18,
+  high: true,
+  head: true,
+  good: true,
+  failed: true,
+  fighted: true
+  }
+   */
+  function isDiffers(a, b) {
+    return a && !b || b && !a;
+  }
+
+  function isDiffers(a, b) {
+    if (!a) return;
+    return a && !b || b && !a;
+  }
+
+  if (isDiffers(passFilter.good, pass.good)) return false;
+  if (isDiffers(passFilter.failed, pass.failed)) return false;
+  if (isDiffers(passFilter.high, pass.high)) return false;
+  if (isDiffers(passFilter.head, pass.head)) return false;
+  if (pass.type === 'throw' && !passFilter.throw) return false;
+  if (pass.type === 'freekick' && !passFilter.freekick) return false;
+  if (pass.type === 'goalkick' && !passFilter.goalkick) return false;
+  if (pass.type === 'fromout' && !passFilter.fromout) return false;
+  var minute = +pass.getAttribute("minute");
+  if (minute < start || minute > end) return false;
+  var startpointX = +pass.getAttribute("startpoint-x");
+  var startpointY = +pass.getAttribute("startpoint-y");
+  if (passFilter.zoneFrom && !isPointMatchZone(startpointX, startpointY, passFilter.zoneFrom)) return false;
+  var endpointX = +pass.getAttribute("endpoint-x");
+  var endpointY = +pass.getAttribute("endpoint-y");
+  if (passFilter.zoneTo && !isPointMatchZone(endpointX, endpointY, passFilter.zoneTo)) return false;
+  return true;
+}
+/**===================================================================================================== */
+
+
+function filterPassesByMainFilter() {
+  document.querySelectorAll("[class$=Pass]").forEach(function (pass) {
+    // const minute = +pass.getAttribute("minute");
+    var matchPass = filterPass(pass, passFilter);
+    pass.style.display = matchPass ? "block" : "none";
+  });
+}
+/**===================================================================================================== */
+
+
+function drawTeamPasses(teamPasses, players, team, ctx) {
+  var passboard = document.querySelector('#passesboard');
+  passboard.querySelectorAll('.pass').forEach(function (el, key, parent) {
+    el.parentNode.removeChild(el); // console.log("el - ", el, parent);
+  });
+  ZONES_COORDS.forEach(function (z, i) {
+    var zone = document.createElement('div');
+    zone.classList.add('zone-border');
+    zone.style.top = z.y - 1 + "px";
+    zone.textContent = i + 1;
+    zone.style.left = z.x - 1 + "px";
+    zone.style.width = ZONE_WIDTH + "px";
+    zone.style.height = ZONE_HEIGHT + "px"; // line.style.transform = "rotate(" + getSegmentAngle(pass.startpoint, pass.endpoint) + "deg)";
+
+    passboard.appendChild(zone);
+    ;
+  });
+  teamPasses.forEach(function (playerPasses, _player) {
+    if (!playerPasses[0]) return;
+    playerPasses.forEach(function (pass) {
+      var passInfo = {
+        playerName: players[_player].name,
+        team: team,
+        player: _player + 1
+      };
+      passboard.appendChild(createPass(pass, passInfo));
+      ;
+    }); //===================================================
+    // ctx.beginPath(); 
+    // ctx.fillStyle = _strokeStyle;
+    // ctx.arc(pass.startpoint.x, pass.startpoint.y, 4, 0, 2 * Math.PI, false);
+    // ctx.fill();              
+    // ctx.moveTo(pass.startpoint.x, pass.startpoint.y);
+    // ctx.lineWidth = 2;
+    // ctx.lineTo(pass.endpoint.x, pass.endpoint.y);
+    // ctx.arc(pass.endpoint.x, pass.endpoint.y, 2, 0, 2 * Math.PI, false);
+    // ctx.strokeStyle = _strokeStyle;
+    // ctx.stroke();
+  });
+}
+/**===================================================================================================== */
+//==============================================================================
+
+
+var maximumValue = MAX_VALUE;
+var heatmapInstance;
+var heatmapInstance2;
+var heatmapInstance3;
+var heatmapInstance4;
+var heatmapInstance5;
+var heatmapInstance7;
+var heatmapInstance8;
+var heatmapInstance9;
+var rep; //-------------------------------------------------
+
+function calculateAvgPositions(_points) {
+  var _avgPoints = [];
+
+  for (var _i3 = 0; _i3 <= MAX_PLAYERS; _i3++) {
+    _avgPoints.push({
+      x: 0,
+      y: 0,
+      points: 0
+    });
+  }
+
+  _points.forEach(function (rawHmap, _n) {
+    var hmap = rawHmap.filter(function (point) {
+      return point != null;
+    });
+    var avg = hmap.length;
+    if (_n === 0 || avg < 1) return;
+    hmap.forEach(function (point, i) {
+      _avgPoints[_n].x += point.x / avg;
+      _avgPoints[_n].y += point.y / avg;
+      _avgPoints[_n].points++;
+    });
+
+    var order = _avgPoints.map(function (pl, i) {
+      var playerPoints = {
+        playerRank: i,
+        points: pl.points
+      };
+      return playerPoints;
+    }).slice(1).sort(function (a, b) {
+      return +b.points - +a.points;
+    });
+
+    _avgPoints[0].order = order;
+  });
+
+  return _avgPoints;
+} //--------------------------------------------------------------------
+
+
+function calculatePlayerClosestToBall(coords, _secondTime) {
+  var ball = coords.ball; // console.log("calculatePlayerClosestToBall secondtime", _secondTime);
+
+  var players = [];
+  var closestPlayer = {
+    n: 0,
+    length: 10000
+  };
+  var prevPlayer = {
+    n: 0,
+    length: 10000
+  }; // let minLength = 10000;
+
+  coords.home.forEach(function (pl) {
+    var length = getLengthToBall(pl, ball, false); // console.log("pl, ball, length  home", pl, ball, length, minLength);
+
+    if (length < closestPlayer.length) {
+      // players.push({ n: pl.n, length: length });
+      prevPlayer.n = closestPlayer.n;
+      prevPlayer.length = closestPlayer.length;
+      closestPlayer.n = pl.n;
+      closestPlayer.length = length;
+    } else if (length < prevPlayer.length) {
+      prevPlayer.n = pl.n;
+      prevPlayer.length = length;
+    }
+  });
+  coords.away.forEach(function (pl) {
+    var length = getLengthToBall(pl, ball, true); // console.log("pl, ball, length away", pl, ball, length, minLength);
+
+    if (length < closestPlayer.length) {
+      // players.push({ n: pl.n, length: length });
+      prevPlayer.n = closestPlayer.n;
+      prevPlayer.length = closestPlayer.length;
+      closestPlayer.n = pl.n + MAX_PLAYERS;
+      closestPlayer.length = length;
+    } else if (length < prevPlayer.length) {
+      prevPlayer.n = pl.n + MAX_PLAYERS;
+      prevPlayer.length = length;
+    }
+  });
+  return [closestPlayer, prevPlayer];
+} //==============================================================================
+//==============================================================================
+//==============================================================================
+
+
+var startTime = Date.now();
+
+window.onload = function () {
+  //--------------------------------------------------------------------
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.overrideMimeType("application/json");
+
+  xmlhttp.onreadystatechange = function () {
+    // setTimeout(function () {
+    if (this.readyState == this.OPENED) {
+      xmlhttp.setRequestHeader('Accept', "application/json, text/javascript, */*; q=0.01");
+    }
+
+    if (this.readyState == 4
+    /*&& this.status == 200*/
+    ) {
+      if (this.status == 200) {
+        //--------------------------------------------------------------------
+        var setTeamsColors = function setTeamsColors() {
+          var away = document.querySelector("#player_default_away .player_shape").style;
+          var home = document.querySelector("#player_default_home .player_shape").style;
+          away.backgroundColor = "#" + rep.away.team.back;
+          away.borderColor = "#" + rep.away.team.color;
+          away.color = "#" + rep.away.team.color;
+          home.color = "#" + rep.home.team.color;
+          home.borderColor = "#" + rep.home.team.color;
+          home.backgroundColor = "#" + rep.home.team.back;
+        };
+
+        var getPenalties = function getPenalties(s, p) {
+          var score = s.split(':');
+          var withpens = p.split(':');
+          return "".concat(withpens[0] - score[0], ":").concat(withpens[1] - score[1]);
+        };
+
+        /**===================================================================================================== */
+        var avgMapCreate = function avgMapCreate(_id) {
+          var radiusKef = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : TEAM_RADIUS_KEFF;
+          var min = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : MIN_OPACITY;
+          var max = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : MAX_OPACITY;
+          return h337.create({
+            container: document.querySelector(_id),
+            //'#heatmap-avgSubHome'),
+            maxOpacity: max,
+            minOpacity: min,
+            radius: POINT_RADIUS * radiusKef
+          });
+        };
+
+        /**===================================================================================================== */
+        var showTeamTacticHeamaps = function showTeamTacticHeamaps() {
+          var _team = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "home";
+
+          document.querySelector("#" + _team + "-tacticks-heatmaps + .bojan__label .bojan__label__header").textContent = "Смены тактик " + rep[_team].team.name;
+
+          if (outData[_team].TacticPoints.length > 1) {
+            var _loop = function _loop(t) {
+              if (outData[_team].TacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) return "continue";
+              outData[_team].TacticPoints[t].rankByMinutes = [];
+
+              outData[_team].TacticPoints[t].averages.forEach(function (positions, _n) {
+                var avg = positions.length;
+                outData[_team].TacticPoints[t].rankByMinutes[_n] = [_n, avg];
+                if (_n === 0 || avg < 2) return;
+                positions.forEach(function (pos, i, _arr) {
+                  positions[0].x += pos.x / avg;
+                  positions[0].y += pos.y / avg;
+                });
+              });
+
+              outData[_team].TacticPoints[t].rankByMinutes.sort(function (a, b) {
+                return b[1] - a[1];
+              });
+
+              var divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
+              var newDiv = divWrapper.cloneNode(true);
+              var tacticId = "#heatmap-tactic" + _team + t;
+              var ballId = "#heatmap-ball" + _team + t;
+              var tacticLabel = (outData[_team].TacticPoints[t].start > 0 ? "от " + outData[_team].TacticPoints[t].start : "") + " " + (outData[_team].TacticPoints[t].end < 125 ? "до " + outData[_team].TacticPoints[t].end : "") + ".  " + rep[_team].team.name;
+              newDiv.querySelector('#heatmap-home').id = "heatmap-tactic" + _team + t;
+              newDiv.querySelector(tacticId + ' > div').textContent = "Игроки " + tacticLabel;
+              newDiv.querySelector('#heatmap-away').id = "heatmap-ball" + _team + t;
+              newDiv.querySelector(ballId + ' > div').textContent = "Мяч " + tacticLabel;
+              ;
+              document.querySelector("#" + _team + "-tacticks-heatmaps ~ .bojan__content").appendChild(newDiv);
+              var theWrapper = document.getElementsByClassName('heatmap-container-wrapper')[1];
+              var thirdField = theWrapper.cloneNode(true);
+              thirdField.className = "heatmap-container-wrapper";
+              newDiv.className = "heatmap3-containers-wrapper";
+              thirdField.querySelector(".heatmap-container").id = "avgPositions" + capitalTeamName(_team) + t;
+              thirdField.querySelector(".heatmap-container > div").textContent = "Ср.поз." + tacticLabel;
+              newDiv.appendChild(thirdField);
+
+              var _loop2 = function _loop2(n) {
+                var pl = document.querySelector('#player_default_' + _team).cloneNode(true);
+                pl.id = _team + "AvgPoints_" + t + "_" + n;
+                var rank = outData[_team].TacticPoints[t].rankByMinutes;
+                pl.style.display = rank.indexOf(rank.find(function (el) {
+                  return el[0] == n;
+                })) < 11 ? "inherit" : "none";
+                pl.style.left = outData[_team].TacticPoints[t].averages[n][0].x - 5 + "px";
+                pl.style.top = outData[_team].TacticPoints[t].averages[n][0].y - 5 + "px";
+                pl.querySelector('.player_number').textContent = rep[_team].players[n - 1].number;
+                pl.querySelector('.tooltiptext').textContent = rep[_team].players[n - 1].name + "    " + rep[_team].players[n - 1].number;
+                document.querySelector('#avgPositions' + capitalTeamName(_team) + t).appendChild(pl);
+              };
+
+              for (var n = 1; n <= MAX_PLAYERS; n++) {
+                _loop2(n);
+              } //------------------------------------------------------------
+
+
+              var heatmapPlayers = h337.create({
+                container: document.querySelector(tacticId),
+                maxOpacity: MAX_OPACITY,
+                minOpacity: MIN_OPACITY,
+                radius: POINT_RADIUS
+              });
+              heatmapPlayers.setData({
+                max: maximumValue,
+                data: outData[_team].TacticPoints[t].team
+              });
+              var heatmapball = h337.create({
+                container: document.querySelector(ballId),
+                maxOpacity: MAX_OPACITY,
+                minOpacity: MIN_OPACITY,
+                radius: POINT_RADIUS * BALL_RADIUS_KEFF * BALL_TACTICS_RADIUS_KEFF
+              });
+              heatmapball.setData({
+                max: maximumValue * BALL_MAX_KEFF * BALL_TACTICS_MAX_KEFF,
+                data: outData[_team].TacticPoints[t].ball
+              });
+            };
+
+            for (var t = 1; t < outData[_team].TacticPoints.length; t++) {
+              var _ret = _loop(t);
+
+              if (_ret === "continue") continue;
+            }
+          }
+
+          showableTacticks.push(outData[_team].TacticPoints.filter(function (t, n) {
+            return n > 0 && t.period > 3;
+          }).map(function (el) {
+            return [el.start, el.end];
+          }));
+        };
+
+        var showPlayersHeatmaps = function showPlayersHeatmaps() {
+          var _loop3 = function _loop3(_i5) {
+            var divWrapper = document.getElementsByClassName('heatmap2-containers-wrapper')[0];
+            var newDiv = divWrapper.cloneNode(true);
+
+            function showOnePlayerHeatmap() {
+              var _team = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "home";
+
+              var playerId = "#heatmap-" + _team + _i5;
+              newDiv.querySelector("#heatmap-" + _team).id = "heatmap-" + _team + _i5;
+              newDiv.querySelector(playerId + ' > div').textContent = rep[_team].players[_i5 - 1].number + '. ' + rep[_team].players[_i5 - 1].name;
+              if (_team === "home") document.querySelector("#separate-heatmaps ~ .bojan__content").appendChild(newDiv);
+
+              var _heatmapPlayer = h337.create({
+                container: document.querySelector(playerId),
+                maxOpacity: MAX_OPACITY,
+                minOpacity: MIN_OPACITY,
+                radius: POINT_RADIUS
+              });
+
+              _heatmapPlayer.setData({
+                max: maximumValue,
+                data: outData[_team].Points[_i5]
+              });
+            }
+
+            showOnePlayerHeatmap("home");
+            showOnePlayerHeatmap("away");
+          };
+
+          for (var _i5 = 1; _i5 <= MAX_PLAYERS; _i5++) {
+            _loop3(_i5);
+          }
+        };
+
+        //-------------------------------------------------------------------------
+        var showHideAllColoboks = function showHideAllColoboks(team, n, _tacticPoints) {
+          var isVisible = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : SHOW;
+
+          var _team = team || "home";
+
+          var _n = n || 1;
+
+          var tacticPoints = _tacticPoints || outData.home.TacticPoints;
+
+          var _colobokId = _team + "AvgPoints" + _n;
+
+          var _colobokId2 = "both" + _team + "AvgPoints" + _n; //  console.log(_colobokId, _colobokId2);
+
+
+          var _style = document.getElementById(_colobokId).style;
+          var _style2 = document.getElementById(_colobokId2).style;
+          _style.display = isVisible ? "inherit" : "none";
+          _style2.display = isVisible ? "inherit" : "none";
+
+          if (tacticPoints.length > 1) {
+            for (var t = 1; t < tacticPoints.length; t++) {
+              if (tacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+
+              var _colobokId3 = _team + "AvgPoints_" + t + "_" + _n;
+
+              document.getElementById(_colobokId3).style.display = isVisible ? // document.getElementById(_colobokId).style.display = document.getElementById(_colobokId).style.display == "none" ?
+              "inherit" : "none";
+            }
+          }
+        };
+
+        //-------------------------------------------------------------------------
+        var showTeamAvgPositions = function showTeamAvgPositions(_team) {
+          for (var n = 1; n <= MAX_PLAYERS; n++) {
+            var pl = document.querySelector('#player_default_' + _team).cloneNode(true);
+            pl.id = _team + "AvgPoints" + n;
+            pl.plId = (_team === "home" ? "hm" : "aw") + n;
+            var plRow = _team + "-player-list_" + n;
+            var newPlayer = document.createElement('div');
+            newPlayer.className = "playerRow";
+            newPlayer.id = plRow;
+            var plNumDiv = document.createElement('div');
+            plNumDiv.innerText = rep[_team].players[n - 1].number + ". ";
+            plNumDiv.className = "player-list-num";
+            var plNameDiv = document.createElement('div');
+            plNameDiv.className = "player-list-name";
+            var plName = document.createElement('a'); // plName.style.fontWeight = n < 12 ? "bold" : "normal";
+
+            plName.id = plRow + '_name';
+            plName.innerText = rep[_team].players[n - 1].name;
+            plName.href = '#';
+            plName.addEventListener('click', function (e) {
+              e.preventDefault();
+              this.style.fontWeight = this.style.fontWeight == "bold" ? "normal" : "bold";
+              showHideAllColoboks(_team, this.id.replace(_team + "-player-list_", '').replace("_name", ''), outData[_team].TacticPoints, this.style.fontWeight == "bold" ? SHOW : HIDE);
+            });
+
+            if (rep[_team].players[n - 1].sub) {
+              plName.appendChild(getSubArrow(rep[_team].players[n - 1].sub));
+            }
+
+            plNameDiv.appendChild(plName);
+            newPlayer.appendChild(plNumDiv);
+            newPlayer.appendChild(plNameDiv);
+            var plEye = document.createElement('div');
+            plEye.className = "player-list-eye";
+            plEye.innerText = " "; //<img src="http://pefl.ru/images/eye.png" alt="" border="0">
+            // apEye.appendChild(createEye(`Тут планируются 
+            // скилы игрока`));
+            // apEye.appendChild(createEye(`Тут планируется 
+            // статистика игрока`));
+
+            newPlayer.appendChild(plEye);
+            var plShots = document.createElement('div');
+            plShots.className = "player-list-shots";
+            var plShotsString = formShotsString(rep[_team].players[n - 1]);
+            plShots.innerText = plShotsString;
+            var plShotsCheckbox = document.createElement('div');
+            plShotsCheckbox.className = "playerShotCheckbox";
+
+            if (plShotsString == " ") {
+              plShotsCheckbox.innerText = " ";
+            } else {
+              plShotsCheckbox.appendChild(createShotCheckbox({
+                player: n,
+                team: _team
+              }));
+              var plShotsTooltip = document.createElement('div');
+              plShotsTooltip.className = "tooltiptext";
+              plShotsTooltip.innerText = SHOT_TOOLTIP;
+              plShots.appendChild(plShotsTooltip);
+            }
+
+            newPlayer.appendChild(plShotsCheckbox);
+            newPlayer.appendChild(plShots);
+            var plMileage = document.createElement('div');
+            plMileage.className = "player-list-mileage";
+            plMileage.innerText = Number(outData[_team].Mileage[n] / 1000.0).toFixed(2) + "км";
+            newPlayer.appendChild(plMileage);
+            document.querySelector('#squad' + capitalTeamName(_team)).appendChild(newPlayer);
+            pl.querySelector('.player_number').textContent = rep[_team].players[n - 1].number;
+            pl.querySelector('.tooltiptext').textContent = rep[_team].players[n - 1].name + "    " + rep[_team].players[n - 1].number;
+            ;
+            document.getElementById('heatmap-avg' + capitalTeamName(_team)).appendChild(pl);
+            var plBoth = pl.cloneNode(true);
+            plBoth.id = "both" + plBoth.id;
+            document.getElementById('heatmap-avgBoth').appendChild(plBoth);
+            var plToINdividualHeatmap = pl.cloneNode(true);
+            plToINdividualHeatmap.style.display = outData[_team].AvgPoints[n].x > 8 && outData[_team].AvgPoints[n].y > 8 ? "inherit" : "none";
+            plToINdividualHeatmap.id = plToINdividualHeatmap.id + "_individual";
+            plToINdividualHeatmap.style.left = outData[_team].AvgPoints[n].x - 5 + "px";
+            plToINdividualHeatmap.style.top = outData[_team].AvgPoints[n].y - 5 + "px";
+            document.querySelector('#heatmap-' + _team + n).appendChild(plToINdividualHeatmap);
+          }
+        };
+
+        var showMainAvgPositions = function showMainAvgPositions() {
+          showTeamAvgPositions("home");
+          showTeamAvgPositions("away");
+        };
+
+        var scoreWithPensFound = this.responseText.match(RE_SCORE_WITH_PENALTIES);
+        var scoreWithPens = scoreWithPensFound ? scoreWithPensFound.pop() : ["0:0"];
+        rep = JSON.parse(this.responseText);
+        setTeamsColors(); //--------------------------------------------------------------------
+
+        var game = rep.game;
+        console.log("rep  - ", rep);
+        var flags = {
+          corner: false,
+          throwIn: false,
+          deadBall: false,
+          goalKick: false,
+          center: true,
+          team: 0,
+          ballOwner: 0
+        };
+
+        var isBallOwnedByHomeTeam = function isBallOwnedByHomeTeam() {
+          return flags.ballOwner = 1;
+        };
+
+        var isHomePlayer = function isHomePlayer(numberInCommonPlayersList) {
+          return numberInCommonPlayersList <= MAX_PLAYERS;
+        };
+
+        var capitalTeamName = function capitalTeamName(_team) {
+          return _team === "home" ? "Home" : "Away";
+        };
+
+        var currentPlayer = 0;
+        game.slice(1, -1);
+        var score = "0:0";
+        var passObject = null;
+        var ballowner = 0;
+
+        try {
+          game.forEach(function (element, episode, episodes) {
+            var lastEpisode = episode > 0 ? episodes[episode - 1] : null;
+            var nextEpisode = episodes[episode + 1] ? episodes[episode + 1] : null;
+            var nextEpisode2 = episodes[episode + 2] ? episodes[episode + 2] : null; //===================================================================
+
+            if (element.C) {
+              flags.corner = true;
+              flags.team = element.C;
+            }
+
+            if (element.A) {
+              flags.throwIn = true;
+              flags.team = element.A;
+            }
+
+            if (element.F) {
+              flags.deadBall = true;
+              flags.team = element.F;
+            }
+
+            if (element.T) {
+              flags.goalKick = true;
+              flags.team = element.T.team;
+            }
+
+            if (element.N) {
+              flags.center = true;
+              flags.team = element.N;
+            } //===================================================================
+
+
+            var newBallOwner = false;
+            var currentBallOwner = getOwnerFromMessages(element.messages);
+
+            if (currentBallOwner || currentBallOwner !== ballowner) {
+              //new ballowner
+              newBallOwner = true;
+              ballowner = currentBallOwner;
+            } //===================================================================
+
+
+            function isBallOwnerWillChangeIn2NextEpisodes() {
+              var nextBallOwner = nextEpisode && getOwnerFromMessages(nextEpisode);
+              var nextBallOwner2 = nextEpisode2 && getOwnerFromMessages(nextEpisode2);
+              if (nextBallOwner && nextBallOwner !== ballowner) return true;
+              if (!nextBallOwner && nextBallOwner2 && nextBallOwner2 !== ballowner) return true;
+              return false;
+            }
+
+            var coords;
+            var playersCloseToBall = [];
+            var prevplayersCloseToBall = [];
+            var closestPlayer;
+            var prevclosestPlayer;
+            var prevclosestPlayer2;
+            var closestPlayer2; //** ---- */
+            // if (!element.coordinates) console.log("NO COORDINATES", element);
+            // if (episode === 0) {
+            //   console.log("Start element - ", element);
+            //   playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
+            // }
+
+            if (element.coordinates) {
+              var isPlayerOwnsBall = function isPlayerOwnsBall() {
+                return closestPlayer && closestPlayer.length === 0;
+              }; //==============================================================================
+
+
+              var isBallMovedFromPlayer = function isBallMovedFromPlayer() {
+                if (!prevclosestPlayer || !closestPlayer) return false;
+                return prevclosestPlayer.length === 0 && (prevclosestPlayer.n === closestPlayer.n && closestPlayer.length > 0 || prevclosestPlayer.n !== closestPlayer.n);
+              }; //==============================================================================
+
+
+              var isClosestPlayerChanged = function isClosestPlayerChanged() {
+                if (!prevclosestPlayer) return false;
+                return prevclosestPlayer.n !== closestPlayer.n;
+              }; //==============================================================================
+
+
+              var isPlayerMovedBall = function isPlayerMovedBall() {
+                if (!prevclosestPlayer || !closestPlayer) return false;
+                return closestPlayer.length === 0 && prevclosestPlayer.length === 0 && prevclosestPlayer.n === closestPlayer.n && closestPlayer2.length > 0 && prevclosestPlayer2.length > 0;
+              }; //==============================================================================
+
+
+              var isItClearPass = function isItClearPass() {
+                return prevclosestPlayer && prevclosestPlayer2 && closestPlayer && closestPlayer2 && prevclosestPlayer.length === 0 && prevclosestPlayer2.length > 0 && closestPlayer.length === 0 && closestPlayer2.length > 0;
+              }; //==============================================================================
+
+
+              var isItPassFromCenter = function isItPassFromCenter() {
+                if (!passObject) return;
+                if (passObject.N && closestPlayer && isPassOpened() && closestPlayer.length === 0) console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
+                return passObject.N && closestPlayer && isPassOpened() && closestPlayer.length === 0;
+              }; //==============================================================================
+
+
+              var isPrevAndClosestFromSameTeam = function isPrevAndClosestFromSameTeam() {
+                if (!prevclosestPlayer || !closestPlayer) return false;
+                return isOneTeam(prevclosestPlayer.n, closestPlayer.n);
+              }; //==============================================================================
+
+
+              var isPassstarterAndClosestFromSameTeam = function isPassstarterAndClosestFromSameTeam(_player) {
+                if (!passObject.start || !_player) return false;
+                return isOneTeam(passObject.start.player, _player.n);
+              }; //==============================================================================
+
+
+              var isPassOpened = function isPassOpened() {
+                if (!passObject) return false;
+                return !!passObject.start;
+              }; //==============================================================================
+              //==============================================================================
+
+
+              var isBallOutfield = function isBallOutfield() {
+                if (ball.w <= jsonCoords.x1 || ball.w >= jsonCoords.x2) return true;
+                if (ball.h <= jsonCoords.y1 || ball.h >= jsonCoords.y2) return true;
+                return false;
+              }; //==============================================================================
+
+
+              var isItFight = function isItFight() {
+                return closestPlayer2 && closestPlayer && closestPlayer.length === closestPlayer2.length && closestPlayer.length === 0;
+              }; //==============================================================================
+
+
+              var checkAfterPassFight = function checkAfterPassFight() {
+                if (!isItFight()) return false;
+                return !(closestPlayer.n === prevclosestPlayer.n || closestPlayer2.n === prevclosestPlayer.n);
+              }; //==============================================================================
+
+
+              var checkDribbling = function checkDribbling() {
+                return false;
+              }; //==============================================================================
+
+
+              var resetPass = function resetPass() {
+                passObject.start = null;
+              }; //==============================================================================
+
+
+              var savePass = function savePass() {
+                var pass = {
+                  high: ball.z === 1,
+                  minute: element.minute,
+                  episode: element.num,
+                  good: passObject.good,
+                  endpoint: null,
+                  startpoint: null,
+                  type: null,
+                  outfield: passObject.outfield,
+                  player: passObject.start.player,
+                  address: passObject.end.player
+                };
+                var ballcoords = {
+                  x: passObject.end.ball.w,
+                  y: passObject.end.ball.h
+                };
+                pass.endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                var startballcoords = {
+                  x: passObject.start.ball.w,
+                  y: passObject.start.ball.h
+                };
+                pass.startpoint = limitPoint(startballcoords, secondTime, shotsCoords, jsonCoords);
+                if (pass.outfield) console.log(" save pass - ", passObject, pass);
+                passes[pass.player].push(_objectSpread({}, pass));
+              }; //==============================================================================
+
+
+              var isShotElement = function isShotElement() {
+                // return element.G
+                return element.G || element.W || element.B || element.U || element.V;
+              }; //==============================================================================
+
+
+              var startPass = function startPass(player) {
+                passObject = {
+                  start: {
+                    ball: _objectSpread({}, ball),
+                    player: player.n
+                  }
+                }; // console.log('START PASS', player);
+              }; //==============================================================================
+
+
+              var endThisPass = function endThisPass(player) {
+                passObject.end = {
+                  ball: _objectSpread({}, ball),
+                  player: player.n
+                };
+              }; //==============================================================================
+              //==============================================================================
+              //==============================================================================
+
+
+              // if (element.coordinates && episode > 0) {
+              var ball = element.coordinates.ball;
+
+              try {
+                // if (isItFight()) {
+                //   console.log(checkAfterPassFight()
+                //     ? "FIGHT "
+                //     : "DRIBBLE ",
+                //     closestPlayer, closestPlayer2, element, prevclosestPlayer);
+                // }
+                var processBallMoving = function processBallMoving() {
+                  if (penalties) {
+                    resetPass();
+                    return;
+                  }
+
+                  if (!isPassOpened()) {
+                    if (isPlayerOwnsBall()) {
+                      startPass(closestPlayer);
+                      console.log('PLAYER OWNS BALL');
+                      return;
+                    }
+
+                    return;
+                  }
+
+                  if (isShotElement()) {
+                    resetPass(); //process shot
+                    // console.log(" ShotElement  playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
+
+                    return;
+                  }
+
+                  if (isPlayerMovedBall()) {
+                    startPass(closestPlayer);
+                    ; // proceedrun with ball
+
+                    return;
+                  }
+
+                  if (isBallOutfield()) {
+                    passObject.good = 0;
+                    passObject.outfield = true;
+                    console.log("Ball outfield", ball, element);
+                    endThisPass(closestPlayer);
+                    savePass();
+                    resetPass();
+                    return;
+                  }
+
+                  if (isItPassFromCenter()) {
+                    passObject.good = 1; // but may be check for bad ball handling
+
+                    endThisPass(closestPlayer);
+                    savePass();
+                    startPass(closestPlayer);
+                  }
+
+                  if (isItClearPass()) {
+                    if (isPrevAndClosestFromSameTeam()) {
+                      ; //ok pass 
+
+                      passObject.good = 1; // but may be check for bad ball handling
+
+                      endThisPass(closestPlayer);
+                      savePass();
+                      startPass(closestPlayer);
+                    } else {
+                      ; // failed pass
+
+                      passObject.good = 0; // but may be check for bad ball handling from opponent
+
+                      endThisPass(closestPlayer);
+                      savePass();
+                      startPass(closestPlayer);
+                    }
+
+                    return;
+                  }
+
+                  if (isItFight()) {
+                    if (checkAfterPassFight()) {
+                      console.log("FIGHT AFTER PASS -", closestPlayer, closestPlayer2, prevclosestPlayer, prevclosestPlayer2, element, passObject);
+                      var passFailed = isBallOwnerWillChangeIn2NextEpisodes();
+                      passObject.good = passFailed ? 0 : 1;
+                      var adress = isPassstarterAndClosestFromSameTeam(closestPlayer) ? passFailed ? closestPlayer2 : closestPlayer : passFailed ? closestPlayer : closestPlayer2;
+                      endThisPass(adress);
+                      savePass();
+                      startPass(adress);
+                      return;
+                    }
+
+                    ;
+
+                    if (checkDribbling()) {
+                      return;
+                    }
+                  }
+                };
+
+                prevplayersCloseToBall = lastEpisode && lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime); //** ---- */
+
+                console.log(" playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
+                closestPlayer = playersCloseToBall[0];
+                closestPlayer2 = playersCloseToBall[1];
+                prevclosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0];
+                prevclosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1];
+
+                if (element.N) {
+                  if (passObject) {
+                    console.log('closestPlayer- ', closestPlayer);
+                    startPass(closestPlayer);
+                  }
+
+                  if (!passObject) startPass(closestPlayer);
+                  passObject.N = true;
+                  console.log("STARTED N ", passObject);
+                }
+
+                if (episode === 0) {
+                  console.log("Start element - ", element); // startPass(closestPlayer)
+                }
+
+                var ballMovingResponce = processBallMoving();
+              } catch (error) {
+                console.log("closest players error", error, element);
+              }
+            }
+
+            function tryMes(messageNumber, regExp) {
+              return element.messages[messageNumber].mes.match(regExp);
+            }
+
+            if (element.interval) sumInterval += parseInt(element.interval);
+            if (!minutesStarts[element.minute]) minutesStarts[element.minute] = outData.home.Points[1].length;
+
+            if (element.S) {
+              // substitutes handle
+              if (element.S.team == 1) {
+                rep.home.players[element.S.in - 1].sub = SUB_IN;
+                rep.home.players[element.S.out - 1].sub = SUB_OUT;
+              } else {
+                rep.away.players[element.S.in - 1].sub = SUB_IN;
+                rep.away.players[element.S.out - 1].sub = SUB_OUT;
+              }
+            }
+
+            if (element.messages[0]) {
+              // изменение счета и пенальти  and calculate passes
+              var pass = {};
+              var passPlayer;
+              var receivePlayer;
+              var _isPassOpened = false;
+
+              try {
+                if (element.coordinates) {
+                  // prevplayersCloseToBall = lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
+                  // playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
+                  // // console.log(" playersCloseToBall - ", playersCloseToBall, element);
+                  // closestPlayer = playersCloseToBall[0]
+                  // closestPlayer2 = playersCloseToBall[1]
+                  // prevclosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
+                  // prevclosestPlayer2 = prevplayersCloseToBall && prevplayersCloseToBall[1]
+                  // if (closestPlayer2 && closestPlayer.length === closestPlayer2.length) {
+                  //   console.log((closestPlayer.n === prevclosestPlayer.n || closestPlayer2.n === prevclosestPlayer.n)
+                  //     ? "DRIBBLE "
+                  //     : "FIGHT ",
+                  //     closestPlayer, closestPlayer2, element, prevclosestPlayer);
+                  // }
+                  try {
+                    if (flags.center && element.messages && element.messages.some(function (mes) {
+                      return mes.mes.match(RE_CENTER_MSG);
+                    })) {
+                      // from center
+                      flags.center = false;
+                      currentPlayer = prevclosestPlayer.n;
+                    }
+                  } catch (error) {
+                    console.log(" N error", error, element);
+                  }
+
+                  ;
+                  var _ball = element.coordinates.ball;
+                  var lastBall = lastEpisode.coordinates ? lastEpisode.coordinates.ball : undefined;
+                  var ballcoords = {
+                    x: _ball.w,
+                    y: _ball.h
+                  };
+
+                  if (flags.corner && element.messages[1]) {
+                    //handle corner kick
+                    pass.endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                    pass.high = _ball.z === 1;
+                    pass.minute = element.minute;
+                    pass.episode = element.num;
+                    pass.type = "corner";
+                    flags.corner = false;
+                    var lastBallcoords = {
+                      x: lastBall.w,
+                      y: lastBall.h
+                    };
+                    passPlayer = getPlayerFromMessage(element.messages[0]);
+                    pass.startpoint = limitPoint(lastBallcoords, secondTime, shotsCoords, jsonCoords);
+
+                    if (element.messages[2]) {
+                      // high pass , 2 episodes
+                      receivePlayer = getPlayerFromMessage(element.messages[2]);
+                      pass.good = isOneTeam(receivePlayer, passPlayer);
+                    } else {
+                      pass.good = true;
+                      receivePlayer = getPlayerFromMessage(element.messages[1]);
+                    }
+
+                    currentPlayer = receivePlayer;
+                    pass.player = passPlayer;
+                    oldpasses[passPlayer].push(pass);
+                  } else if (flags.throwIn && element.messages[0]) {
+                    // handle out
+                    pass.endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                    pass.high = _ball.z === 1;
+                    pass.minute = element.minute;
+                    pass.episode = element.num;
+                    pass.type = "throw";
+                    flags.throwIn = false;
+                    passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
+                    if (!passPlayer) lastEpisode = episodes[episode - 2];
+                    passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
+                    if (!passPlayer) lastEpisode = episodes[episode - 3];
+                    lastBall = lastEpisode.coordinates.ball;
+                    var _lastBallcoords = {
+                      x: lastBall.w,
+                      y: lastBall.h
+                    };
+                    passPlayer = getPlayerFromMessage(lastEpisode.messages[lastEpisode.messages.length - 1]);
+                    pass.startpoint = limitPoint(_lastBallcoords, secondTime, shotsCoords, jsonCoords);
+                    receivePlayer = getPlayerFromMessage(element.messages[element.messages.length - 1]);
+                    pass.good = isOneTeam(receivePlayer, passPlayer);
+                    currentPlayer = receivePlayer;
+                    pass.player = passPlayer;
+                    oldpasses[passPlayer].push(pass);
+                    ;
+                  } else if (flags.deadBall) {
+                    // handle free kick
+                    ;
+                    flags.deadBall = false;
+                  } else if (flags.goalKick) {
+                    // handle pass from goalkick
+                    pass.endpoint = limitPoint(ballcoords, secondTime, shotsCoords, jsonCoords);
+                    pass.high = _ball.z === 1;
+                    pass.minute = element.minute;
+                    pass.episode = element.num;
+                    _isPassOpened = true;
+                    pass.type = "goalkick";
+                    var _lastBallcoords2 = {
+                      x: lastBall.w,
+                      y: lastBall.h
+                    };
+                    flags.goalKick = false; // console.log("T - Lastelement ", lastEpisode);
+                    // console.log("T - element ", element);
+
+                    currentPlayer = prevclosestPlayer.n; // console.log(" T - currentPlayer -", currentPlayer);
+
+                    passPlayer = currentPlayer;
+                    pass.startpoint = limitPoint(_lastBallcoords2, secondTime, shotsCoords, jsonCoords); // console.log("T - Nextlement ", episodes[episode + 1]);
+                    // console.log("T - Nextlement2 ", episodes[episode + 2]);
+                    // if (!episodes[episode + 2].messages[0]) {
+                    // console.log("T - Nextlement3 ", episodes[episode + 3]);
+                    // }
+                    // }
+
+                    if (element.messages[0]) {
+                      if (tryMes(0, RE_PASS_FROM_GOALKICK)) {
+                        if (element.messages[1]) {
+                          receivePlayer = +tryMes(1, RE_PLAYER_NUMBERS)[0];
+                          pass.good = isOneTeam(passPlayer, receivePlayer); // console.log("T short pass - ", element.minute, element.num, pass.good, receivePlayer, passPlayer, pass.player)
+                        } else {
+                          ; // "open" pass
+
+                          _isPassOpened = true;
+                        }
+                      }
+
+                      ;
+
+                      if (pass.type === "goalkick" && _isPassOpened) {
+                        var firstPlayer = +tryMes(0, RE_PLAYER_NUMBERS)[0];
+                        pass.good = tryMes(0, RE_PASS_FROM_GOALKICK) || firstPlayer;
+                        _isPassOpened = false;
+                      }
+                    }
+
+                    ;
+                    pass.player = passPlayer;
+                    oldpasses[passPlayer].push(pass);
+                  } else {
+                    //just pass
+                    ;
+                  }
+                }
+
+                ;
+              } catch (error) {
+                console.log("error ", lastEpisode);
+                console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
+              }
+
+              element.messages.forEach(function (mes) {
+                if (mes.mes.indexOf(' СЧЕТ ') > -1) {
+                  score = mes.mes.replace(' СЧЕТ ', '');
+                }
+
+                ;
+              });
+
+              if (element.messages[0].mes == "Серия пенальти!..." || element.messages[0].mes == "Матч переходит к послематчевым одиннадцатиметровым!..." || element.messages[0].mes == "Назначаются послематчевые пенальти!...") {
+                penalties = true; //может на будущее
+
+                throw "Серия пенальти!...";
+              }
+            }
+
+            if (element.ZT) {
+              // смена тактики
+              var calcTacticChange = function calcTacticChange() {
+                var _team = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "home";
+
+                outData[_team].TacticPoints[0].end = element.minute;
+                outData[_team].TacticPoints[0].period = element.minute - outData[_team].TacticPoints[0].start;
+
+                outData[_team].TacticPoints.push(outData[_team].TacticPoints[0]);
+
+                outData[_team].TacticPoints[0] = {
+                  start: element.minute,
+                  end: 125,
+                  period: 125 - element.minute,
+                  team: [],
+                  ball: [],
+                  averages: []
+                };
+
+                outData[_team].TacticChanges.push(outData[_team].Points[0].length);
+
+                for (var _i4 = 0; _i4 <= MAX_PLAYERS; _i4++) {
+                  outData[_team].TacticPoints[0].averages.push([{
+                    x: 0,
+                    y: 0
+                  }]);
+                }
+              };
+
+              if (element.ZT.team == 1) {
+                calcTacticChange("home");
+                outData.home.TacticChanges.push(outData.home.Points[0].length);
+              } else {
+                calcTacticChange("away");
+              }
+            }
+
+            try {
+              if ((element.U || element.W) && !penalties) {
+                // shots handle
+                var _ball2 = element.coordinates.ball;
+                var _ballcoords = {
+                  x: _ball2.w,
+                  y: _ball2.h,
+                  value: 1
+                };
+                var shotType = element.G ? "G" : element.V ? "V" : element.W ? "W" : element.B ? "B" : element.U.team > 2 ? "Block" : "U";
+                var shotStart = episodes[episode - 1].coordinates ? episodes[episode - 1].coordinates.ball : episodes[episode - 2].coordinates ? episodes[episode - 2].coordinates.ball : episodes[episode - 3].coordinates ? episodes[episode - 3].coordinates.ball : episodes[episode - 4].coordinates.ball;
+                var startCoords = {
+                  x: shotStart.w,
+                  y: shotStart.h,
+                  value: 1
+                };
+                var endpoint = limitPoint(_ballcoords, secondTime, shotsCoords, jsonCoords);
+                var startpoint = limitPoint(startCoords, secondTime, shotsCoords, jsonCoords);
+                var newShot = {
+                  endpoint: endpoint,
+                  startpoint: startpoint,
+                  episode: episode,
+                  type: shotType,
+                  minute: element.minute,
+                  player: element.U ? element.U.player : element.W.player,
+                  xG: element.U ? element.U.xG ? element.U.xG : "ждем xG" : element.W.xG ? element.W.xG : "ждем xG"
+                };
+
+                if (element.U && (element.U.team == 1 || element.U.team == 3) || element.W && (element.W.team == 2 || element.W.team == 4)) {
+                  oldshots.home.push(newShot);
+                } else {
+                  oldshots.away.push(newShot);
+                }
+
+                ;
+              }
+
+              if ((element.G || element.V || element.B) && !element.U) {
+                // goal/block/ event in next episode
+                var _ball3 = element.coordinates.ball;
+                console.log("goal event in next episode -  min=", element.minute, " U=", element.U, " W=", element.W, " V=", element.V, " G=", element.G, " B=", element.B, _ball3);
+                var _ballcoords2 = {
+                  x: _ball3.w,
+                  y: _ball3.h,
+                  value: 1
+                };
+
+                var _endpoint = limitPoint(_ballcoords2, secondTime, shotsCoords, jsonCoords);
+
+                var lastShot;
+
+                if (element.G && (element.G.team == 1 || element.G.team == 3) || element.V && (element.V.team == 1 || element.V.team == 3) || element.B && (element.B.team == 1 || element.B.team == 3)) {
+                  lastShot = oldshots.home[oldshots.home.length - 1];
+                } else {
+                  lastShot = oldshots.away[oldshots.away.length - 1];
+                }
+
+                if (episodes[episode - 1].messages.length > 0 && episodes[episode - 1].messages.some(function (el) {
+                  return el.mes.match(RE_LONG_PASS);
+                })) {
+                  lastShot.startpoint = lastShot.endpoint;
+                }
+
+                lastShot.type = element.G ? "G" : element.V ? "V" : "B";
+                lastShot.endpoint = _endpoint;
+                lastShot.player = element.G ? element.G.player : element.V ? element.V.player : element.B.player;
+              }
+            } catch (error) {
+              console.log("Что то не так с обсчетом удара", element.minute, element.n, error);
+              console.log(element, episodes[episode - 1], episodes[episode - 2]);
+            }
+
+            if (element.M) {
+              // смена сторон. конец тайма.                         
+              secondTime = !secondTime;
+            }
+
+            ;
+
+            function pushFullPoint(arr, fullPoints) {
+              for (var p = 1; p <= MAX_PLAYERS; p++) {
+                arr[p].push(fullPoints[p]);
+              }
+            }
+
+            if (element.coordinates) {
+              var calcTeamFullPoints = function calcTeamFullPoints() {
+                var _team = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "home";
+
+                var theTeam = element.coordinates[_team];
+                var currentTeamPositions = [];
+
+                for (var p = 0; p <= MAX_PLAYERS; p++) {
+                  currentTeamPositions.push(null);
+                }
+
+                theTeam.forEach(function (pl) {
+                  coords = pl.n == 1 ? {
+                    x: pl.w,
+                    y: pl.h,
+                    value: GK_VALUE
+                  } : {
+                    x: pl.w,
+                    y: pl.h,
+                    value: 1
+                  };
+
+                  if (pl.n <= MAX_PLAYERS) {
+                    var playerPoints = limitPoint(coords, _team === "home" ? secondTime : !secondTime);
+
+                    outData[_team].Points[pl.n].push(playerPoints);
+
+                    outData[_team].Points[0].push(playerPoints);
+
+                    outData[_team].TacticPoints[0].team.push(playerPoints);
+
+                    outData[_team].TacticPoints[0].averages[pl.n].push(playerPoints);
+
+                    if (outData[_team].Points[pl.n].length > 1) {
+                      var l = outData[_team].Points[pl.n].length - 1;
+                      outData[_team].Mileage[pl.n] += getMileage(outData[_team].Points[pl.n][l], outData[_team].Points[pl.n][l - 1]);
+                    }
+
+                    currentTeamPositions[pl.n] = playerPoints;
+                  } else {
+                    strangePoints[_team].push(pl);
+                  }
+                });
+
+                outData[_team].TacticPoints[0].ball.push(ballHeatMap);
+
+                pushFullPoint(outData[_team].PointsFull, currentTeamPositions);
+              };
+
+              var _ball4 = element.coordinates.ball;
+              var _ballcoords3 = {
+                x: _ball4.w,
+                y: _ball4.h,
+                value: 1
+              };
+              var ballHeatMap = limitPoint(_ballcoords3, secondTime);
+              ballPoints.push(ballHeatMap);
+              calcTeamFullPoints("home");
+              calcTeamFullPoints("away");
+            }
+          });
+        } catch (error) {
+          console.log("game.forEach ", error);
+        }
+
+        outData.home.TacticPoints.push(outData.home.TacticPoints[0]);
+        outData.away.TacticPoints.push(outData.away.TacticPoints[0]);
+        var finalScore = score + (scoreWithPens == score ? '' : "(".concat(getPenalties(score, scoreWithPens), ")"));
+        var gameInfoSrting = rep.date + ". " + (rep.stadium.city ? rep.stadium.city + ". " : "") + rep.stadium.name + ". " + rep.home.team.name + " - " + rep.away.team.name + " " + finalScore;
+        document.querySelector("#game-info").textContent = gameInfoSrting;
+        console.log("oldpasses -", oldpasses);
+        console.log("passes -", passes);
+        var gkPasses = oldpasses.reduce(function (acc, pl, i) {
+          var goalKicks = pl.filter(function (pass) {
+            return pass.type === "goalkick";
+          });
+          return goalKicks[0] ? [].concat(_toConsumableArray(acc), _toConsumableArray(goalKicks)) : _toConsumableArray(acc);
+        }, []);
+        console.log("gkPasses   ", gkPasses);
+        /**=========================================================================== */
+        // oldpasses.slice(1,18).forEach(pass => {
+        //   countPass(pass.type, rep.home.players[pass.player - 1]);
+        // });
+        // passes.slice(19).forEach(pass => {
+        //   countPass(pass.type, rep.away.players[pass.player - 1]);
+        // });
+
+        /**=========================================================================== */
+
+        oldshots.home.forEach(function (shot) {
+          countShot(shot.type, rep.home.players[shot.player - 1]);
+        });
+        oldshots.away.forEach(function (shot) {
+          countShot(shot.type, rep.away.players[shot.player - 1]);
+        });
+        heatmapInstance = avgMapCreate('#heatmap-home');
+        heatmapInstance2 = avgMapCreate('#heatmap-away');
+        heatmapInstance3 = avgMapCreate('#heatmap-ball', BALL_RADIUS_KEFF);
+        updateMainMaps(outData.home.PointsFull, outData.away.PointsFull, ballPoints);
+        heatmapInstance4 = avgMapCreate('#heatmap-avgHome');
+        heatmapInstance5 = avgMapCreate('#heatmap-avgAway');
+        heatmapInstance7 = avgMapCreate('#chalkboard');
+        heatmapInstance8 = avgMapCreate('#heatmap-avgBoth');
+        heatmapInstance9 = avgMapCreate('#passesboard');
+        var heatPoints = [{
+          x: 19,
+          y: 19,
+          value: 1,
+          radius: 1
+        }, {
+          x: 346.56,
+          y: 229.5,
+          value: 200,
+          radius: 1
+        }, {
+          x: 19,
+          y: 229.5,
+          value: 1,
+          radius: 1
+        }, {
+          x: 346.56,
+          y: 19,
+          value: 1,
+          radius: 1
+        }];
+        var defaultData = {
+          max: maximumValue * TEAM_MAX_KEFF,
+          data: heatPoints
+        };
+        showTeamTacticHeamaps("home");
+        showTeamTacticHeamaps("away");
+        setTimeout(showPlayersHeatmaps, 10);
+        document.querySelector("#heatmap-home .overlay").textContent = rep.home.team.name;
+        document.querySelector("#heatmap-away .overlay").textContent = rep.away.team.name;
+        document.querySelector("#heatmap-avgHome .overlay").textContent = "Средние позиции " + rep.home.team.name;
+        document.querySelector("#heatmap-avgAway .overlay").textContent = "Средние позиции " + rep.away.team.name;
+        /**===================================================================================================== */
+
+        /**=========================СРЕДНИЕ ПОЗИЦИИ================================================== */
+
+        outData.home.TacticChanges.push(outData.home.Points[0].length - 1);
+        outData.away.TacticChanges.push(outData.away.Points[0].length - 1);
+        outData.home.AvgPoints = calculateAvgPositions(outData.home.Points).slice();
+        outData.away.AvgPoints = calculateAvgPositions(outData.away.Points).slice();
+        ;
+        setTimeout(showMainAvgPositions, 50);
+        /**===================================================================================================== */
+
+        setTimeout(function () {
+          document.body.removeChild(document.querySelector('.loader-wrapper'));
+        }, 200);
+        /**===================================================================================================== */
+
+        var _chalkboard = document.querySelector('#chalkboard .heatmap-canvas');
+
+        var _passesboard = document.querySelector('#passesboard .heatmap-canvas');
+        /**===================================================================================================== */
+
+
+        if (_chalkboard.getContext) {
+          var context = _chalkboard.getContext('2d');
+
+          drawTeamShots(oldshots.away, rep.away.players, "away", context);
+          drawTeamShots(oldshots.home, rep.home.players, "home", context);
+        }
+
+        if (_passesboard.getContext) {
+          var _context = _passesboard.getContext('2d'); // drawTeamPasses(oldpasses.slice(19), rep.away.players, "away", context);
+          // drawTeamPasses(oldpasses.slice(1, 18), rep.home.players, "home", context);
+
+
+          drawTeamPasses(passes.slice(19), rep.away.players, "away", _context);
+          drawTeamPasses(passes.slice(1, 18), rep.home.players, "home", _context);
+        }
+        /**===================================================================================================== */
+
+      } else {
+        alert('Вставьте верно ссылку на матч!');
+      }
+
+      setTimeout(afterLoadEvents, 200);
+    }
+  };
+
+  xmlhttp.open("GET", formJsonUrl({
+    DEFAULT_TV_URL: DEFAULT_TV_URL,
+    test: false
+  }));
+  xmlhttp.send(); //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
+}; //--------------------------------------------------------------------
+
+
+function updateMainMaps(_homePoints, _awayPoints, _ballPoints) {
+  heatmapInstance.setData({
+    max: maximumValue * TEAM_MAX_KEFF,
+    data: _homePoints
+  });
+  heatmapInstance2.setData({
+    max: maximumValue * TEAM_MAX_KEFF,
+    data: _awayPoints
+  });
+  heatmapInstance3.setData({
+    max: maximumValue * BALL_MAX_KEFF,
+    data: _ballPoints
+  });
+}
+
+;
+
+function filterMapsByTime(_start, end) {
+  try {
+    var filterTeamPoints = function filterTeamPoints() {
+      var _team = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "home";
+
+      playersFiltered[_team] = outData[_team].PointsFull.map(function (pl) {
+        return pl.slice(startEpisode, endEpisode);
+      });
+
+      playersFiltered[_team].forEach(function (row, n) {
+        if (n === 0) return;
+        row.filter(function (el) {
+          return el != null;
+        }).forEach(function (point) {
+          return filteredPoints[_team].push(point);
+        });
+      });
+    };
+
+    var displayTeamAvgPoints = function displayTeamAvgPoints() {
+      var _team = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "home";
+
+      var _avgPoints = calculateAvgPositions(playersFiltered[_team]).slice();
+
+      var _rank = _avgPoints[0].order;
+
+      var _loop4 = function _loop4(n) {
+        var pl = document.getElementById(_team + "AvgPoints" + n);
+
+        var plRank = _rank.indexOf(_rank.find(function (_) {
+          return _.playerRank == n;
+        }));
+
+        pl.style.display = plRank < 11 ? "inherit" : "none";
+        pl.style.left = _avgPoints[n].x - 5 + "px";
+        pl.style.top = _avgPoints[n].y - 5 + "px";
+        var plBoth = document.getElementById("both" + _team + "AvgPoints" + n);
+        plBoth.style.display = pl.style.display;
+        plBoth.style.left = pl.style.left;
+        plBoth.style.top = pl.style.top;
+        var plName = document.getElementById(_team + "-player-list_" + n + '_name');
+        plName.style.fontWeight = plRank < 11 ? "bold" : "normal";
+      };
+
+      for (var n = 1; n <= MAX_PLAYERS; n++) {
+        _loop4(n);
+      }
+    };
+
+    var _start2 = _start == 0 ? 1 : _start;
+
+    if (_start2 > end || +end - +_start2 <= MIN_MINUTES_FOR_SHOW_TACTIC) return;
+    var startEpisode = minutesStarts[_start2];
+    var endEpisode = minutesStarts[end];
+    var filteredPoints = {
+      home: [],
+      away: [],
+      ball: []
+    };
+    var playersFiltered = {
+      home: [],
+      away: []
+    };
+    filteredPoints.ball = ballPoints.slice(startEpisode, endEpisode);
+    filterTeamPoints("home");
+    filterTeamPoints("away");
+    updateMainMaps(filteredPoints.home, filteredPoints.away, filteredPoints.ball);
+    displayTeamAvgPoints("home");
+    displayTeamAvgPoints("away");
+  } catch (error) {
+    console.log(error);
+  }
+} //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
+
+
+;
+
+function afterLoadEvents() {
+  function formHeatmapUrl(_urlINput) {
+    return window.location.origin + window.location.pathname + "?" + _urlINput.replace('http://pefl.ru/tv/#/', '');
+  }
+
+  ;
+
+  function formTVUrl() {
+    var locationString = window.location.href;
+    locationString = locationString.replace("http://pefl.ru/heatmaps.html?", "http://pefl.ru/tv/#/").replace(":8080//", ':8080/').replace("http://localhost:8080/heatmaps.html?", 'http://pefl.ru/tv/#/');
+    return locationString;
+  }
+  /**===================================================================================================== */
+
+
+  var urlInput = document.querySelector("#tv-url-input");
+  document.getElementById("tv-url").href = formTVUrl();
+  document.getElementById("json-url").href = formJsonUrl({
+    test: false
+  });
+  document.querySelector('#updateButton').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
+      alert('Вставьте корректную ссылку на ТВ матча в поле ввода!');
+      return;
+    }
+
+    window.location.assign(formHeatmapUrl(urlInput.value));
+  });
+  document.querySelector('#newWindow').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (!urlInput.value.match(/http\:\/\/pefl.ru\/tv\/\#\/j\=\d+\&z\=.+/i)) {
+      alert('Вставьте корректную ссылку на ТВ матча в поле ввода!');
+      return;
+    }
+
+    window.open(formHeatmapUrl(urlInput.value), '_blank');
+  });
+
+  function normalizeTacticAvgPositions(_team) {
+    if (outData[_team].TacticPoints.length > 1) {
+      for (var t = 1; t < outData[_team].TacticPoints.length; t++) {
+        if (outData[_team].TacticPoints[t].period < MIN_MINUTES_FOR_SHOW_TACTIC) continue;
+
+        var _loop5 = function _loop5(n) {
+          var pl = document.querySelector("#" + _team + "AvgPoints_" + t + "_" + n);
+          var rank = outData[_team].TacticPoints[t].rankByMinutes;
+          pl.style.display = rank.indexOf(rank.find(function (el) {
+            return el[0] == n;
+          })) < 11 ? "inherit" : "none";
+        };
+
+        for (var n = 1; n <= MAX_PLAYERS; n++) {
+          _loop5(n);
+        }
+      }
+    }
+  }
+
+  setTimeout(function () {
+    document.querySelector("#shots-chalkboard ~ .bojan__content").appendChild(createSlider("shots", showableTacticks, filterShotsByTime));
+    document.querySelector("#maps-filtered ~ .bojan__content").appendChild(createSlider("maps", showableTacticks, filterMapsByTime));
+    document.querySelector("#pass-chalkboard ~ .bojan__content").appendChild(createSlider("pass", showableTacticks, filterPassesByTime));
+    document.getElementById("norm-tactic-avg").addEventListener("click", function (e) {
+      e.preventDefault();
+      normalizeTacticAvgPositions("home");
+      normalizeTacticAvgPositions("away");
+    });
+    document.getElementById("reset-maps-filtering").addEventListener("click", function (e) {
+      e.preventDefault();
+      filterMapsByTime(0, 125);
+      filterRangeMaximize("maps-time-filter");
+    });
+  }, 200);
+}
+
+;
+;
+
+function createSlider() {
+  var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var tacticksArray = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [[[0, 125]], [[0, 125]]];
+  var cb = arguments.length > 2 ? arguments[2] : undefined;
+  var filterWrapper = document.createElement("div");
+  filterWrapper.classList.add("time-slider");
+  filterWrapper.id = prefix + "-time-filter";
+  filterWrapper.addEventListener("change", function (e) {
+    e.preventDefault();
+    updateValues();
+  });
+  setLimits(0, 125);
+
+  function formTackticksRow() {
+    var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [0, 125];
+    var team = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "home";
+    var t = document.createElement("div");
+    t.classList.add("time-slider__tacticks");
+
+    var _label = document.createElement("span");
+
+    _label.innerText = team === "home" ? "Тактики хозяев" : "Тактики гостей";
+    t.appendChild(_label);
+
+    var _ul = document.createElement("ul");
+
+    data.forEach(function (el) {
+      ;
+
+      var _li = document.createElement("li");
+
+      _li.innerText = el[0] + " - " + el[1];
+
+      _li.classList.add("time-slider__tacticks__ref");
+
+      _li.addEventListener("click", function (e) {
+        e.preventDefault();
+        setLimits(el[0], el[1]);
+        updateValues();
+      });
+
+      _ul.appendChild(_li);
+    });
+    t.appendChild(_ul);
+    return t;
+  }
+
+  var inputs = document.createElement("div");
+  inputs.classList.add("time-slider__inputs");
+  var sinput = document.createElement("input");
+  sinput.type = "number";
+  sinput.min = 0;
+  sinput.max = 125;
+  sinput.value = 0;
+  sinput.id = prefix + "-start-input";
+  var einput = sinput.cloneNode(true);
+  einput.id = prefix + "-end-input";
+  sinput.addEventListener('change', function (e) {
+    e.preventDefault();
+
+    if (+this.value > +filterWrapper.getAttribute("end") - 3) {
+      this.value = +filterWrapper.getAttribute("end") - 3;
+    }
+
+    start(this.value);
+    updateValues();
+  });
+  einput.addEventListener('change', function (e) {
+    e.preventDefault();
+
+    if (+this.value < +filterWrapper.getAttribute("start") + 3) {
+      this.value = +filterWrapper.getAttribute("start") + 3;
+    }
+
+    end(this.value);
+    updateValues();
+  });
+  var inputsLabel = document.createElement("span");
+  inputsLabel.innerText = "Границы периода";
+  inputs.appendChild(sinput);
+  inputs.appendChild(inputsLabel);
+  inputs.appendChild(einput);
+
+  function start(_start) {
+    filterWrapper.setAttribute("start", _start);
+  }
+
+  function end(_end) {
+    filterWrapper.setAttribute("end", _end);
+  }
+
+  function setLimits(start, end) {
+    filterWrapper.setAttribute("start", start);
+    filterWrapper.setAttribute("end", end);
+  }
+
+  function updateValues() {
+    var _start = +filterWrapper.getAttribute("start");
+
+    var _end = +filterWrapper.getAttribute("end");
+
+    sinput.value = _start;
+    einput.value = _end;
+    cb(_start, _end);
+  }
+
+  if (tacticksArray[0].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[0]));
+  if (tacticksArray[1].length > 0) filterWrapper.appendChild(formTackticksRow(tacticksArray[1], "away"));
+  filterWrapper.appendChild(inputs);
+  updateValues(); // cb(filterWrapper.getAttribute("start"), filterWrapper.getAttribute("end"));
+
+  return filterWrapper;
+}
+
+},{}]},{},[1]);
+
 /*
  * heatmap.js v2.0.5 | JavaScript Heatmap Library
  *
@@ -7,5 +2495,720 @@
  *
  * :: 2016-09-05 01:16
  */
-(function (a, b, c) { if (typeof module !== "undefined" && module.exports) { module.exports = c() } else if (typeof define === "function" && define.amd) { define(c) } else { b[a] = c() } })("h337", this, function () { var a = { defaultRadius: 40, defaultRenderer: "canvas2d", defaultGradient: { .25: "rgb(0,0,255)", .55: "rgb(0,255,0)", .85: "yellow", 1: "rgb(255,0,0)" }, defaultMaxOpacity: 1, defaultMinOpacity: 0, defaultBlur: .85, defaultXField: "x", defaultYField: "y", defaultValueField: "value", plugins: {} }; var b = function h() { var b = function d(a) { this._coordinator = {}; this._data = []; this._radi = []; this._min = 10; this._max = 1; this._xField = a["xField"] || a.defaultXField; this._yField = a["yField"] || a.defaultYField; this._valueField = a["valueField"] || a.defaultValueField; if (a["radius"]) { this._cfgRadius = a["radius"] } }; var c = a.defaultRadius; b.prototype = { _organiseData: function (a, b) { var d = a[this._xField]; var e = a[this._yField]; var f = this._radi; var g = this._data; var h = this._max; var i = this._min; var j = a[this._valueField] || 1; var k = a.radius || this._cfgRadius || c; if (!g[d]) { g[d] = []; f[d] = [] } if (!g[d][e]) { g[d][e] = j; f[d][e] = k } else { g[d][e] += j } var l = g[d][e]; if (l > h) { if (!b) { this._max = l } else { this.setDataMax(l) } return false } else if (l < i) { if (!b) { this._min = l } else { this.setDataMin(l) } return false } else { return { x: d, y: e, value: j, radius: k, min: i, max: h } } }, _unOrganizeData: function () { var a = []; var b = this._data; var c = this._radi; for (var d in b) { for (var e in b[d]) { a.push({ x: d, y: e, radius: c[d][e], value: b[d][e] }) } } return { min: this._min, max: this._max, data: a } }, _onExtremaChange: function () { this._coordinator.emit("extremachange", { min: this._min, max: this._max }) }, addData: function () { if (arguments[0].length > 0) { var a = arguments[0]; var b = a.length; while (b--) { this.addData.call(this, a[b]) } } else { var c = this._organiseData(arguments[0], true); if (c) { if (this._data.length === 0) { this._min = this._max = c.value } this._coordinator.emit("renderpartial", { min: this._min, max: this._max, data: [c] }) } } return this }, setData: function (a) { var b = a.data; var c = b.length; this._data = []; this._radi = []; for (var d = 0; d < c; d++) { this._organiseData(b[d], false) } this._max = a.max; this._min = a.min || 0; this._onExtremaChange(); this._coordinator.emit("renderall", this._getInternalData()); return this }, removeData: function () { }, setDataMax: function (a) { this._max = a; this._onExtremaChange(); this._coordinator.emit("renderall", this._getInternalData()); return this }, setDataMin: function (a) { this._min = a; this._onExtremaChange(); this._coordinator.emit("renderall", this._getInternalData()); return this }, setCoordinator: function (a) { this._coordinator = a }, _getInternalData: function () { return { max: this._max, min: this._min, data: this._data, radi: this._radi } }, getData: function () { return this._unOrganizeData() } }; return b }(); var c = function i() { var a = function (a) { var b = a.gradient || a.defaultGradient; var c = document.createElement("canvas"); var d = c.getContext("2d"); c.width = 256; c.height = 1; var e = d.createLinearGradient(0, 0, 256, 1); for (var f in b) { e.addColorStop(f, b[f]) } d.fillStyle = e; d.fillRect(0, 0, 256, 1); return d.getImageData(0, 0, 256, 1).data }; var b = function (a, b) { var c = document.createElement("canvas"); var d = c.getContext("2d"); var e = a; var f = a; c.width = c.height = a * 2; if (b == 1) { d.beginPath(); d.arc(e, f, a, 0, 2 * Math.PI, false); d.fillStyle = "rgba(0,0,0,1)"; d.fill() } else { var g = d.createRadialGradient(e, f, a * b, e, f, a); g.addColorStop(0, "rgba(0,0,0,1)"); g.addColorStop(1, "rgba(0,0,0,0)"); d.fillStyle = g; d.fillRect(0, 0, 2 * a, 2 * a) } return c }; var c = function (a) { var b = []; var c = a.min; var d = a.max; var e = a.radi; var a = a.data; var f = Object.keys(a); var g = f.length; while (g--) { var h = f[g]; var i = Object.keys(a[h]); var j = i.length; while (j--) { var k = i[j]; var l = a[h][k]; var m = e[h][k]; b.push({ x: h, y: k, value: l, radius: m }) } } return { min: c, max: d, data: b } }; function d(b) { var c = b.container; var d = this.shadowCanvas = document.createElement("canvas"); var e = this.canvas = b.canvas || document.createElement("canvas"); var f = this._renderBoundaries = [1e4, 1e4, 0, 0]; var g = getComputedStyle(b.container) || {}; e.className = "heatmap-canvas"; this._width = e.width = d.width = b.width || +g.width.replace(/px/, ""); this._height = e.height = d.height = b.height || +g.height.replace(/px/, ""); this.shadowCtx = d.getContext("2d"); this.ctx = e.getContext("2d"); e.style.cssText = d.style.cssText = "position:absolute;left:0;top:0;"; c.style.position = "relative"; c.appendChild(e); this._palette = a(b); this._templates = {}; this._setStyles(b) } d.prototype = { renderPartial: function (a) { if (a.data.length > 0) { this._drawAlpha(a); this._colorize() } }, renderAll: function (a) { this._clear(); if (a.data.length > 0) { this._drawAlpha(c(a)); this._colorize() } }, _updateGradient: function (b) { this._palette = a(b) }, updateConfig: function (a) { if (a["gradient"]) { this._updateGradient(a) } this._setStyles(a) }, setDimensions: function (a, b) { this._width = a; this._height = b; this.canvas.width = this.shadowCanvas.width = a; this.canvas.height = this.shadowCanvas.height = b }, _clear: function () { this.shadowCtx.clearRect(0, 0, this._width, this._height); this.ctx.clearRect(0, 0, this._width, this._height) }, _setStyles: function (a) { this._blur = a.blur == 0 ? 0 : a.blur || a.defaultBlur; if (a.backgroundColor) { this.canvas.style.backgroundColor = a.backgroundColor } this._width = this.canvas.width = this.shadowCanvas.width = a.width || this._width; this._height = this.canvas.height = this.shadowCanvas.height = a.height || this._height; this._opacity = (a.opacity || 0) * 255; this._maxOpacity = (a.maxOpacity || a.defaultMaxOpacity) * 255; this._minOpacity = (a.minOpacity || a.defaultMinOpacity) * 255; this._useGradientOpacity = !!a.useGradientOpacity }, _drawAlpha: function (a) { var c = this._min = a.min; var d = this._max = a.max; var a = a.data || []; var e = a.length; var f = 1 - this._blur; while (e--) { var g = a[e]; var h = g.x; var i = g.y; var j = g.radius; var k = Math.min(g.value, d); var l = h - j; var m = i - j; var n = this.shadowCtx; var o; if (!this._templates[j]) { this._templates[j] = o = b(j, f) } else { o = this._templates[j] } var p = (k - c) / (d - c); n.globalAlpha = p < .01 ? .01 : p; n.drawImage(o, l, m); if (l < this._renderBoundaries[0]) { this._renderBoundaries[0] = l } if (m < this._renderBoundaries[1]) { this._renderBoundaries[1] = m } if (l + 2 * j > this._renderBoundaries[2]) { this._renderBoundaries[2] = l + 2 * j } if (m + 2 * j > this._renderBoundaries[3]) { this._renderBoundaries[3] = m + 2 * j } } }, _colorize: function () { var a = this._renderBoundaries[0]; var b = this._renderBoundaries[1]; var c = this._renderBoundaries[2] - a; var d = this._renderBoundaries[3] - b; var e = this._width; var f = this._height; var g = this._opacity; var h = this._maxOpacity; var i = this._minOpacity; var j = this._useGradientOpacity; if (a < 0) { a = 0 } if (b < 0) { b = 0 } if (a + c > e) { c = e - a } if (b + d > f) { d = f - b } var k = this.shadowCtx.getImageData(a, b, c, d); var l = k.data; var m = l.length; var n = this._palette; for (var o = 3; o < m; o += 4) { var p = l[o]; var q = p * 4; if (!q) { continue } var r; if (g > 0) { r = g } else { if (p < h) { if (p < i) { r = i } else { r = p } } else { r = h } } l[o - 3] = n[q]; l[o - 2] = n[q + 1]; l[o - 1] = n[q + 2]; l[o] = j ? n[q + 3] : r } k.data = l; this.ctx.putImageData(k, a, b); this._renderBoundaries = [1e3, 1e3, 0, 0] }, getValueAt: function (a) { var b; var c = this.shadowCtx; var d = c.getImageData(a.x, a.y, 1, 1); var e = d.data[3]; var f = this._max; var g = this._min; b = Math.abs(f - g) * (e / 255) >> 0; return b }, getDataURL: function () { return this.canvas.toDataURL() } }; return d }(); var d = function j() { var b = false; if (a["defaultRenderer"] === "canvas2d") { b = c } return b }(); var e = { merge: function () { var a = {}; var b = arguments.length; for (var c = 0; c < b; c++) { var d = arguments[c]; for (var e in d) { a[e] = d[e] } } return a } }; var f = function k() { var c = function h() { function a() { this.cStore = {} } a.prototype = { on: function (a, b, c) { var d = this.cStore; if (!d[a]) { d[a] = [] } d[a].push(function (a) { return b.call(c, a) }) }, emit: function (a, b) { var c = this.cStore; if (c[a]) { var d = c[a].length; for (var e = 0; e < d; e++) { var f = c[a][e]; f(b) } } } }; return a }(); var f = function (a) { var b = a._renderer; var c = a._coordinator; var d = a._store; c.on("renderpartial", b.renderPartial, b); c.on("renderall", b.renderAll, b); c.on("extremachange", function (b) { a._config.onExtremaChange && a._config.onExtremaChange({ min: b.min, max: b.max, gradient: a._config["gradient"] || a._config["defaultGradient"] }) }); d.setCoordinator(c) }; function g() { var g = this._config = e.merge(a, arguments[0] || {}); this._coordinator = new c; if (g["plugin"]) { var h = g["plugin"]; if (!a.plugins[h]) { throw new Error("Plugin '" + h + "' not found. Maybe it was not registered.") } else { var i = a.plugins[h]; this._renderer = new i.renderer(g); this._store = new i.store(g) } } else { this._renderer = new d(g); this._store = new b(g) } f(this) } g.prototype = { addData: function () { this._store.addData.apply(this._store, arguments); return this }, removeData: function () { this._store.removeData && this._store.removeData.apply(this._store, arguments); return this }, setData: function () { this._store.setData.apply(this._store, arguments); return this }, setDataMax: function () { this._store.setDataMax.apply(this._store, arguments); return this }, setDataMin: function () { this._store.setDataMin.apply(this._store, arguments); return this }, configure: function (a) { this._config = e.merge(this._config, a); this._renderer.updateConfig(this._config); this._coordinator.emit("renderall", this._store._getInternalData()); return this }, repaint: function () { this._coordinator.emit("renderall", this._store._getInternalData()); return this }, getData: function () { return this._store.getData() }, getDataURL: function () { return this._renderer.getDataURL() }, getValueAt: function (a) { if (this._store.getValueAt) { return this._store.getValueAt(a) } else if (this._renderer.getValueAt) { return this._renderer.getValueAt(a) } else { return null } } }; return g }(); var g = { create: function (a) { return new f(a) }, register: function (b, c) { a.plugins[b] = c } }; return g });
+;(function (name, context, factory) {
+
+  // Supports UMD. AMD, CommonJS/Node.js and browser context
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = factory();
+  } else if (typeof define === "function" && define.amd) {
+    define(factory);
+  } else {
+    context[name] = factory();
+  }
+
+})("h337", this, function () {
+
+// Heatmap Config stores default values and will be merged with instance config
+var HeatmapConfig = {
+  defaultRadius: 40,
+  defaultRenderer: 'canvas2d',
+  defaultGradient: { 0.25: "rgb(0,0,255)", 0.55: "rgb(0,255,0)", 0.85: "yellow", 1.0: "rgb(255,0,0)"},
+  defaultMaxOpacity: 1,
+  defaultMinOpacity: 0,
+  defaultBlur: .85,
+  defaultXField: 'x',
+  defaultYField: 'y',
+  defaultValueField: 'value', 
+  plugins: {}
+};
+var Store = (function StoreClosure() {
+
+  var Store = function Store(config) {
+    this._coordinator = {};
+    this._data = [];
+    this._radi = [];
+    this._min = 10;
+    this._max = 1;
+    this._xField = config['xField'] || config.defaultXField;
+    this._yField = config['yField'] || config.defaultYField;
+    this._valueField = config['valueField'] || config.defaultValueField;
+
+    if (config["radius"]) {
+      this._cfgRadius = config["radius"];
+    }
+  };
+
+  var defaultRadius = HeatmapConfig.defaultRadius;
+
+  Store.prototype = {
+    // when forceRender = false -> called from setData, omits renderall event
+    _organiseData: function(dataPoint, forceRender) {
+        var x = dataPoint[this._xField];
+        var y = dataPoint[this._yField];
+        var radi = this._radi;
+        var store = this._data;
+        var max = this._max;
+        var min = this._min;
+        var value = dataPoint[this._valueField] || 1;
+        var radius = dataPoint.radius || this._cfgRadius || defaultRadius;
+
+        if (!store[x]) {
+          store[x] = [];
+          radi[x] = [];
+        }
+
+        if (!store[x][y]) {
+          store[x][y] = value;
+          radi[x][y] = radius;
+        } else {
+          store[x][y] += value;
+        }
+        var storedVal = store[x][y];
+
+        if (storedVal > max) {
+          if (!forceRender) {
+            this._max = storedVal;
+          } else {
+            this.setDataMax(storedVal);
+          }
+          return false;
+        } else if (storedVal < min) {
+          if (!forceRender) {
+            this._min = storedVal;
+          } else {
+            this.setDataMin(storedVal);
+          }
+          return false;
+        } else {
+          return { 
+            x: x, 
+            y: y,
+            value: value, 
+            radius: radius,
+            min: min,
+            max: max 
+          };
+        }
+    },
+    _unOrganizeData: function() {
+      var unorganizedData = [];
+      var data = this._data;
+      var radi = this._radi;
+
+      for (var x in data) {
+        for (var y in data[x]) {
+
+          unorganizedData.push({
+            x: x,
+            y: y,
+            radius: radi[x][y],
+            value: data[x][y]
+          });
+
+        }
+      }
+      return {
+        min: this._min,
+        max: this._max,
+        data: unorganizedData
+      };
+    },
+    _onExtremaChange: function() {
+      this._coordinator.emit('extremachange', {
+        min: this._min,
+        max: this._max
+      });
+    },
+    addData: function() {
+      if (arguments[0].length > 0) {
+        var dataArr = arguments[0];
+        var dataLen = dataArr.length;
+        while (dataLen--) {
+          this.addData.call(this, dataArr[dataLen]);
+        }
+      } else {
+        // add to store  
+        var organisedEntry = this._organiseData(arguments[0], true);
+        if (organisedEntry) {
+          // if it's the first datapoint initialize the extremas with it
+          if (this._data.length === 0) {
+            this._min = this._max = organisedEntry.value;
+          }
+          this._coordinator.emit('renderpartial', {
+            min: this._min,
+            max: this._max,
+            data: [organisedEntry]
+          });
+        }
+      }
+      return this;
+    },
+    setData: function(data) {
+      var dataPoints = data.data;
+      var pointsLen = dataPoints.length;
+
+
+      // reset data arrays
+      this._data = [];
+      this._radi = [];
+
+      for(var i = 0; i < pointsLen; i++) {
+        this._organiseData(dataPoints[i], false);
+      }
+      this._max = data.max;
+      this._min = data.min || 0;
+      
+      this._onExtremaChange();
+      this._coordinator.emit('renderall', this._getInternalData());
+      return this;
+    },
+    removeData: function() {
+      // TODO: implement
+    },
+    setDataMax: function(max) {
+      this._max = max;
+      this._onExtremaChange();
+      this._coordinator.emit('renderall', this._getInternalData());
+      return this;
+    },
+    setDataMin: function(min) {
+      this._min = min;
+      this._onExtremaChange();
+      this._coordinator.emit('renderall', this._getInternalData());
+      return this;
+    },
+    setCoordinator: function(coordinator) {
+      this._coordinator = coordinator;
+    },
+    _getInternalData: function() {
+      return { 
+        max: this._max,
+        min: this._min, 
+        data: this._data,
+        radi: this._radi 
+      };
+    },
+    getData: function() {
+      return this._unOrganizeData();
+    }/*,
+
+      TODO: rethink.
+
+    getValueAt: function(point) {
+      var value;
+      var radius = 100;
+      var x = point.x;
+      var y = point.y;
+      var data = this._data;
+
+      if (data[x] && data[x][y]) {
+        return data[x][y];
+      } else {
+        var values = [];
+        // radial search for datapoints based on default radius
+        for(var distance = 1; distance < radius; distance++) {
+          var neighbors = distance * 2 +1;
+          var startX = x - distance;
+          var startY = y - distance;
+
+          for(var i = 0; i < neighbors; i++) {
+            for (var o = 0; o < neighbors; o++) {
+              if ((i == 0 || i == neighbors-1) || (o == 0 || o == neighbors-1)) {
+                if (data[startY+i] && data[startY+i][startX+o]) {
+                  values.push(data[startY+i][startX+o]);
+                }
+              } else {
+                continue;
+              } 
+            }
+          }
+        }
+        if (values.length > 0) {
+          return Math.max.apply(Math, values);
+        }
+      }
+      return false;
+    }*/
+  };
+
+
+  return Store;
+})();
+
+var Canvas2dRenderer = (function Canvas2dRendererClosure() {
+
+  var _getColorPalette = function(config) {
+    var gradientConfig = config.gradient || config.defaultGradient;
+    var paletteCanvas = document.createElement('canvas');
+    var paletteCtx = paletteCanvas.getContext('2d');
+
+    paletteCanvas.width = 256;
+    paletteCanvas.height = 1;
+
+    var gradient = paletteCtx.createLinearGradient(0, 0, 256, 1);
+    for (var key in gradientConfig) {
+      gradient.addColorStop(key, gradientConfig[key]);
+    }
+
+    paletteCtx.fillStyle = gradient;
+    paletteCtx.fillRect(0, 0, 256, 1);
+
+    return paletteCtx.getImageData(0, 0, 256, 1).data;
+  };
+
+  var _getPointTemplate = function(radius, blurFactor) {
+    var tplCanvas = document.createElement('canvas');
+    var tplCtx = tplCanvas.getContext('2d');
+    var x = radius;
+    var y = radius;
+    tplCanvas.width = tplCanvas.height = radius*2;
+
+    if (blurFactor == 1) {
+      tplCtx.beginPath();
+      tplCtx.arc(x, y, radius, 0, 2 * Math.PI, false);
+      tplCtx.fillStyle = 'rgba(0,0,0,1)';
+      tplCtx.fill();
+    } else {
+      var gradient = tplCtx.createRadialGradient(x, y, radius*blurFactor, x, y, radius);
+      gradient.addColorStop(0, 'rgba(0,0,0,1)');
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      tplCtx.fillStyle = gradient;
+      tplCtx.fillRect(0, 0, 2*radius, 2*radius);
+    }
+
+
+
+    return tplCanvas;
+  };
+
+  var _prepareData = function(data) {
+    var renderData = [];
+    var min = data.min;
+    var max = data.max;
+    var radi = data.radi;
+    var data = data.data;
+
+    var xValues = Object.keys(data);
+    var xValuesLen = xValues.length;
+
+    while(xValuesLen--) {
+      var xValue = xValues[xValuesLen];
+      var yValues = Object.keys(data[xValue]);
+      var yValuesLen = yValues.length;
+      while(yValuesLen--) {
+        var yValue = yValues[yValuesLen];
+        var value = data[xValue][yValue];
+        var radius = radi[xValue][yValue];
+        renderData.push({
+          x: xValue,
+          y: yValue,
+          value: value,
+          radius: radius
+        });
+      }
+    }
+
+    return {
+      min: min,
+      max: max,
+      data: renderData
+    };
+  };
+
+
+  function Canvas2dRenderer(config) {
+    var container = config.container;
+    var shadowCanvas = this.shadowCanvas = document.createElement('canvas');
+    var canvas = this.canvas = config.canvas || document.createElement('canvas');
+    var renderBoundaries = this._renderBoundaries = [10000, 10000, 0, 0];
+
+    var computed = getComputedStyle(config.container) || {};
+
+    canvas.className = 'heatmap-canvas';
+
+    this._width = canvas.width = shadowCanvas.width = config.width || +(computed.width.replace(/px/,''));
+    this._height = canvas.height = shadowCanvas.height = config.height || +(computed.height.replace(/px/,''));
+
+    this.shadowCtx = shadowCanvas.getContext('2d');
+    this.ctx = canvas.getContext('2d');
+
+    // @TODO:
+    // conditional wrapper
+
+    canvas.style.cssText = shadowCanvas.style.cssText = 'position:absolute;left:0;top:0;';
+
+    container.style.position = 'relative';
+    container.appendChild(canvas);
+
+    this._palette = _getColorPalette(config);
+    this._templates = {};
+
+    this._setStyles(config);
+  };
+
+  Canvas2dRenderer.prototype = {
+    renderPartial: function(data) {
+      if (data.data.length > 0) {
+        this._drawAlpha(data);
+        this._colorize();
+      }
+    },
+    renderAll: function(data) {
+      // reset render boundaries
+      this._clear();
+      if (data.data.length > 0) {
+        this._drawAlpha(_prepareData(data));
+        this._colorize();
+      }
+    },
+    _updateGradient: function(config) {
+      this._palette = _getColorPalette(config);
+    },
+    updateConfig: function(config) {
+      if (config['gradient']) {
+        this._updateGradient(config);
+      }
+      this._setStyles(config);
+    },
+    setDimensions: function(width, height) {
+      this._width = width;
+      this._height = height;
+      this.canvas.width = this.shadowCanvas.width = width;
+      this.canvas.height = this.shadowCanvas.height = height;
+    },
+    _clear: function() {
+      this.shadowCtx.clearRect(0, 0, this._width, this._height);
+      this.ctx.clearRect(0, 0, this._width, this._height);
+    },
+    _setStyles: function(config) {
+      this._blur = (config.blur == 0)?0:(config.blur || config.defaultBlur);
+
+      if (config.backgroundColor) {
+        this.canvas.style.backgroundColor = config.backgroundColor;
+      }
+
+      this._width = this.canvas.width = this.shadowCanvas.width = config.width || this._width;
+      this._height = this.canvas.height = this.shadowCanvas.height = config.height || this._height;
+
+
+      this._opacity = (config.opacity || 0) * 255;
+      this._maxOpacity = (config.maxOpacity || config.defaultMaxOpacity) * 255;
+      this._minOpacity = (config.minOpacity || config.defaultMinOpacity) * 255;
+      this._useGradientOpacity = !!config.useGradientOpacity;
+    },
+    _drawAlpha: function(data) {
+      var min = this._min = data.min;
+      var max = this._max = data.max;
+      var data = data.data || [];
+      var dataLen = data.length;
+      // on a point basis?
+      var blur = 1 - this._blur;
+
+      while(dataLen--) {
+
+        var point = data[dataLen];
+
+        var x = point.x;
+        var y = point.y;
+        var radius = point.radius;
+        // if value is bigger than max
+        // use max as value
+        var value = Math.min(point.value, max);
+        var rectX = x - radius;
+        var rectY = y - radius;
+        var shadowCtx = this.shadowCtx;
+
+
+
+
+        var tpl;
+        if (!this._templates[radius]) {
+          this._templates[radius] = tpl = _getPointTemplate(radius, blur);
+        } else {
+          tpl = this._templates[radius];
+        }
+        // value from minimum / value range
+        // => [0, 1]
+        var templateAlpha = (value-min)/(max-min);
+        // this fixes #176: small values are not visible because globalAlpha < .01 cannot be read from imageData
+        shadowCtx.globalAlpha = templateAlpha < .01 ? .01 : templateAlpha;
+
+        shadowCtx.drawImage(tpl, rectX, rectY);
+
+        // update renderBoundaries
+        if (rectX < this._renderBoundaries[0]) {
+            this._renderBoundaries[0] = rectX;
+          }
+          if (rectY < this._renderBoundaries[1]) {
+            this._renderBoundaries[1] = rectY;
+          }
+          if (rectX + 2*radius > this._renderBoundaries[2]) {
+            this._renderBoundaries[2] = rectX + 2*radius;
+          }
+          if (rectY + 2*radius > this._renderBoundaries[3]) {
+            this._renderBoundaries[3] = rectY + 2*radius;
+          }
+
+      }
+    },
+    _colorize: function() {
+      var x = this._renderBoundaries[0];
+      var y = this._renderBoundaries[1];
+      var width = this._renderBoundaries[2] - x;
+      var height = this._renderBoundaries[3] - y;
+      var maxWidth = this._width;
+      var maxHeight = this._height;
+      var opacity = this._opacity;
+      var maxOpacity = this._maxOpacity;
+      var minOpacity = this._minOpacity;
+      var useGradientOpacity = this._useGradientOpacity;
+
+      if (x < 0) {
+        x = 0;
+      }
+      if (y < 0) {
+        y = 0;
+      }
+      if (x + width > maxWidth) {
+        width = maxWidth - x;
+      }
+      if (y + height > maxHeight) {
+        height = maxHeight - y;
+      }
+
+      var img = this.shadowCtx.getImageData(x, y, width, height);
+      var imgData = img.data;
+      var len = imgData.length;
+      var palette = this._palette;
+
+
+      for (var i = 3; i < len; i+= 4) {
+        var alpha = imgData[i];
+        var offset = alpha * 4;
+
+
+        if (!offset) {
+          continue;
+        }
+
+        var finalAlpha;
+        if (opacity > 0) {
+          finalAlpha = opacity;
+        } else {
+          if (alpha < maxOpacity) {
+            if (alpha < minOpacity) {
+              finalAlpha = minOpacity;
+            } else {
+              finalAlpha = alpha;
+            }
+          } else {
+            finalAlpha = maxOpacity;
+          }
+        }
+
+        imgData[i-3] = palette[offset];
+        imgData[i-2] = palette[offset + 1];
+        imgData[i-1] = palette[offset + 2];
+        imgData[i] = useGradientOpacity ? palette[offset + 3] : finalAlpha;
+
+      }
+
+      img.data = imgData;
+      this.ctx.putImageData(img, x, y);
+
+      this._renderBoundaries = [1000, 1000, 0, 0];
+
+    },
+    getValueAt: function(point) {
+      var value;
+      var shadowCtx = this.shadowCtx;
+      var img = shadowCtx.getImageData(point.x, point.y, 1, 1);
+      var data = img.data[3];
+      var max = this._max;
+      var min = this._min;
+
+      value = (Math.abs(max-min) * (data/255)) >> 0;
+
+      return value;
+    },
+    getDataURL: function() {
+      return this.canvas.toDataURL();
+    }
+  };
+
+
+  return Canvas2dRenderer;
+})();
+
+
+var Renderer = (function RendererClosure() {
+
+  var rendererFn = false;
+
+  if (HeatmapConfig['defaultRenderer'] === 'canvas2d') {
+    rendererFn = Canvas2dRenderer;
+  }
+
+  return rendererFn;
+})();
+
+
+var Util = {
+  merge: function() {
+    var merged = {};
+    var argsLen = arguments.length;
+    for (var i = 0; i < argsLen; i++) {
+      var obj = arguments[i]
+      for (var key in obj) {
+        merged[key] = obj[key];
+      }
+    }
+    return merged;
+  }
+};
+// Heatmap Constructor
+var Heatmap = (function HeatmapClosure() {
+
+  var Coordinator = (function CoordinatorClosure() {
+
+    function Coordinator() {
+      this.cStore = {};
+    };
+
+    Coordinator.prototype = {
+      on: function(evtName, callback, scope) {
+        var cStore = this.cStore;
+
+        if (!cStore[evtName]) {
+          cStore[evtName] = [];
+        }
+        cStore[evtName].push((function(data) {
+            return callback.call(scope, data);
+        }));
+      },
+      emit: function(evtName, data) {
+        var cStore = this.cStore;
+        if (cStore[evtName]) {
+          var len = cStore[evtName].length;
+          for (var i=0; i<len; i++) {
+            var callback = cStore[evtName][i];
+            callback(data);
+          }
+        }
+      }
+    };
+
+    return Coordinator;
+  })();
+
+
+  var _connect = function(scope) {
+    var renderer = scope._renderer;
+    var coordinator = scope._coordinator;
+    var store = scope._store;
+
+    coordinator.on('renderpartial', renderer.renderPartial, renderer);
+    coordinator.on('renderall', renderer.renderAll, renderer);
+    coordinator.on('extremachange', function(data) {
+      scope._config.onExtremaChange &&
+      scope._config.onExtremaChange({
+        min: data.min,
+        max: data.max,
+        gradient: scope._config['gradient'] || scope._config['defaultGradient']
+      });
+    });
+    store.setCoordinator(coordinator);
+  };
+
+
+  function Heatmap() {
+    var config = this._config = Util.merge(HeatmapConfig, arguments[0] || {});
+    this._coordinator = new Coordinator();
+    if (config['plugin']) {
+      var pluginToLoad = config['plugin'];
+      if (!HeatmapConfig.plugins[pluginToLoad]) {
+        throw new Error('Plugin \''+ pluginToLoad + '\' not found. Maybe it was not registered.');
+      } else {
+        var plugin = HeatmapConfig.plugins[pluginToLoad];
+        // set plugin renderer and store
+        this._renderer = new plugin.renderer(config);
+        this._store = new plugin.store(config);
+      }
+    } else {
+      this._renderer = new Renderer(config);
+      this._store = new Store(config);
+    }
+    _connect(this);
+  };
+
+  // @TODO:
+  // add API documentation
+  Heatmap.prototype = {
+    addData: function() {
+      this._store.addData.apply(this._store, arguments);
+      return this;
+    },
+    removeData: function() {
+      this._store.removeData && this._store.removeData.apply(this._store, arguments);
+      return this;
+    },
+    setData: function() {
+      this._store.setData.apply(this._store, arguments);
+      return this;
+    },
+    setDataMax: function() {
+      this._store.setDataMax.apply(this._store, arguments);
+      return this;
+    },
+    setDataMin: function() {
+      this._store.setDataMin.apply(this._store, arguments);
+      return this;
+    },
+    configure: function(config) {
+      this._config = Util.merge(this._config, config);
+      this._renderer.updateConfig(this._config);
+      this._coordinator.emit('renderall', this._store._getInternalData());
+      return this;
+    },
+    repaint: function() {
+      this._coordinator.emit('renderall', this._store._getInternalData());
+      return this;
+    },
+    getData: function() {
+      return this._store.getData();
+    },
+    getDataURL: function() {
+      return this._renderer.getDataURL();
+    },
+    getValueAt: function(point) {
+
+      if (this._store.getValueAt) {
+        return this._store.getValueAt(point);
+      } else  if (this._renderer.getValueAt) {
+        return this._renderer.getValueAt(point);
+      } else {
+        return null;
+      }
+    }
+  };
+
+  return Heatmap;
+
+})();
+
+
+// core
+var heatmapFactory = {
+  create: function(config) {
+    return new Heatmap(config);
+  },
+  register: function(pluginKey, plugin) {
+    HeatmapConfig.plugins[pluginKey] = plugin;
+  }
+};
+
+return heatmapFactory;
+
+
+});
 //# sourceMappingURL=hm.js.map

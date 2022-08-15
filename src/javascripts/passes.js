@@ -70,11 +70,18 @@ function createPass(pass, passinfo) {
     const teamClass = passinfo.team + "Pass";
     passPict.classList.add(teamClass);
 
+    passPict.setAttribute("startpoint-x", pass.startpoint.x);
+    passPict.setAttribute("endpoint-x", pass.endpoint.x);
+    passPict.setAttribute("startpoint-y", pass.startpoint.y);
+    passPict.setAttribute("endpoint-y", pass.endpoint.y);
+
     passPict.setAttribute("player", pass.player);
     passPict.setAttribute("passType", pass.type);
     passPict.setAttribute("minute", pass.minute);
     passPict.setAttribute("high", pass.high);
     passPict.setAttribute("good", pass.good);
+    passPict.setAttribute("failed", pass.failed);
+    passPict.setAttribute("fighted", pass.fighted);
 
     passPict.appendChild(createPassLine(pass, passinfo, _strokeStyle));
     passPict.appendChild(createPassStart(pass, passinfo, _strokeStyle));
@@ -85,36 +92,107 @@ function createPass(pass, passinfo) {
 
 /**===================================================================================================== */
 function filterPassesByTime(start, end) {
+    passFilter.start = start
+    passFilter.end = end
+
     document.querySelectorAll("[class$=Pass]").forEach(pass => {
         const minute = +pass.getAttribute("minute");
+
+
         const matchPeriod = (minute >= +start && minute <= +end);
         pass.style.display = (matchPeriod)
             ? "block"
             : "none";
     });
 }
+
+/**===================================================================================================== */
+function filterPass(pass, passFilter) {
+    /**
+     * 
+const passFilter = {
+  playersCheckboxes: [],
+  start: 0,
+  end: 125,
+  zoneTo: 0,
+  zoneFrom: 0,
+  homePlayers: 18,
+  awayPlayers: 18,
+  high: true,
+  head: true,
+  good: true,
+  failed: true,
+  fighted: true
+}
+     */
+    function isDiffers(a, b) {
+        return a && !b || b && !a
+    }
+    function isDiffers(a, b) {
+        if (!a) return
+
+        return a && !b || b && !a
+    }
+
+    if (isDiffers(passFilter.good, pass.good)) return false
+    if (isDiffers(passFilter.failed, pass.failed)) return false
+    if (isDiffers(passFilter.high, pass.high)) return false
+    if (isDiffers(passFilter.head, pass.head)) return false
+
+    if (pass.type === 'throw' && !passFilter.throw) return false
+    if (pass.type === 'freekick' && !passFilter.freekick) return false
+    if (pass.type === 'goalkick' && !passFilter.goalkick) return false
+    if (pass.type === 'fromout' && !passFilter.fromout) return false
+
+
+    const minute = +pass.getAttribute("minute");
+    if (minute < start || minute > end) return false
+
+    const startpointX = +pass.getAttribute("startpoint-x");
+    const startpointY = +pass.getAttribute("startpoint-y");
+    if (passFilter.zoneFrom && !isPointMatchZone(startpointX, startpointY, passFilter.zoneFrom)) return false
+    const endpointX = +pass.getAttribute("endpoint-x");
+    const endpointY = +pass.getAttribute("endpoint-y");
+    if (passFilter.zoneTo && !isPointMatchZone(endpointX, endpointY, passFilter.zoneTo)) return false
+
+
+
+
+    return true
+}
+/**===================================================================================================== */
+function filterPassesByMainFilter() {
+    document.querySelectorAll("[class$=Pass]").forEach(pass => {
+        // const minute = +pass.getAttribute("minute");
+        const matchPass = filterPass(pass, passFilter);
+        pass.style.display = (matchPass)
+            ? "block"
+            : "none";
+    });
+}
+
 /**===================================================================================================== */
 function drawTeamPasses(teamPasses, players, team, ctx) {
     const passboard = document.querySelector('#passesboard');
     passboard.querySelectorAll('.pass').forEach(function (el, key, parent) {
-        // passboard.removeChild(el)
+        el.parentNode.removeChild(el)
         // console.log("el - ", el, parent);
     })
- 
 
-    // ZONES_COORDS.forEach((z, i) => {
-    //     const zone = document.createElement('div');
-    //     zone.classList.add('zone-border');
-    //     zone.style.top = z.y - 1 + "px";
-    //     zone.textContent = i + 1;
 
-    //     zone.style.left = z.x - 1 + "px";
-    //     zone.style.width = ZONE_WIDTH + "px";
-    //     zone.style.height = ZONE_HEIGHT + "px";
-    //     // line.style.transform = "rotate(" + getSegmentAngle(pass.startpoint, pass.endpoint) + "deg)";
-    //     passboard.appendChild(zone);;
+    ZONES_COORDS.forEach((z, i) => {
+        const zone = document.createElement('div');
+        zone.classList.add('zone-border');
+        zone.style.top = z.y - 1 + "px";
+        zone.textContent = i + 1;
 
-    // })
+        zone.style.left = z.x - 1 + "px";
+        zone.style.width = ZONE_WIDTH + "px";
+        zone.style.height = ZONE_HEIGHT + "px";
+        // line.style.transform = "rotate(" + getSegmentAngle(pass.startpoint, pass.endpoint) + "deg)";
+        passboard.appendChild(zone);;
+
+    })
 
     teamPasses.forEach((playerPasses, _player) => {
         if (!playerPasses[0]) return;

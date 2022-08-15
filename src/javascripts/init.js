@@ -41,8 +41,12 @@ const passFilter = {
   awayPlayers: 18,
   high: true,
   head: true,
-  ok: true,
+  good: true,
   failed: true,
+  throw: true,
+  freekick: true,
+  goalkick: true,
+  fromout: true,
   fighted: true
 }
 

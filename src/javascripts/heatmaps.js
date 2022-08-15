@@ -133,10 +133,14 @@ window.onload = function () {
         game.slice(1, -1);
         let score = "0:0";
         let passObject = null
+        let ballowner = 0;
 
         try {
           game.forEach((element, episode, episodes) => {
             let lastEpisode = episode > 0 ? episodes[episode - 1] : null;
+            let nextEpisode = episodes[episode + 1] ? episodes[episode + 1] : null
+            let nextEpisode2 = episodes[episode + 2] ? episodes[episode + 2] : null
+
             //===================================================================
             if (element.C) { flags.corner = true; flags.team = element.C; }
             if (element.A) { flags.throwIn = true; flags.team = element.A; }
@@ -146,6 +150,22 @@ window.onload = function () {
             }
             if (element.N) { flags.center = true; flags.team = element.N; }
             //===================================================================
+            let newBallOwner = false;
+            const currentBallOwner = getOwnerFromMessages(element.messages)
+            if (currentBallOwner || currentBallOwner !== ballowner) {
+              //new ballowner
+              newBallOwner = true
+              ballowner = currentBallOwner
+            }
+            //===================================================================
+            function isBallOwnerWillChangeIn2NextEpisodes() {
+              const nextBallOwner = nextEpisode && getOwnerFromMessages(nextEpisode)
+              const nextBallOwner2 = nextEpisode2 && getOwnerFromMessages(nextEpisode2)
+              if (nextBallOwner && nextBallOwner !== ballowner) return true
+              if (!nextBallOwner && nextBallOwner2 && nextBallOwner2 !== ballowner) return true
+              return false
+            }
+
 
             let coords;
             let playersCloseToBall = []
@@ -215,11 +235,40 @@ window.onload = function () {
                 return isOneTeam(prevclosestPlayer.n, closestPlayer.n)
               }
               //==============================================================================
+              function isPassstarterAndClosestFromSameTeam(_player) {
+                if (!passObject.start || !_player) return false
+                return isOneTeam(passObject.start.player, _player.n)
+              }
+              //==============================================================================
               function isPassOpened() {
                 if (!passObject) return false
                 return !!passObject.start
               }
               //==============================================================================
+
+              //==============================================================================
+              function isBallOutfield() {
+                if (ball.w <= jsonCoords.x1 || ball.w >= jsonCoords.x2) return true
+                if (ball.h <= jsonCoords.y1 || ball.h >= jsonCoords.y2) return true
+                return false
+              }
+              //==============================================================================
+              function isItFight() {
+                return closestPlayer2 && closestPlayer
+                  && closestPlayer.length === closestPlayer2.length
+                  && closestPlayer.length === 0
+              }
+              //==============================================================================
+              function checkAfterPassFight() {
+                if (!isItFight()) return false
+                return !(closestPlayer.n === prevclosestPlayer.n || closestPlayer2.n === prevclosestPlayer.n)
+              }
+              //==============================================================================
+              function checkDribbling() {
+                return false;
+              }
+              //==============================================================================
+
               function resetPass() {
                 passObject.start = null
               }
@@ -235,7 +284,8 @@ window.onload = function () {
                   startpoint: null,
                   type: null,
                   outfield: passObject.outfield,
-                  player: passObject.start.player
+                  player: passObject.start.player,
+                  address: passObject.end.player
                 }
 
                 const ballcoords = {
@@ -278,26 +328,7 @@ window.onload = function () {
                   player: player.n
                 }
 
-              }
-              //==============================================================================
-              function isBallOutfield() {
-                if (ball.w <= jsonCoords.x1 || ball.w >= jsonCoords.x2) return true
-                if (ball.h <= jsonCoords.y1 || ball.h >= jsonCoords.y2) return true
-                return false
-              }
-              //==============================================================================
-              function isItFight() {
-                return closestPlayer2 && closestPlayer
-                  && closestPlayer.length === closestPlayer2.length
-                  && closestPlayer.length === 0
-              }
-              //==============================================================================
-              function checkAfterPassFight() {
-                if (!isItFight()) return false
-                return !(closestPlayer.n === prevclosestPlayer.n || closestPlayer2.n === prevclosestPlayer.n)
-              }
-              //==============================================================================
-              //==============================================================================
+              }              //==============================================================================
               //==============================================================================
               //==============================================================================
 
@@ -393,6 +424,26 @@ window.onload = function () {
                       startPass(closestPlayer)
                     }
                     return
+                  }
+
+                  if (isItFight()) {
+                    if (checkAfterPassFight()) {
+                      console.log("FIGHT AFTER PASS -", closestPlayer, closestPlayer2, prevclosestPlayer, prevclosestPlayer2, element, passObject);
+                      const passFailed = isBallOwnerWillChangeIn2NextEpisodes()
+                      passObject.good = passFailed ? 0 : 1
+
+                      const adress = isPassstarterAndClosestFromSameTeam(closestPlayer)
+                        ? passFailed ? closestPlayer2 : closestPlayer
+                        : passFailed ? closestPlayer : closestPlayer2
+                      endThisPass(adress)
+                      savePass()
+                      startPass(adress)
+
+                      return;
+                    };
+                    if (checkDribbling()) {
+                      return
+                    }
                   }
 
                 }
@@ -1144,7 +1195,7 @@ window.onload = function () {
 
   };
 
-  xmlhttp.open("GET", formJsonUrl(tvurl), true);
+  xmlhttp.open("GET", formJsonUrl({ DEFAULT_TV_URL, test: false }));
   xmlhttp.send();
   //"http://pefl.ru/tv/#/j=1099441&z=614c69293214e3c2e1ea1fdae3d6dd2d";
 }

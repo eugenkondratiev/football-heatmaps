@@ -1,13 +1,21 @@
-; const JSON_URL_START = 'http://pefl.ru/jsonreport.php';
+// ; const JSON_URL_START = 'http://pefl.ru/jsonreport.php';
+; const JSON_URL_START = window.location.origin + '/public/data/';
 //==============================================================================
-function formJsonUrl(tvurl) {
+function formJsonUrl({ tvurl, test = false }) {
+
+  console.log("###window.location.origin + tvurl - ", window.location.origin + tvurl, test);
+  if (test) return window.location.origin + tvurl;
+  const _tvurl = tvurl || DEFAULT_TV_URL
   const urlString = window.location.href.match(/j\=\d+\&z\=.+/i)
     ? window.location.href
-    : tvurl;
+    : _tvurl;
   const zIndex = urlString.indexOf('&z=');
   const jIndex = urlString.indexOf('j=');
+  console.log(window.location.href.match(/j\=\d+\&z\=.+/i), urlString, zIndex, jIndex);
 
-  return JSON_URL_START + `?j=${urlString.substring(2 + jIndex, zIndex)}&z=${urlString.substring(3 + zIndex)}`;
+  console.log(`__${urlString.substring(2 + jIndex, zIndex)}.json`);
+  return JSON_URL_START + `__${urlString.substring(2 + jIndex, zIndex)}.json`
+  // return JSON_URL_START + `?j=${urlString.substring(2 + jIndex, zIndex)}&z=${urlString.substring(3 + zIndex)}`;
 }
 //==============================================================================
 function limitPoint(point, secondTime = false, coords1 = hmCoords, coords2 = jsonCoords) {
@@ -39,6 +47,15 @@ function getSegmentLength(point1, point2) {
   return Math.sqrt(dX * dX + dY * dY)
 }
 //==============================================================================
+function isPointMatchZone(pointX = 0, pointY = 0, zoneNumber = 14) {
+  if (!zoneNumber) return false
+  if (!ZONES_COORDS[zoneNumber]) return false
+  const _zone = ZONES_COORDS[zoneNumber]
+  if (pointX < _zone.x || pointY < _zone.y) return false
+  if (pointX > (_zone.x + ZONE_WIDTH) || pointY > (_zone.y + ZONE_HEIGHT)) return false
+  return true
+}
+//==============================================================================
 function getLength(coord1, coord2) {
   const dX = coord2.w - coord1.w;
   const dY = coord2.h - coord1.h;
@@ -66,6 +83,12 @@ function getMileage(point1, point2) {
 //==============================================================================
 function leaveValuablePoints(pointsArr) {
   return pointsArr.filter(point => !point); // if not null
+}
+//==============================================================================
+function getOwnerFromMessages(_messages) {
+  if (!_messages) return null
+  if (!_messages[0]) return null
+  return _messages[0].owner
 }
 //==============================================================================
 function getPlayerFromMessage(_message, num = 1) {
