@@ -224,8 +224,8 @@ window.onload = function () {
               //==============================================================================
               function isItPassFromCenter() {
                 if (!passObject) return
-                if (passObject.N && closestPlayer
-                  && isPassOpened() && closestPlayer.length === 0) console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
+                // if (passObject.N && closestPlayer
+                  // && isPassOpened() && closestPlayer.length === 0) console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
                 return passObject.N && closestPlayer
                   && isPassOpened() && closestPlayer.length === 0
               }
@@ -300,7 +300,7 @@ window.onload = function () {
                   y: passObject.start.ball.h
                 };
                 pass.startpoint = limitPoint(startballcoords, secondTime, shotsCoords, jsonCoords);
-                if (pass.outfield) console.log(" save pass - ", passObject, pass);
+                // if (pass.outfield) console.log(" save pass - ", passObject, pass);
                 passes[pass.player].push({ ...pass });
 
               }
@@ -336,7 +336,7 @@ window.onload = function () {
                 prevplayersCloseToBall = lastEpisode && lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
                 playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime);
                 //** ---- */
-                console.log(" playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
+                // console.log(" playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
                 closestPlayer = playersCloseToBall[0]
                 closestPlayer2 = playersCloseToBall[1]
                 prevclosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0]
@@ -345,13 +345,13 @@ window.onload = function () {
                 if (element.N) {
 
                   if (passObject) {
-                    console.log('closestPlayer- ', closestPlayer);
+                    // console.log('closestPlayer- ', closestPlayer);
                     startPass(closestPlayer)
                   }
                   if (!passObject) startPass(closestPlayer)
 
                   passObject.N = true
-                  console.log("STARTED N ", passObject);
+                  // console.log("STARTED N ", passObject);
                 }
                 // if (isItFight()) {
                 //   console.log(checkAfterPassFight()
@@ -369,7 +369,7 @@ window.onload = function () {
                   if (!isPassOpened()) {
                     if (isPlayerOwnsBall()) {
                       startPass(closestPlayer)
-                      console.log('PLAYER OWNS BALL');
+                      // console.log('PLAYER OWNS BALL');
                       return
                     }
                     return
@@ -391,7 +391,7 @@ window.onload = function () {
                   if (isBallOutfield()) {
                     passObject.good = 0
                     passObject.outfield = true;
-                    console.log("Ball outfield", ball, element);
+                    // console.log("Ball outfield", ball, element);
                     endThisPass(closestPlayer)
                     savePass()
                     resetPass()
@@ -428,7 +428,7 @@ window.onload = function () {
 
                   if (isItFight()) {
                     if (checkAfterPassFight()) {
-                      console.log("FIGHT AFTER PASS -", closestPlayer, closestPlayer2, prevclosestPlayer, prevclosestPlayer2, element, passObject);
+                      // console.log("FIGHT AFTER PASS -", closestPlayer, closestPlayer2, prevclosestPlayer, prevclosestPlayer2, element, passObject);
                       const passFailed = isBallOwnerWillChangeIn2NextEpisodes()
                       passObject.good = passFailed ? 0 : 1
 
@@ -621,8 +621,9 @@ window.onload = function () {
                   }
                 };
               } catch (error) {
-                console.log("error ", lastEpisode);
-                console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
+                ;
+                // console.log("error ", lastEpisode);
+                // console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
               }
               element.messages.forEach(mes => {
                 if (mes.mes.indexOf(' СЧЕТ ') > -1) {

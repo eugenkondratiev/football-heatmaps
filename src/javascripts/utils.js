@@ -7,7 +7,8 @@ function formJsonUrl({ tvurl, test = false }) {
   if (test) return window.location.origin + tvurl;
   const _tvurl = tvurl || DEFAULT_TV_URL
   const urlString = window.location.href.match(/j\=\d+\&z\=.+/i)
-    ? window.location.href
+    // ? window.location.href 
+    ? window.location.href.replace(/\/index.html/, "/")
     : _tvurl;
   const zIndex = urlString.indexOf('&z=');
   const jIndex = urlString.indexOf('j=');

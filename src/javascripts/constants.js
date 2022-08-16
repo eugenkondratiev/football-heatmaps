@@ -1,4 +1,4 @@
-; const DEFAULT_TV_URL = window.location.origin +"/tv/#/j=1&z=c12345";
+; const DEFAULT_TV_URL = window.location.href.replace(/\/index.html/, "/") +"/tv/#/j=1&z=c12345";
 // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
 
 const MAX_VALUE = 60;

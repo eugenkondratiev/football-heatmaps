@@ -20,7 +20,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 ;
-var DEFAULT_TV_URL = window.location.origin + "/tv/#/j=1&z=c12345"; // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
+var DEFAULT_TV_URL = window.location.href.replace(/\/index.html/, "/") + "/tv/#/j=1&z=c12345"; // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
 
 var MAX_VALUE = 60;
 var MAX_OPACITY = .7;
@@ -206,7 +206,8 @@ function formJsonUrl(_ref) {
 
   var _tvurl = tvurl || DEFAULT_TV_URL;
 
-  var urlString = window.location.href.match(/j\=\d+\&z\=.+/i) ? window.location.href : _tvurl;
+  var urlString = window.location.href.match(/j\=\d+\&z\=.+/i) // ? window.location.href 
+  ? window.location.href.replace(/\/index.html/, "/") : _tvurl;
   var zIndex = urlString.indexOf('&z=');
   var jIndex = urlString.indexOf('j=');
   console.log(window.location.href.match(/j\=\d+\&z\=.+/i), urlString, zIndex, jIndex);
@@ -1453,8 +1454,9 @@ window.onload = function () {
 
 
               var isItPassFromCenter = function isItPassFromCenter() {
-                if (!passObject) return;
-                if (passObject.N && closestPlayer && isPassOpened() && closestPlayer.length === 0) console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
+                if (!passObject) return; // if (passObject.N && closestPlayer
+                // && isPassOpened() && closestPlayer.length === 0) console.log(" passObject  closestPlayer isPassOpened()", passObject, closestPlayer, isPassOpened());
+
                 return passObject.N && closestPlayer && isPassOpened() && closestPlayer.length === 0;
               }; //==============================================================================
 
@@ -1528,8 +1530,8 @@ window.onload = function () {
                   x: passObject.start.ball.w,
                   y: passObject.start.ball.h
                 };
-                pass.startpoint = limitPoint(startballcoords, secondTime, shotsCoords, jsonCoords);
-                if (pass.outfield) console.log(" save pass - ", passObject, pass);
+                pass.startpoint = limitPoint(startballcoords, secondTime, shotsCoords, jsonCoords); // if (pass.outfield) console.log(" save pass - ", passObject, pass);
+
                 passes[pass.player].push(_objectSpread({}, pass));
               }; //==============================================================================
 
@@ -1578,8 +1580,8 @@ window.onload = function () {
 
                   if (!isPassOpened()) {
                     if (isPlayerOwnsBall()) {
-                      startPass(closestPlayer);
-                      console.log('PLAYER OWNS BALL');
+                      startPass(closestPlayer); // console.log('PLAYER OWNS BALL');
+
                       return;
                     }
 
@@ -1602,8 +1604,8 @@ window.onload = function () {
 
                   if (isBallOutfield()) {
                     passObject.good = 0;
-                    passObject.outfield = true;
-                    console.log("Ball outfield", ball, element);
+                    passObject.outfield = true; // console.log("Ball outfield", ball, element);
+
                     endThisPass(closestPlayer);
                     savePass();
                     resetPass();
@@ -1642,7 +1644,7 @@ window.onload = function () {
 
                   if (isItFight()) {
                     if (checkAfterPassFight()) {
-                      console.log("FIGHT AFTER PASS -", closestPlayer, closestPlayer2, prevclosestPlayer, prevclosestPlayer2, element, passObject);
+                      // console.log("FIGHT AFTER PASS -", closestPlayer, closestPlayer2, prevclosestPlayer, prevclosestPlayer2, element, passObject);
                       var passFailed = isBallOwnerWillChangeIn2NextEpisodes();
                       passObject.good = passFailed ? 0 : 1;
                       var adress = isPassstarterAndClosestFromSameTeam(closestPlayer) ? passFailed ? closestPlayer2 : closestPlayer : passFailed ? closestPlayer : closestPlayer2;
@@ -1662,8 +1664,8 @@ window.onload = function () {
 
                 prevplayersCloseToBall = lastEpisode && lastEpisode.coordinates && calculatePlayerClosestToBall(lastEpisode.coordinates, secondTime);
                 playersCloseToBall = calculatePlayerClosestToBall(element.coordinates, secondTime); //** ---- */
+                // console.log(" playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
 
-                console.log(" playersCloseToBall - ", playersCloseToBall, prevplayersCloseToBall, element);
                 closestPlayer = playersCloseToBall[0];
                 closestPlayer2 = playersCloseToBall[1];
                 prevclosestPlayer = prevplayersCloseToBall && prevplayersCloseToBall[0];
@@ -1671,13 +1673,12 @@ window.onload = function () {
 
                 if (element.N) {
                   if (passObject) {
-                    console.log('closestPlayer- ', closestPlayer);
+                    // console.log('closestPlayer- ', closestPlayer);
                     startPass(closestPlayer);
                   }
 
                   if (!passObject) startPass(closestPlayer);
-                  passObject.N = true;
-                  console.log("STARTED N ", passObject);
+                  passObject.N = true; // console.log("STARTED N ", passObject);
                 }
 
                 if (episode === 0) {
@@ -1863,8 +1864,8 @@ window.onload = function () {
 
                 ;
               } catch (error) {
-                console.log("error ", lastEpisode);
-                console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
+                ; // console.log("error ", lastEpisode);
+                // console.log("Что то не так с обсчетом паса", element.minute, element.n, error);
               }
 
               element.messages.forEach(function (mes) {
