@@ -54,6 +54,7 @@
 }
 
 .zone-border {
+    visibility: hidden;
     position: absolute;
     border: 1px solid darkgoldenrod;
     box-shadow: inset 2px 2px 7px darkgrey;

@@ -20,7 +20,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 ;
-var DEFAULT_TV_URL = window.location.href.replace(/\/index.html/, "/") + "/tv/#/j=1&z=c12345"; // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
+var DEFAULT_TV_URL = window.location.href.replace(/\/index.html/, "/").replace(/\/heatmaps.html/, "/") + "/tv/#/j=1&z=c12345";
+
+var getImagesUrl = function getImagesUrl() {
+  return window.location.href.replace(/\/index.html/, "/").replace(/\/heatmaps.html/, "/") + "public/images";
+}; // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
+
 
 var MAX_VALUE = 60;
 var MAX_OPACITY = .7;
@@ -375,7 +380,9 @@ function isOneTeam(firstPlayerNumber, secondPlayerNumber) {
 
 function getSubArrow(_sub) {
   var sub = _sub || SUB_OUT;
-  var arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
+  var imgUrl = getImagesUrl();
+  var arrRef = sub == SUB_OUT ? imgUrl + '/out.gif' : imgUrl + '/in.gif'; // const arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
+
   var arrow = document.createElement("img");
   arrow.src = arrRef;
   return arrow;
@@ -385,7 +392,9 @@ function getSubArrow(_sub) {
 
 function createEye(toolTip) {
   var eye = document.createElement('img');
-  eye.src = "http://pefl.ru/images/eye.png";
+  var imgUrl = getImagesUrl();
+  eye.src = imgUrl + "/eye.png"; // eye.src = "http://pefl.ru/images/eye.png";
+
   eye.alt = "";
   var tp = document.createElement('div');
   tp.className = "tooltiptext";

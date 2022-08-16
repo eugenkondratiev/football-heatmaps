@@ -129,7 +129,9 @@ function isOneTeam(firstPlayerNumber, secondPlayerNumber) {
 /**===================================================================================================== */
 function getSubArrow(_sub) {
   const sub = _sub || SUB_OUT;
-  const arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
+  const imgUrl = getImagesUrl()
+  const arrRef = sub == SUB_OUT ? imgUrl + '/out.gif' : imgUrl + '/in.gif';
+  // const arrRef = sub == SUB_OUT ? 'http://pefl.ru/system/img/gm/out.gif' : 'http://pefl.ru/system/img/gm/in.gif';
   const arrow = document.createElement("img");
   arrow.src = arrRef;
   return arrow;
@@ -137,7 +139,9 @@ function getSubArrow(_sub) {
 /**===================================================================================================== */
 function createEye(toolTip) {
   const eye = document.createElement('img');
-  eye.src = "http://pefl.ru/images/eye.png";
+  const imgUrl = getImagesUrl()
+  eye.src = imgUrl + "/eye.png";
+  // eye.src = "http://pefl.ru/images/eye.png";
   eye.alt = "";
   const tp = document.createElement('div');
   tp.className = "tooltiptext";

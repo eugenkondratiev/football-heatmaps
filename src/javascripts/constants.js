@@ -1,4 +1,6 @@
-; const DEFAULT_TV_URL = window.location.href.replace(/\/index.html/, "/") +"/tv/#/j=1&z=c12345";
+; const DEFAULT_TV_URL = window.location.href.replace(/\/index.html/, "/").replace(/\/heatmaps.html/, "/")  + "/tv/#/j=1&z=c12345";
+const getImagesUrl = () => window.location.href.replace(/\/index.html/, "/").replace(/\/heatmaps.html/, "/")  + "public/images"
+
 // ; const tvurl = "http://pefl.ru/tv/#/j=1099079&z=c3121c566116e3f04f0fba27f99d502c";
 
 const MAX_VALUE = 60;
@@ -33,7 +35,7 @@ const ZONE_WIDTH = (shotsCoords.x2 - shotsCoords.x1) / 6.0;
 const ZONE_HEIGHT = (shotsCoords.y2 - shotsCoords.y1) / 3.0;
 const ZONES = [...Array(18)].map((_, i) => { return { x: ((i) / 3 >> 0), y: ((i) % 3) } })
 const ZONES_COORDS = ZONES.map(z => { return { x: shotsCoords.x1 + z.x * ZONE_WIDTH, y: shotsCoords.y1 + z.y * ZONE_HEIGHT } })
-const ZONES_FIND_ORDER = [8,11,5,14,7,10,9,12,2,17,4,6,13,15,1,3,16,18]
+const ZONES_FIND_ORDER = [8, 11, 5, 14, 7, 10, 9, 12, 2, 17, 4, 6, 13, 15, 1, 3, 16, 18]
 
 
 const FIELD_LONGTITUDE = 105;
