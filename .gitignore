@@ -8,8 +8,8 @@ peflembedded
 *.map
 
 
-public
-public/**/*.*
-public/*
+# public
+# public/**/*.*
+# public/*
 
 
