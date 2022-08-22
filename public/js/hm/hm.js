@@ -200,7 +200,7 @@ var secondTime = false;
 var penalties = false; // ; const JSON_URL_START = 'http://pefl.ru/jsonreport.php';
 
 ;
-var JSON_URL_START = window.location.origin + '/public/data/'; //==============================================================================
+var JSON_URL_START = window.location.origin + '/public/json/'; //==============================================================================
 
 function formJsonUrl(_ref) {
   var tvurl = _ref.tvurl,

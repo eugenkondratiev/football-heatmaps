@@ -1,5 +1,5 @@
 // ; const JSON_URL_START = 'http://pefl.ru/jsonreport.php';
-; const JSON_URL_START = window.location.origin + '/public/data/';
+; const JSON_URL_START = window.location.origin + '/public/json/';
 //==============================================================================
 function formJsonUrl({ tvurl, test = false }) {
 
